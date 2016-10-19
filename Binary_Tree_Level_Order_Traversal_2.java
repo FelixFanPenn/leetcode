@@ -11,7 +11,6 @@ public class Solution {
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
         help(root, 0, res);
-        reverse(res);
         Collections.reverse(res);   // it reverses the list but returns null!!!!!!
         return res;
     }
