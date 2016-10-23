@@ -18,6 +18,16 @@ public class Solution {
             }
         });
         
+        /*   also work
+        Comparator<Interval> comparator = new Comparator<Interval>(){
+            @Override
+            public int compare(Interval inter1, Interval inter2){
+                return inter1.start - inter2.start;
+            }
+        };
+        Collections.sort(intervals, comparator);
+        */
+        
         int start = intervals.get(0).start, end = intervals.get(0).end;
         
         for (Interval inter : intervals){
