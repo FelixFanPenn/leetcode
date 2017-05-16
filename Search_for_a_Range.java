@@ -1,39 +1,55 @@
 public class Solution {
     public int[] searchRange(int[] nums, int target) {
-        if (nums == null || nums.length == 0) return new int[]{-1, -1};
-        int left = -1, right = -1;
-        int begin = 0, end = nums.length-1;
+        int[] res = new int[2];
+        res[0] = -1; res[1] = -1;
         
-        while(begin + 1 < end){
-            int mid = (begin + end)/2;
+        if (nums == null || nums.length == 0 || nums[0] > target || nums[nums.length - 1] < target){
+            return res;
+        }
+        
+        
+        
+        
+        res[0] = findFirst(nums, target);
+        res[1] = findLast(nums, target);
+        return res;
+    }
+    
+    public int findFirst(int[] nums, int target){
+        int start = 0; int end = nums.length - 1;
+        while(start + 1 < end){
+            int mid = (start + end) / 2;
+            
             if (nums[mid] < target){
-                begin = mid;
-            } else if (nums[mid] >= target){
+                start = mid;
+            } else {
                 end = mid;
             }
         }
-        if (nums[begin] == target){
-            left = begin;
-        } else if (nums[end] == target){
-            left = end;
-        }
         
-        begin = 0; end = nums.length-1;
-        while(begin + 1 < end){
-            int mid = (begin + end)/2;
+        if (nums[start] == target) return start;
+        else {
+            if (nums[end] == target) return end;
+            else return -1;
+        }
+    }
+    
+    public int findLast(int[] nums, int target){
+        int start = 0; int end = nums.length - 1;
+        while(start + 1 < end){
+            int mid = (start + end) / 2;
+            
             if (nums[mid] > target){
                 end = mid;
-            } else if (nums[mid] <= target){
-                begin = mid;
+            } else {
+                start = mid;
             }
         }
-        if (nums[end] == target){
-            right = end;
-        } else if (nums[begin] == target){
-            right = begin;
+        if (nums[end] == target) return end;
+        else {
+            if (nums[start] == target) return start;
+            else return -1;
         }
-        
-        return new int[]{left, right};
     }
 }
 
