@@ -8,6 +8,76 @@
  */
 public class Solution {
     public void reorderList(ListNode head) {
+        if (head == null || head.next == null){
+            return;
+        }
+        
+        ListNode pre = getPreMid(head);
+        ListNode mid = pre.next;
+        pre.next = null;
+        
+        ListNode newHead = reverse(mid);
+        merge(head, newHead);   
+    }
+    
+    public ListNode merge(ListNode l1, ListNode l2){
+        if (l1 == null){
+            return l2;
+        } else if (l2 == null){
+            return l1;
+        }
+        
+        ListNode dum = new ListNode(0);
+        ListNode itr = dum;
+        while (l1 != null && l2 != null){
+            itr.next = l1;
+            l1 = l1.next;
+            itr = itr.next;
+            
+            itr.next = l2;
+            l2 = l2.next;
+            itr = itr.next;
+        }
+        
+        if (l1 != null){
+            itr.next = l1;
+        }
+        
+        if (l2 != null){
+            itr.next = l2;
+        }
+        return dum.next;
+    }
+    
+    public ListNode reverse(ListNode head){
+        ListNode pre = null;
+        while (head != null){
+            ListNode tmp = head.next;
+            head.next = pre;
+            pre = head;
+            head = tmp;
+        }
+        return pre;
+    }
+    
+    public ListNode getPreMid(ListNode head){
+        ListNode slow = head.next;
+        ListNode fast = head.next.next;
+        ListNode pre = head;
+        
+        while (fast != null && fast.next != null){
+            pre = pre.next;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        return pre;
+    }
+}
+
+/*
+public class Solution {
+    public void reorderList(ListNode head) {
         if(head == null || head.next == null) return;
             
             //Find the middle of the list
@@ -41,3 +111,4 @@ public class Solution {
         
     }
 }
+*/
