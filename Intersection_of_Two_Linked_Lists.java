@@ -9,6 +9,69 @@
  *     }
  * }
  */
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null){
+            return null;
+        }
+        
+        int lenA = getLen(headA);
+        int lenB = getLen(headB);
+        
+        int dif = Math.abs(lenA - lenB);
+        
+        if (lenA > lenB){
+            headA = forward(dif, headA);
+        } else {
+            headB = forward(dif, headB);
+        }
+        
+        return getIntersection(headA, headB);
+        
+    }
+    
+    public int getLen(ListNode head){
+        int len = 0;
+        while (head != null){
+            len++;
+            head = head.next;
+        }
+        return len;
+    }
+    
+    public ListNode forward(int steps, ListNode head){
+        while (steps != 0){
+            head = head.next;
+            steps--;
+        }
+        return head;
+    }
+    
+    public ListNode getIntersection(ListNode headA, ListNode headB){
+        while (headA != null && headB != null){
+            if (headA.val == headB.val) return headA;
+            headA = headA.next;
+            headB = headB.next;
+        }
+        return null;
+    }
+}
+
+
+/*
 public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         if (headA == null || headB == null) return null;
@@ -42,3 +105,4 @@ public class Solution {
         
     }
 }
+*/
