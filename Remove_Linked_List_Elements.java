@@ -6,21 +6,23 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-public class Solution {    /// change the original linked list
+public class Solution {
     public ListNode removeElements(ListNode head, int val) {
-        if (head == null) return head;
-        ListNode itr = new ListNode(0);
-        ListNode dummy = itr;
+        if (head == null){
+            return head;
+        }
         
-        while(head.next != null){
-            if (head.val != val){
-                itr.next = head;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode itr = dummy;
+        
+        while (itr.next != null){
+            if (itr.next.val == val){
+                itr.next = itr.next.next;
+            } else {
                 itr = itr.next;
             }
-            head = head.next;
         }
-        if (head.val == val) itr.next = null;
-        else itr.next = head;
         
         return dummy.next;
     }
