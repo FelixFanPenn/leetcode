@@ -16,3 +16,32 @@ public class Solution {
         return res;
     }
 }
+
+/*
+public class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int[] tmp = new int[nums.length];
+        tmp[0] = 1;
+        
+        for (int i = 1; i < nums.length; i++){
+            tmp[i] = tmp[i-1] * nums[i-1];
+        }
+        
+        int[] tmp1 = new int[nums.length];
+        tmp1[nums.length-1] = 1;
+        
+        for (int i = nums.length-2; i >= 0; i--){
+            tmp1[i] = tmp1[i+1] * nums[i+1];
+        }
+        
+        for (int i = 0; i < nums.length; i++){
+            tmp[i] *= tmp1[i];
+        }
+        
+        
+        return tmp;
+    }
+}
+
+
+*/
