@@ -1,42 +1,62 @@
-public class Solution {
-    public int trap(int[] height) {          //two pointers
-        int left = 0, right = height.length-1;
-        int level = 0, res = 0;
-        
-        while(left < right){
-            int tmp = height[left] < height[right] ? height[left++]: height[right--];
-            if (level < tmp){
-                level = tmp;
-            } else {
-                res += level - tmp;
-            }
-        }
-        return res;
-    }
-}
-/*
 
 public class Solution {
-    public int trap(int[] height) {          // stack
-        int res = 0;
+    
+    public int trap(int[] height) {
+        int len = height.length;
+        if (len < 3) return 0;
         Stack<Integer> stack = new Stack<>();
-        int i = 0;
+        int water = 0, i = 0, index = 0;
         
-        while(i < height.length){
-            if (stack.isEmpty() || height[stack.peek()] > height[i]) stack.push(i);
-            else {
-                while(!stack.isEmpty() && height[stack.peek()] < height[i]){
-                    int mid = stack.pop();
-                    if(!stack.empty()) {
-                        int j = stack.peek();
-                        res += (i - j - 1) * (Math.min(height[i], height[j]) - height[mid]);
-                    }
+        while (i < len){
+            if (stack.isEmpty() || height[stack.peek()] >= height[i]){
+                stack.push(i++);
+            } else {
+                index = stack.pop();
+                if (!stack.isEmpty()) {
+                    int w = i - stack.peek() - 1;
+                    int h = Math.min(height[i], height[stack.peek()]) - height[index];
+                    water += w * h;
                 }
-                stack.push(i);
+
             }
-            i++;
+        }
+        return water;
+    }
+    
+}
+
+/*
+public class Solution {
+    public int trap(int[] height) {
+        int len = height.length;
+        if (len < 3) return 0;
+        int water = 0, max = height[0], index = 0;
+        
+        for (int i = 0; i < len; i++){
+            if (max < height[i]){
+                index = i;
+                max = height[i];
+            }
         }
         
-        return res;
+        int cur = height[0];
+        for (int i = 1; i < index; i++){
+            if (height[i] < cur) {
+                water += cur - height[i];
+            } else {
+                cur = height[i];
+            }
+        }
+        
+        cur = height[len-1];
+        for (int i = len-1; i > index; i--){
+            if (height[i] < cur) {
+                water += cur - height[i];
+            } else {
+                cur = height[i];
+            }
+        }
+        return water;
     }
 }
+*/
