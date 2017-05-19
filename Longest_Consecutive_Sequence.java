@@ -1,3 +1,31 @@
+public class Solution {
+    public int longestConsecutive(int[] nums) {
+        int max = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        for (int i : nums){
+            
+            if (!map.containsKey(i)){
+                int left = map.containsKey(i-1) ? map.get(i-1) : 0;
+                int right = map.containsKey(i+1) ? map.get(i+1) : 0;
+                int len = left + right + 1;
+                
+                map.put(i, len);
+                
+                max = Math.max(max, len);
+                
+                map.put(i - left, len);
+                map.put(i + right, len);
+                
+            }
+            
+        }
+        
+        return max;
+    }
+}
+
+/*
 public class Solution {   // union find solution
     
     class Range{
@@ -36,37 +64,4 @@ public class Solution {   // union find solution
         return max;
     }
 }
-
-/*
-public class Solution {
-    public int longestConsecutive(int[] nums) {
-        if(nums == null || nums.length == 0) return 0;
-        Set<Integer> set = new HashSet<Integer>();
-        
-        for (int num: nums){
-            set.add(num);
-        }
-        
-        int max = 0;
-        for (int num: nums){
-            if (set.remove(num)){
-                int sum = 1, s = num-1, l = num+1;
-                
-                while(set.remove(s--)){
-                    sum++;
-                } 
-
-                while(set.remove(l++)){
-                    sum++;
-                }
-                
-                max = Math.max(max, sum);
-            }
-        }
-        return max;
-    }
-}
-
 */
-
-
