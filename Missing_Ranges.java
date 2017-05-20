@@ -1,5 +1,51 @@
 public class Solution {
     public List<String> findMissingRanges(int[] nums, int lower, int upper) {
+        List<String> res = new ArrayList<>();
+
+        int len = nums.length;
+        
+        if (len == 0) {
+            if (lower == upper) {
+                res.add("" + lower);
+            } else {
+                res.add(lower + "->" + upper);
+            }
+            return res;
+        }
+        
+        if (nums[0] <= lower){
+            
+        } else if (nums[0]-1 > lower) {
+            res.add(lower + "->" + (nums[0]-1));
+        } else if (nums[0]-1 == lower){
+            res.add("" + lower);
+        }
+        
+        for (int i = 0; i < len-1; i++){
+            if (nums[i+1] == nums[i]) {
+                continue;
+            } else if (nums[i+1] > nums[i]+2){
+                res.add((nums[i] + 1) + "->" + (nums[i+1]-1));
+            } else if (nums[i+1] > nums[i]+1){
+                res.add("" + (nums[i]+1));
+            }
+        }
+        
+        if (nums[len-1] >= upper){
+            
+        } else if (nums[len-1] < upper-1) {
+            res.add((nums[len-1]+1) + "->" + upper);
+        } else if (nums[len-1] == upper-1){
+            res.add("" + upper);
+        }
+        
+        return res;
+    }
+}
+
+/*
+public class Solution {
+    public List<String> findMissingRanges(int[] nums, int lower, int upper) {
         int next = lower;
         ArrayList<String> res = new ArrayList<>();
         String str = "";
@@ -33,6 +79,7 @@ public class Solution {
         return (n1 == n2) ? "" + n1 : n1 + "->" + n2;
     }
 }
+*/
 
 /*
 public class Solution {
