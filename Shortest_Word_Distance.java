@@ -1,5 +1,23 @@
 public class Solution {
     public int shortestDistance(String[] words, String word1, String word2) {
+        int index1 = Integer.MAX_VALUE, index2 = Integer.MAX_VALUE;
+        int dist = Integer.MAX_VALUE;
+        for (int i = 0; i < words.length; i++){
+            if (words[i].equals(word1)){
+                index1 = i;
+                dist = Math.min(dist, Math.abs(index2 - index1));
+            } else if (words[i].equals(word2)){
+                index2 = i;
+                dist = Math.min(dist, Math.abs(index2 - index1));
+            }
+        }
+        return dist;
+    }
+}
+
+/*
+public class Solution {
+    public int shortestDistance(String[] words, String word1, String word2) {
         int distance = Integer.MAX_VALUE;
         for (int i = 0; i < words.length; i++){
             if (words[i].equals(word1)){
@@ -24,3 +42,4 @@ public class Solution {
         return distance;
     }
 }
+*/
