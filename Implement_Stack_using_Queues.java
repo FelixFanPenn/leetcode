@@ -1,58 +1,86 @@
-class MyStack {            // use two queues
+public class MyStack {
     
     Queue<Integer> q1 = new LinkedList<>();
     Queue<Integer> q2 = new LinkedList<>();
-    // Push element x onto stack.
+    /** Initialize your data structure here. */
+    public MyStack() {
+        
+    }
+    
+    /** Push element x onto stack. */
     public void push(int x) {
-        q1.add(x);
-        while(!q2.isEmpty()){
-            q1.add(q2.poll());
+        q1.offer(x);
+       
+        /*
+        if (q1.isEmpty()){
+            q1.offer(x);
+            while (!q2.isEmpty()){
+                q1.offer(q2.poll());
+            }
+        } else {
+            q2.offer(x);
+            while (!q1.isEmpty()){
+                q2.offer(q1.poll());
+            }
         }
-        while(!q1.isEmpty()){
-            q2.add(q1.poll());
+        */
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    public int pop() {
+        while (q1.size() > 1){
+            q2.offer(q1.poll());
         }
+        int res = q1.poll();
+        
+        while (q2.size() > 0){
+            q1.offer(q2.poll());
+        }
+        
+        return res;
+        /*
+        if (q1.size() > 0) {
+            return q1.poll();
+        } else {
+            return q2.poll();
+        }
+        */
     }
-
-    // Removes the element on top of the stack.
-    public void pop() {
-        q2.poll();
-    }
-
-    // Get the top element.
+    
+    /** Get the top element. */
     public int top() {
-        return q2.peek();
+        while (q1.size() > 1){
+            q2.offer(q1.poll());
+        }
+        int res = q1.peek();
+        q2.offer(q1.poll());
+        
+        while (q2.size() > 0){
+            q1.offer(q2.poll());
+        }
+        
+        return res;
+        
+        /*
+        if (q1.size() > 0) {
+            return q1.peek();
+        } else {
+            return q2.peek();
+        }
+        */
     }
-
-    // Return whether the stack is empty.
+    
+    /** Returns whether the stack is empty. */
     public boolean empty() {
-        return q2.isEmpty();
+        return q1.isEmpty() && q2.isEmpty();
     }
 }
 
-/*
-
-class MyStack {          // use only one queue
-
-    private Queue<Integer> queue = new LinkedList<>();
-
-    public void push(int x) {
-        queue.add(x);
-        for (int i = 0; i < queue.size()-1; i++){
-            queue.add(queue.poll());
-        }
-    }
-
-    public void pop() {
-        queue.poll();
-    }
-
-    public int top() {
-        return queue.peek();
-    }
-
-    public boolean empty() {
-        return queue.isEmpty();
-    }
-}
-*/
-
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
