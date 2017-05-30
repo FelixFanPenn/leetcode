@@ -8,7 +8,7 @@ public class Solution {
         boolean[] res = new boolean[s.length()+1];
         res[0] = true;
         
-        for (int i = 1; i <= res.length; i++){
+        for (int i = 1; i < res.length; i++){
             for (int j = i-1; j >= i - maxLen && j >= 0; j--){
                 String tmp = s.substring(j, i);
                 if (set.contains(tmp) && res[j]) {
