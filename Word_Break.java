@@ -1,29 +1,30 @@
 public class Solution {
-    public boolean wordBreak(String s, Set<String> wordDict) {
-        int maxlen = findMaxLen(wordDict);
-        if (wordDict == null || maxlen == 0) return false;
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>();
+        set.addAll(wordDict);
+        int maxLen = getMaxLen(wordDict);
+        int len = s.length();
         
         boolean[] res = new boolean[s.length()+1];
         res[0] = true;
         
-        for (int i = 1; i <= s.length(); i++){
-            res[i] = false;
-            for (int j = 1; j <= i && j <= maxlen; j++){ // j is last word length
-                String str = s.substring(i-j, i);
-                if (wordDict.contains(str) && res[i-j] == true){  // if last word is in dict and segment is valid
+        for (int i = 1; i <= res.length; i++){
+            for (int j = i-1; j >= i - maxLen && j >= 0; j--){
+                String tmp = s.substring(j, i);
+                if (set.contains(tmp) && res[j]) {
                     res[i] = true;
                     break;
                 }
             }
         }
-        return res[s.length()];
+        return res[len];
     }
     
-    private int findMaxLen(Set<String> wordDict){
-        int maxlen = 0;
-        for (String str: wordDict){
-            maxlen = Math.max(maxlen, str.length());
+    public int getMaxLen(List<String> w){
+        int max = 0;
+        for (String s : w){
+            max = Math.max(s.length(), max);
         }
-        return maxlen;
+        return max;
     }
 }
