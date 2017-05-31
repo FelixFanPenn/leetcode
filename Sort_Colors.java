@@ -1,22 +1,33 @@
 public class Solution {
     public void sortColors(int[] nums) {
-        int i = 0, j = 0, k = nums.length-1;
+        int len = nums.length, red = 0, blue = len-1;
         
-        while (j <= k){
-            if (nums[j] == 0){
-                int tmp = nums[i];
-                nums[i] = nums[j];
-                nums[j] = tmp;
-                i++;
-                j++;
-            } else if (nums[j] == 2){
-                int tmp = nums[j];
-                nums[j] = nums[k];
-                nums[k] = tmp;
-                k--;
-            } else {
-                j++;
+        for (int i = 0; i <= blue; i++){
+            if (nums[i] == 0) {
+                switchNumbers(nums, i, red++);
+            } else if (nums[i] == 2){
+                switchNumbers(nums, i--, blue--);
             }
         }
+        
+        
+        /*  counting sort
+        int[] count = new int[3];
+        for (int i : nums){
+            count[i]++;
+        }
+        int idx = 0;
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < count[i]; j++){
+                nums[idx++] = i;
+            }
+        }
+        */
+    }
+    
+    public void switchNumbers(int[] nums, int i, int j){
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
     }
 }
