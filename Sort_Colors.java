@@ -6,7 +6,7 @@ public class Solution {
             if (nums[i] == 0) {
                 switchNumbers(nums, i, red++);
             } else if (nums[i] == 2){
-                switchNumbers(nums, i--, blue--);
+                switchNumbers(nums, i--, blue--); // AFTER SWAPPING, CONSIDER THIS POSITION AGAIN
             }
         }
         
