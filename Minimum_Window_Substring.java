@@ -1,5 +1,40 @@
 public class Solution {
     public String minWindow(String s, String t) {
+        int len1 = s.length(), len2 = t.length(), left = 0, right = len2, min = Integer.MAX_VALUE;
+        int l = 0, r = 0;
+        if (len2 > len1) return "";
+        int[] nums = new int[256];
+        
+        for (int i = 0; i < len2; i++){
+            nums[s.charAt(i)]++;
+            nums[t.charAt(i)]--;
+        }
+        if (allPositive(nums)) return s.substring(0, len2);
+        
+        while (right < len1){
+            nums[s.charAt(right++)]++;
+            
+            while (allPositive(nums)){
+                if (min > right - left) {
+                    r = right; l = left;
+                    min = right - left;
+                }
+                nums[s.charAt(left++)]--;
+            }
+        }
+        return r == 0? "" : s.substring(l, r);
+    }
+    
+    public boolean allPositive(int[] nums){
+        for (int i : nums){
+            if (i < 0) return false;
+        }
+        return true;
+    }
+}
+/*
+public class Solution {
+    public String minWindow(String s, String t) {
         String res = "";
         if (t.length() == 0 || s.length() == 0) return res;
     
@@ -43,3 +78,5 @@ public class Solution {
         return s.substring(minLeft, minLeft + minLen);
     }
 }
+
+*/
