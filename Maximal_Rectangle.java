@@ -6,39 +6,28 @@ public class Solution {
         Arrays.fill(height, 0);
         
         for (int i = 0; i < matrix.length; i++){
-            height = resetHeight(matrix, i, height);
-            maxArea = Math.max(maxArea, largestInRow(height));
+            for (int j = 0; j < matrix[0].length; j++){
+                if (matrix[i][j] == '1') {
+                    height[j] += 1;
+                } else height[j] = 0;
+            }
+            maxArea = Math.max(maxArea, largestRectangleArea(height));
         }
         return maxArea;
     }
     
-    private int[] resetHeight(char[][] matrix, int row, int[] height){
-        for (int i = 0; i < matrix[row].length; i++){
-            if (matrix[row][i] == '0'){
-                height[i] = 0;
-            } else if (matrix[row][i] == '1'){
-                height[i] += 1;
-            }
-        }
-        return height;
-    }
-    
-    private int largestInRow(int[] height){
-        if(height == null || height.length == 0) return 0;
-        int len = height.length, maxArea = 0;
-        Stack<Integer> stack = new Stack<Integer>();
-        
-        for (int i = 0; i <= len; i++){
-            int h = (i == len)? 0: height[i];
-            
-            if (stack.isEmpty() || height[stack.peek()] <= h){
-                stack.push(i);
-            } else {
-                int tmp = stack.pop();
-                maxArea = Math.max(maxArea, height[tmp] * (stack.isEmpty()? i : (i - 1 - stack.peek())));
+    public int largestRectangleArea(int[] heights) {
+        Stack<Integer> stack = new Stack<>();
+        int max = 0;
+        for (int i = 0; i <= heights.length; i++){
+            int h = (i == heights.length)? 0 : heights[i];
+            if (stack.isEmpty() || h >= heights[stack.peek()]) stack.push(i);
+            else {
+                int index = stack.pop();
+                max = Math.max(max, heights[index] * (stack.isEmpty()? i : i - stack.peek() - 1));
                 i--;
             }
         }
-        return maxArea;
+        return max;
     }
 }
