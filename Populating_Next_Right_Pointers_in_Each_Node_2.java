@@ -8,6 +8,32 @@
  */
 public class Solution {
     public void connect(TreeLinkNode root) {
+        if (root == null) return;
+        TreeLinkNode itr = root.next;
+        while (itr != null){
+            if (itr.left != null) {
+                itr = itr.left;
+                break;
+            }
+            
+            if (itr.right != null) {
+                itr = itr.right;
+                break;
+            }
+            
+            itr = itr.next;
+        }
+        
+        if (root.right != null) root.right.next = itr;
+        if (root.left != null) root.left.next = (root.right == null)? itr : root.right ; 
+        connect(root.right);
+        connect(root.left);
+    }
+}
+
+/*
+public class Solution {
+    public void connect(TreeLinkNode root) {
         TreeLinkNode cur = root;
         TreeLinkNode head = null, pre = null;//pre ---> the leading node on the next level
                      //head of the next level
@@ -39,3 +65,4 @@ public class Solution {
         }
     }
 }
+*/
