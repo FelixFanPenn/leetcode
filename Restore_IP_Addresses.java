@@ -1,6 +1,32 @@
 public class Solution {
     public List<String> restoreIpAddresses(String s) {
         List<String> res = new ArrayList<>();
+        
+        backtrack(s, 0, res, "");
+        return res;
+    }
+    
+    private void backtrack(String s, int n, List<String> res, String str){
+        if (n == 4) {
+            if (s.length() == 0) res.add(str);
+            return;
+        }
+        for (int i = 1; i < 4; i++){
+            if (s.length() < i) break;
+            String tmp = s.substring(0, i);
+            int ip = Integer.parseInt(tmp);
+            //if (ip > 255 || String.valueOf(ip).length() != i) continue;
+    
+            if (ip <= 255 && String.valueOf(ip).length() == i)
+                backtrack(s.substring(i), n+1, res, str + tmp + ((n == 3)? "" : "."));
+            
+        }
+    }
+}
+/*
+public class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        List<String> res = new ArrayList<>();
         int i, j, k, p, len = s.length();
         if (len > 12) return res;
         String first, second, third, fourth;
@@ -26,3 +52,4 @@ public class Solution {
         return true;
     }
 }
+*/
