@@ -9,64 +9,26 @@
  */
 public class Solution {
     public int minMeetingRooms(Interval[] intervals) {
-        /*
-        if (intervals.length == 0) return 0;
-        PriorityQueue<Interval> queue = new PriorityQueue<Interval>(new Comparator<Interval>(){
-            @Override
-            public int compare(Interval in1, Interval in2){
-                return in1.start - in2.start;
-            }
-        });
+        int res = 0, len = intervals.length, endpos = 0;
+        int[] a = new int[len];
+        int[] b = new int[len];
         
-        for (int i = 0; i < intervals.length; i++){
-            queue.offer(intervals[i]);
+        for (int i = 0; i < intervals.length; i++) {
+            a[i] = intervals[i].start;
+            b[i] = intervals[i].end;
         }
         
-        ArrayList<Interval> array = new ArrayList<>();
-        while (!queue.isEmpty()){
-            array.add(queue.poll());
-        }
+        Arrays.sort(a); Arrays.sort(b);
         
-        HashSet<Interval> set = new HashSet<>();
-        int num = 1;
-        for (int i = 0; i < array.size(); i++){
-            int start = array.get(i).start;
-            int count = 1;
-            for (Interval interval : set){
-                if (interval.end > start){
-                    count++;
-                }
-            }
-            num = Math.max(num, count);
-            set.add(array.get(i));
-        }
-         
-        return num;
-        */
-        
-        if (intervals == null || intervals.length == 0) return 0;
-        
-        Arrays.sort(intervals, new Comparator<Interval>() {
-            public int compare(Interval a, Interval b) { return a.start - b.start; }
-        });
-        
-        PriorityQueue<Interval> queue = new PriorityQueue<Interval>(new Comparator<Interval>(){
-            @Override
-            public int compare(Interval in1, Interval in2){
-                return in1.end - in2.end;
-            }
-        });
-        
-        queue.offer(intervals[0]);
-        for (int i = 1; i < intervals.length; i++) {
-            Interval interval = queue.poll();
-            if (intervals[i].start >= interval.end){
-                interval.end = intervals[i].end;
+        for (int i = 0; i < len; i++) {
+            if (a[i] < b[endpos]) {
+                res++;
             } else {
-                queue.offer(intervals[i]);
+                endpos++;
             }
-            queue.offer(interval);
         }
-        return queue.size();
+        
+        return res;
+        
     }
 }
