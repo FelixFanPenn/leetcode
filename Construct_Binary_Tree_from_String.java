@@ -16,6 +16,7 @@ public class Solution {
                 i++;
             } else if (s.charAt(i) == ')') {
                 i++;
+                s1.pop();
             } else {
                 int j = i+1;
                 while (j < s.length() && s.charAt(j) != '(' && s.charAt(j) != ')') {
