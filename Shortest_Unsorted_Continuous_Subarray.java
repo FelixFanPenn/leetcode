@@ -9,6 +9,7 @@ public class Solution {
             if (min < nums[len - i - 1]) beg = len - i - 1;
         }
         
+        
         return end - beg + 1;
     }
 }
