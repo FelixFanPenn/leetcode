@@ -1,65 +1,31 @@
-
 public class Solution {
     public List<int[]> getSkyline(int[][] buildings) {
-        class Point implements Comparable<Point> {
-            int x;
-            int height;
-            boolean isStart;
-            
-            Point(int x, int h, boolean start) {
-                this.x = x;
-                this.height = h;
-                this.isStart = start;
-            }
-            
-            @Override
-            public int compareTo(Point p) {
-                if (this.x != p.x) return this.x - p.x;
-                else {
-                    if (this.isStart && p.isStart) {                // both are start, put the higher one first
-                        return p.height - this.height;
-                    } else if (!this.isStart && !p.isStart) {       // both are end, put the lower one first
-                        return this.height - p.height;
-                    } else {                                        // one start one end, put the start first
-                        if (this.isStart) return -1;
-                        else return 1;
-                    }
-                }
-            }
+        List<int[]> result = new ArrayList<>();
+        List<int[]> height = new ArrayList<>();
+        for(int[] b:buildings) {
+            height.add(new int[]{b[0], -b[2]});
+            height.add(new int[]{b[1], b[2]});
         }
-        
-        Point[] points = new Point[buildings.length * 2];
-        int index = 0;
-        for (int[] b : buildings) {
-            points[index++] = new Point(b[0], b[2], true);
-            points[index++] = new Point(b[1], b[2], false);
-        }
-        Arrays.sort(points);
-        
-        int max = 0;
-        TreeMap<Integer, Integer> tm = new TreeMap<>();
-        tm.put(0, 1);
-        List<int[]> res = new ArrayList<>();
-        for (Point point : points) {
-            if (point.isStart) {
-                tm.compute(point.height, (k, v) -> {        // get the value of key(point.height), 
-                    if (v != null) return v+1;
-                    return 1;
-                });
+        Collections.sort(height, (a, b) -> {
+                if(a[0] != b[0]) 
+                    return a[0] - b[0];
+                return a[1] - b[1];
+        });
+        Queue<Integer> pq = new PriorityQueue<>((a, b) -> (b - a));
+        pq.offer(0);
+        int prev = 0;
+        for(int[] h:height) {
+            if(h[1] < 0) {
+                pq.offer(-h[1]);
             } else {
-                tm.compute(point.height, (k, v) -> {
-                    if (v == 1) return null;
-                    return v-1;
-                });
+                pq.remove(h[1]);
             }
-            
-            int cur = tm.lastKey();             // get the max key in the tree map
-            if (cur != max) {
-                res.add(new int[]{point.x, cur});
-                max = cur;
+            int cur = pq.peek();
+            if(prev != cur) {
+                result.add(new int[]{h[0], cur});
+                prev = cur;
             }
         }
-        
-        return res;
+        return result;
     }
 }
