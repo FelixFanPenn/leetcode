@@ -7,21 +7,27 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-public class Solution {
+class Solution {
+    int pre = 0;
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        return help(preorder, inorder, 0, preorder.length-1, 0);
+        int right = inorder.length-1;
+        return helper(inorder, preorder, 0, right);
     }
     
-    private TreeNode help(int[] preorder, int[] inorder, int start, int end, int index){
-        if (start > end || index >= preorder.length) return null;
-        TreeNode root = new TreeNode(preorder[index]);
-        int i;
-        for (i = end; i >= start; i--){
-            if (preorder[index] == inorder[i]) break;
+    public TreeNode helper(int[] inorder, int[] preorder, int left, int right) {
+        if (right < left) return null;
+        TreeNode node = new TreeNode(preorder[pre++]);
+        if (left == right) return node;
+        int in = search(inorder, node.val, left, right);
+        node.left = helper(inorder, preorder, left, in-1);
+        node.right = helper(inorder, preorder, in+1, right);
+        return node;
+    }
+    
+    public int search(int[] in, int target, int left, int right) {
+        for (int i = left; i <= right; i++) {
+            if (in[i] == target) return i;
         }
-        
-        root.left = help(preorder, inorder, start, i-1, index+1);
-        root.right = help(preorder, inorder, i+1, end, index+i-start+1);   // index+i-start+1 ?????  url = http://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/
-        return root;
+        return right;
     }
 }
