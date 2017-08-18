@@ -7,6 +7,11 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
+
+/*
+http://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/
+*/
+
 class Solution {
     int pre = 0;
     public TreeNode buildTree(int[] preorder, int[] inorder) {
