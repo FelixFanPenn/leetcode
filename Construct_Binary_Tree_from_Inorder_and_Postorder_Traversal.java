@@ -7,21 +7,34 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-public class Solution {
+/*
+http://www.geeksforgeeks.org/construct-a-binary-tree-from-postorder-and-inorder/
+*/
+
+class Solution {
+    int post = 0;
     public TreeNode buildTree(int[] inorder, int[] postorder) {
-        return help(inorder, postorder, 0, inorder.length-1, 0, postorder.length-1);
+        int right = inorder.length-1;
+        post = right;
+        return helper(inorder, postorder, 0, right);
     }
     
-    private TreeNode help(int[] inorder, int[] postorder, int instart, int inend, int postart, int poend){
-        if (instart > inend) return null;
-        TreeNode root = new TreeNode(postorder[poend]);
-        int i;
-        for (i = inend; i >= instart; i--){
-            if (inorder[i] == postorder[poend]) break;
-        }
+    public TreeNode helper(int[] inorder, int[] postorder, int left, int right) {
+        if (right < left) return null;
         
-        root.left = help(inorder, postorder, instart, i-1, postart, i+postart-instart-1);
-        root.right = help(inorder, postorder, i+1, inend, i+postart-instart, poend-1);   // url = http://www.geeksforgeeks.org/construct-a-binary-tree-from-postorder-and-inorder/
-        return root;
+        TreeNode node = new TreeNode(postorder[post--]);
+        if (right == left) return node;
+        
+        int index = search(inorder, node.val, left, right);
+        node.right = helper(inorder, postorder, index+1, right);
+        node.left = helper(inorder, postorder, left, index-1);
+        return node;
+    }
+    
+    public int search(int[] in, int target, int left, int right) {
+        for (int i = left; i <= right; i++) {
+            if (in[i] == target) return i;
+        }
+        return right;
     }
 }
