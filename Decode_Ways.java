@@ -18,4 +18,35 @@ public class Solution {
         
         return res[s.length()];
     }
+
+    /*      // space O(1)
+    public int numDecodings(String s) {
+        // write your code here
+        int len = s.length();
+        if (len == 0) {
+            return 0;
+        }
+        int last = 0, secondLast = 1;
+        if (s.charAt(len-1) != '0') last = 1;
+        
+        for (int i = len-2; i >= 0; i--) {
+            if (s.charAt(i) == '0') {
+                secondLast = last;
+                last = 0;
+                continue;
+            } 
+            String str = s.substring(i, i+2);
+            int val = Integer.parseInt(str);
+            if (val <= 26) {
+                int tmp = last;
+                last = last + secondLast;
+                secondLast = tmp;
+            } else {
+                secondLast = last;
+            }
+        }
+        return last;
+    }
+
+    */
 }
