@@ -1,19 +1,32 @@
 public class Solution {
-    public boolean repeatedSubstringPattern(String s) {
+    public boolean repeatedSubstringPattern(String str) {
+            //This is the kmp issue
+        int[] prefix = kmp(str);
+        int len = prefix[str.length()-1];
+        int n = str.length();
+        return (len > 0 && n%(n-len) == 0); // if the pattern length is divisable by the whole string
+    }
+    
+    private int[] kmp(String s){
         int len = s.length();
-        
-        for (int i = 1; i <= len / 2; i++){
-            if (len % i != 0) continue;
-            int j = i;
-            String sub = s.substring(0, j);
-            while (j < len){
-                int t = j+i;
-                String tmp = s.substring(j, t);
-                if (!tmp.equals(sub)) break;
-                j = t;
+        int[] res = new int[len];
+        char[] ch = s.toCharArray();
+        int i = 0, j = 1;
+        res[0] = 0;
+        while(i < ch.length && j < ch.length){
+            if(ch[j] == ch[i]){
+                res[j] = i+1;
+                i++;
+                j++;
+            }else{
+                if(i == 0){
+                    res[j] = 0;
+                    j++;
+                }else{
+                    i = res[i-1];
+                }
             }
-            if (j == len) return true;
         }
-        return false;
+        return res;
     }
 }
