@@ -1,23 +1,18 @@
 public class Solution {
+    int count = 0;
     public int countSubstrings(String s) {
-        int len = s.length();
-        if (len == 0) return 0;
-        int[] res = new int[len];
-        res[0] = 1;
-        
-        for (int i = 1; i < len; i++) {
-            res[i] += res[i-1];
-            for (int j = 0; j <= i; j++) {
-                if (isPalin(s, j, i)) res[i]++;
-            }
+        for (int i = 0; i < s.length(); i++) {
+            search(s, i, i+1);
+            search(s, i, i);
         }
-        return res[len-1];
+        return count;
     }
     
-    public boolean isPalin(String str, int start, int end) {
-        while (start < end && str.charAt(start) == str.charAt(end)) {
-            start++; end--;
+    public void search(String str, int start, int end) {
+        while (start >= 0 && end < str.length() && str.charAt(start) == str.charAt(end)) {
+            count++;
+            start--;
+            end++;
         }
-        return start >= end;
     }
 }
