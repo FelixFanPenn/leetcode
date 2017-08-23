@@ -1,4 +1,4 @@
-public class Solution {
+class Solution {
     public List<String> wordBreak(String s, List<String> wordDict) {
         return dfs(s, wordDict, new HashMap<String, List<String>>());
     }
@@ -13,6 +13,7 @@ public class Solution {
         }
         
         for (String str : wordDict) {
+            if (str.length() == 0) continue;
             if (s.startsWith(str)) {
                 List<String> tmp = dfs(s.substring(str.length()), wordDict, map);
                 for (String e : tmp) {      // tmp may contain 0 or 1 word
