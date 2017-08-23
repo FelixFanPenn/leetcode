@@ -1,15 +1,19 @@
 public class Solution {
     boolean isConnected = false;
-    public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> w) {
        
         Set<String> begin = new HashSet<>();
         begin.add(beginWord);
         Set<String> end = new HashSet<>();
         end.add(endWord);
+        Set<String> wordList = new HashSet<>();
+        wordList.addAll(w);
         
         Map<String, List<String>> map = new HashMap<>();
-        bfs(begin, end, map, false, wordList);
         List<List<String>> res = new ArrayList<List<String>>();
+        if (!wordList.contains(endWord)) return res;
+        
+        bfs(begin, end, map, false, wordList);
         if(!isConnected) return res;
         
         List<String> temp = new ArrayList<String>();
