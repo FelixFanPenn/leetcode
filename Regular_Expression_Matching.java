@@ -20,7 +20,7 @@ public class Solution {
                     } else {
                         res[i+1][j+1] = (j > 0 ? res[i+1][j-1] : false) || res[i+1][j] || res[i][j+1];
                         
-                                                // a* match empty       a* match a        a* match multiple a      
+                                                // a* becomes empty       a* becomes a    a* becomes multiple a (expand a)     
                     }
                 }
             }
