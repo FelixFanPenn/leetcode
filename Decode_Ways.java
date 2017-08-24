@@ -1,4 +1,5 @@
 public class Solution {
+    /*
     public int numDecodings(String s) {
         if (s == null || s.length() == 0) return 0;
         int[] res = new int[s.length()+1];
@@ -18,8 +19,9 @@ public class Solution {
         
         return res[s.length()];
     }
+    */
 
-    /*      // space O(1)
+     // space O(1)
     public int numDecodings(String s) {
         // write your code here
         int len = s.length();
@@ -48,5 +50,4 @@ public class Solution {
         return last;
     }
 
-    */
 }
