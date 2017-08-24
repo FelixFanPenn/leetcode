@@ -1,26 +1,41 @@
 public class Solution {
     public List<String> letterCombinations(String digits) {
-        List<String> list = new ArrayList<>();
-        if (digits.length() == 0) return list;
+        /*
         String[] strs = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        List<String> res = new ArrayList<>();
+        if (digits.length() == 0) return res;
+        helper(digits, 0, strs, res, "");
+        return res;
+        */
+        if (digits.length() == 0) return new ArrayList<String>();
+        LinkedList<String> ans = new LinkedList<String>();
+        String[] mapping = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        ans.add("");
         
-        backtrack(list, "", digits, 0, strs);
-        
-        return list;
+        for (int i = 0; i < digits.length(); i++) {
+            int num = digits.charAt(i) - '0';
+            while (ans.peek().length() == i) {
+                String s = ans.poll();
+                for (char c : mapping[num].toCharArray()) {
+                    ans.offer(s + c);
+                }
+            }
+        }
+        return ans;
     }
     
-    public void backtrack(List<String> list, String res, String digits, int index, String[] strs){
+    /*
+    public void helper(String digits, int index, String[] strs, List<String> res, String s) {
         if (index == digits.length()) {
-            list.add(res);
+            res.add(s);
             return;
-        }
-        
-        int cur = digits.charAt(index) - '0';
-        String curs = strs[cur];
-        for (int i = 0; i < curs.length(); i++){
-            res += curs.charAt(i);
-            backtrack(list, res, digits, index+1, strs);
-            res = res.substring(0, res.length()-1);
+        } else {
+            int num = digits.charAt(index) - '0';
+            String tmp = strs[num];
+            for (int i = 0; i < tmp.length(); i++) {
+                helper(digits, index+1, strs, res, s + tmp.charAt(i));
+            }
         }
     }
+    */
 }
