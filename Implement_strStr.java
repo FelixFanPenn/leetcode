@@ -3,12 +3,11 @@ class Solution {
         if (haystack == null || needle == null)
             return -1;
     //generate next array, need O(n) time
-        int i = -1, j = 0, m = haystack.length(), n = needle.length();
+        int i = 0, j = 0, m = haystack.length(), n = needle.length();
         if (n == 0) return 0;
         int[] next = kmp(needle);
 
     //check through the haystack using next, need O(m) time
-        i = 0; j = 0;
         while (i < m && j < n) {
             if (haystack.charAt(i) == needle.charAt(j)) {
                 i++;
