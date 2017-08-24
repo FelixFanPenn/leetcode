@@ -8,20 +8,16 @@ public class Solution extends Reader4 {
      * @return    The number of characters read
      */
     public int read(char[] buf, int n) {
+        int hasRead = 0, cur = 4;
         char[] buffer = new char[4];
-        int hasRead = 0, toRead = 0;
         
-        while (true) {
-            int tmp = read4(buffer);
-            
-            toRead = Math.min(n - hasRead, tmp);
-            for (int i = 0; i < toRead; i++){
-                buf[hasRead++] = buffer[i];
+        while (hasRead < n && cur == 4) {
+            cur = read4(buffer);
+            int i = 0;
+            while (i < cur && hasRead < n) {
+                buf[hasRead++] = buffer[i++];
             }
-            
-            if (hasRead >= n || tmp == 0) break;
         }
-        
         return hasRead;
     }
 }
