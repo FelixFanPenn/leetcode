@@ -1,3 +1,4 @@
+// O(2 ^ N)
 public List<Integer> products(int[] input) {
 	Set<Integer> set = new HashSet<>();
 	Arrays.sort(input);
