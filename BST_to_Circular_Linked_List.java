@@ -1,3 +1,4 @@
+// O(NLOGN)
 public TreeNode Tree2LinkedList(TreeNode root){
 	if (root == null) return null;
 	connect(root);
