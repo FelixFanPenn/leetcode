@@ -9,16 +9,12 @@ public class Solution {
             char[] tmp = strs[i].toCharArray();
             
             Arrays.sort(tmp);
-            for (char c : tmp){
-                str.add(c);
-            }
+            String newstring = new String(tmp);
 
-            if (!map.containsKey(str.toString())){
-                map.put(str.toString(), new ArrayList<String>());
-                map.get(str.toString()).add(strs[i]);
-            } else {
-                map.get(str.toString()).add(strs[i]);
+            if (!map.containsKey(newstring)){
+                map.put(newstring, new ArrayList<String>());
             }
+            map.get(newstring).add(strs[i]);
         }
         for (String key: map.keySet()){
             res.add(map.get(key));
