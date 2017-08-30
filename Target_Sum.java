@@ -1,22 +1,29 @@
 public class Solution {
+    public int findTargetSumWays(int[] nums, int s) {
+        int sum = 0;
+        for (int n : nums)
+            sum += n;
+        return sum < s || (s + sum) % 2 > 0 ? 0 : subsetSum(nums, (s + sum) >>> 1); 
+    }   
+
+    public int subsetSum(int[] nums, int s) {
+        int[] dp = new int[s + 1]; 
+        dp[0] = 1;
+        for (int n : nums)
+            for (int i = s; i >= n; i--)
+                dp[i] += dp[i - n]; 
+        return dp[s];
+    } 
+
     /*
-    public int findTargetSumWays(int[] nums, int S) {
-        int[] res = new int[1];
-        dfs(nums, S, res, 0);
-        return res[0];
-    }
-    
-    public void dfs(int[] nums, int S, int[] res, int cur) {
-        if (S == 0 && cur == nums.length) {
-            res[0]++;
-            return;
-        }
-        if (cur == nums.length) return;
-        
-        dfs(nums, S - nums[cur], res, cur+1);
-        dfs(nums, S + nums[cur], res, cur+1);
-    }
+    The original problem statement is equivalent to:
+    Find a subset of nums that need to be positive, and the rest of them negative, 
+    such that the sum is equal to target
+
+
     */
+
+    /*
     public int findTargetSumWays(int[] nums, int S) {
         if (nums == null || nums.length == 0){
             return 0;
@@ -39,4 +46,5 @@ public class Solution {
         map.put(key, sub+add);
         return sub+add;
     }
+    */
 }
