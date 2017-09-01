@@ -23,7 +23,7 @@ class FindSmallPath {
         if (left.min > right.min) {
             result.path.addAll(right.path);
         }
-        else {
+        else {      // no duplicates in tree. so this is ok!
             result.path.addAll(left.path);
         }
         result.min = Math.min(root.val, Math.min(left.min, right.min));

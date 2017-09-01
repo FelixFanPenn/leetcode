@@ -4,7 +4,7 @@
 // Use TrieTree, 
 // word.length = k, post.length = n
 'Time complexity: O(nk), space complexity: total number of the node in trie tree'
-*/)
+*/
 
 class FindIndex {
     TrieNode root = new TrieNode();
@@ -17,9 +17,7 @@ class FindIndex {
             insert(word);
         }
         for (int i = 0; i < post.length(); i++) {
-            if (i == 3) {
-                System.out.print("s");
-            }
+
             List<String> words = search(post, i);
             for (String word : words) {
                 if (!result.containsKey(word)) {

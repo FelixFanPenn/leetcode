@@ -13,10 +13,7 @@ class MedianOfKSorted {
         PriorityQueue<Number> minNumber = new PriorityQueue<>(input.size(), new Comparator<Number>() {
             @Override
             public int compare(Number num1, Number num2) {
-                if (num1.value > num2.value) {
-                    return 1;
-                }
-                return -1;
+                return (num1.value > num2.value);
             }
         });
         int total = 0;
