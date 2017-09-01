@@ -39,19 +39,19 @@ public int dotProduct(int[][] A, int[][] B) {
 	return sum;
 }
 
-public int binarySearch(int[][], int index) {
+public int binarySearch(int[][] B, int index) {
 	int low = 0, high = B.length - 1;
 	while (low + 1 < high) {
 		int mid = (high - low) / 2 + low;
 		if (B[mid][0] == index) {
 			return mid;
 		} else if (B[mid][0] > index) {
-			right = mid;
+			high = mid;
 		} else {
-			left = mid;
+			low = mid;
 		}
 	}
-	if (B[left][0] == index) return left;
-	if (B[right][0] == index) return right;
+	if (B[low][0] == index) return low;
+	if (B[high][0] == index) return high;
 	return -1;
 }

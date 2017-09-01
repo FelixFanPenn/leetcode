@@ -8,58 +8,56 @@
  */
 public class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        if (l1 == null) return l2;
-        if (l2 == null) return l1;
-        l1 = reverse(l1);
-        l2 = reverse(l2);
+        Stack<Integer> s1 = new Stack<Integer>();
+        Stack<Integer> s2 = new Stack<Integer>();
         
-        ListNode head = addTwoNumbHelper(l1, l2);
+        while(l1 != null) {
+            s1.push(l1.val);
+            l1 = l1.next;
+        };
+        while(l2 != null) {
+            s2.push(l2.val);
+            l2 = l2.next;
+        }
         
-        head = reverse(head);
+        int sum = 0;
+        ListNode list = new ListNode(0);
+        while (!s1.empty() || !s2.empty()) {
+            if (!s1.empty()) sum += s1.pop();
+            if (!s2.empty()) sum += s2.pop();
+            list.val = sum % 10;
+            ListNode head = new ListNode(sum / 10);
+            head.next = list;
+            list = head;
+            sum /= 10;
+        }
         
-        return head;
+        return list.val == 0 ? list.next : list;
+    }
+}
+
+/*
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode n1 = reverse(l1);
+        ListNode n2 = reverse(l2);
         
+        ListNode head = n1;
+        int c = 0;
+        while (n1 != null && n2 != null) {
+            
+        }
     }
     
-    public ListNode reverse(ListNode l){
+    public ListNode reverse(ListNode head) {
         ListNode pre = null;
-        while (l != null){
-            ListNode temp = l.next;
-            l.next = pre;
-            pre = l;
-            l = temp;
+        while (head != null) {
+            ListNode tmp = head.next;
+            head.next = pre;
+            pre = head;
+            head = tmp;
         }
         return pre;
     }
-    
-    public ListNode addTwoNumbHelper(ListNode l1, ListNode l2){
-
-        int carry = 0;
-        ListNode head = new ListNode(0);
-        ListNode itr = head;
-        while (l1 != null || l2 != null){
-            int i = 0;
-            int j = 0;
-            if (l1 != null) {
-                i = l1.val;
-                l1 = l1.next;
-            }
-            if (l2 != null) {
-                j = l2.val;
-                l2 = l2.next;
-            }
-            ListNode node = new ListNode((i+j+carry) % 10);
-            itr.next = node;
-            itr = itr.next;
-            
-            carry = (i+j+carry) / 10;
-        }
-        
-        if (carry != 0){
-            ListNode node = new ListNode(carry);
-            itr.next = node;
-        }
-        return head.next;
-    }
-    
 }
+*/
