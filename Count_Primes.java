@@ -1,20 +1,15 @@
-public class Solution {
+class Solution {
     public int countPrimes(int n) {
-        boolean[] primes = new boolean[n+1];
-        Arrays.fill(primes, true);
-        
-        for (int i = 2; i * i < n; i++){
-            for (int j = 2 * i; j < n; j += i){
-                primes[j] = false;
+        boolean[] res = new boolean[n];
+        int count = 0;
+        for (int i = 2; i < n; i++) {
+            if (res[i]) continue;
+            count++;
+            for (int j = 2 * i; j < n; j += i) {
+                res[j] = true;
             }
         }
         
-        int num = 0;
-        for (int i = 2; i < n; i++){
-            if (primes[i]){
-                num++;
-            }
-        }
-        return num;
+        return count;
     }
 }
