@@ -1,0 +1,36 @@
+import java.util.Stack;
+
+public class Baseball {
+	public static double cal(String[] input) {
+		Stack<Double> stack = new Stack<>();
+		double res = 0;
+		for (String s : input) {
+			if (s.charAt(0) == 'X') {
+				if (!stack.isEmpty()) res += stack.peek() + stack.peek();
+			} else if (s.charAt(0) == 'Z') {
+				if (!stack.isEmpty()) res -= stack.peek();
+			} else if (s.charAt(0) == '+') {
+				if (stack.isEmpty()) continue;
+				double d1 = stack.pop();
+				if (stack.isEmpty()) {
+					stack.push(d1);
+					continue;
+				}
+				double d2 = stack.pop();
+				res += d1 + d2;
+				stack.push(d2);
+				stack.push(d1);
+				stack.push(d1 + d2);
+			} else {
+				double d = Double.parseDouble(s);
+				stack.push(d);
+			}
+		}
+		return res;
+	}
+	
+	public static void main(String[] args) {
+		String[] arr = new String[] {"73", "27", "+", "X", "+"};
+		System.out.println(cal(arr));
+	}
+}
