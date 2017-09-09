@@ -26,7 +26,7 @@ public class BSTDistance {
             CreateBST(values);
             int l1 = distToRoot(root, node1);
             int l2 = distToRoot(root, node2);
-            if (l1 == -1 && l2 == -1) return -1;
+            if (l1 == -1 || l2 == -1) return -1;
             int lcaVal = findLCA(root, node1, node2).val;
             int lcaDistance = distToRoot(root, lcaVal);
  
