@@ -1,6 +1,3 @@
-
-package FriendCycle;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,28 +46,6 @@ public class FriendCircle {
         }
 
         Arrays.sort(res);
-        System.out.println(Arrays.toString(res));
-
         return res;
-    }
-    
-    public static void main(String[] args) {
-
-        assert true == Arrays.equals(
-                new String[] {"friend3", "friend4", "friend5"}
-                , new FriendCircle().findLargestFriendCircle(new String[][]{
-                        {"friend1", "friend2"},
-                        {"friend3", "friend4"},
-                        {"friend4", "friend5"},
-                }));
-        
-        assert true == Arrays.equals(
-                new String[] {"friend1", "friend2"}
-                , new FriendCircle().findLargestFriendCircle(new String[][]{
-                        {"friend1", "friend2"},
-                        {"friend3", "friend4"},
-                }));
-
-
     }
 }
