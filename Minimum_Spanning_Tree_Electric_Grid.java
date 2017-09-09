@@ -85,16 +85,5 @@ public class MST {
         }
         return new ArrayList<>();
     }
-    
-    public static void main(String[] args) {
-        Connection c1 = new Connection("a", "b", 10);
-        Connection c2 = new Connection("d", "b", 30);
-        Connection c3 = new Connection("a", "e", 20);
-        List<Connection> list = new ArrayList<>();
-        list.add(c2); list.add(c1);list.add(c3);
-        for (Connection connection : getMST(list)) {
-            System.out.println(connection.cost);
-        }
-    }
 }
 
