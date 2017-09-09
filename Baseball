@@ -28,9 +28,4 @@ public class Baseball {
 		}
 		return res;
 	}
-	
-	public static void main(String[] args) {
-		String[] arr = new String[] {"73", "27", "+", "X", "+"};
-		System.out.println(cal(arr));
-	}
 }
