@@ -5,9 +5,13 @@ class Solution {
         int[] count = new int[256];
         int num = 0, i = 0, res = 0;
         for (int j = 0; j < s.length(); j++) {
-            if (count[s.charAt(j)]++ == 0) num++;
+            count[s.charAt(j)]++;
+            if (count[s.charAt(j)] == 1) num++;
             if (num > k) {
-                while (--count[s.charAt(i++)] > 0);
+                count[s.charAt(i)]--;
+                while (count[s.charAt(i++)] > 0) {
+                    count[s.charAt(i)]--;
+                }
                 num--;
             }
             res = Math.max(res, j - i + 1);
