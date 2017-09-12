@@ -1,30 +1,23 @@
-public class Solution {
-    public int lengthOfLongestSubstringKDistinct(String s, int k) {
-        /*
-        Map<Character, Integer> map = new HashMap<>();
-        int l = 0, r = 0, len = 0;
-        
-        while (r < s.length()) {
-            if (map.size() <= k) {
-                char c = s.charAt(r++);
-                if (!map.containsKey(c)) {
-                    map.put(c, 1);
-                } else {
-                    map.put(c, map.get(c)+1);
-                }
-            } else {
-                char c = s.charAt(l++);
-                if (map.get(c) == 1) {
-                    map.remove(c);
-                } else {
-                    map.put(c, map.get(c)-1);
-                }
+class Solution {
+    
+    // this works for 256 different chars, fast O(n)
+   public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        int[] count = new int[256];
+        int num = 0, i = 0, res = 0;
+        for (int j = 0; j < s.length(); j++) {
+            if (count[s.charAt(j)]++ == 0) num++;
+            if (num > k) {
+                while (--count[s.charAt(i++)] > 0);
+                num--;
             }
-            if (map.size() <= k) len = Math.max(len, r-l);
+            res = Math.max(res, j - i + 1);
         }
-        return len;
-        */
-        Map<Character, Integer> map = new HashMap<>();
+        return res;
+    }
+    
+    //this works for all unicode chars, slow O(n)
+    /*
+    Map<Character, Integer> map = new HashMap<>();
         int left = 0;
         int best = 0;
         for(int i = 0; i < s.length(); i++) {
@@ -43,5 +36,5 @@ public class Solution {
             best = Math.max(best, i - left + 1);
         }
         return best;
-    }
+    */
 }
