@@ -1,3 +1,4 @@
+// AVG O(N) WORST CASE O(N^2)
 class Solution {
     public int findKthLargest(int[] nums, int k) {
         return partition(nums, nums.length - k, 0, nums.length-1);
@@ -23,4 +24,25 @@ class Solution {
         nums[l] = nums[r];
         nums[r] = val;
     }
+}
+
+// O(N lg N) running time + O(1) memory
+public int findKthLargest(int[] nums, int k) {
+    final int N = nums.length;
+    Arrays.sort(nums);
+    return nums[N - k];
+}
+
+//O(N lg K) running time + O(K) memory
+public int findKthLargest(int[] nums, int k) {
+
+    final PriorityQueue<Integer> pq = new PriorityQueue<>();
+    for(int val : nums) {
+        pq.offer(val);
+
+        if(pq.size() > k) {
+            pq.poll();
+        }
+    }
+    return pq.peek();
 }
