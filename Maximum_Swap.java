@@ -1,43 +1,22 @@
 class Solution {
     public int maximumSwap(int num) {
-        char[] chars = Integer.toString(num).toCharArray();
-        int i = chars.length;
-        int[] digits = new int[i];
+        char[] digits = ("" + num).toCharArray();
+        int[] buckets = new int[10];
         
-        for (int j = 0; j < i; j++) {
-            digits[j] = chars[j] - '0';
+        for (int i = 0; i < digits.length; i++) {
+            buckets[digits[i] - '0'] = i;
         }
         
-        boolean b = true;
-        for (int j = 0; j < i; j++) {
-            if (j < i-1 && digits[j] < digits[j+1]) {
-                b = false;
-                break;
-            }
-        }
-        if (b) return num;
-        
-        for (int j = 0; j < i; j++) {
-            int max = Integer.MIN_VALUE, index = -1;;
-            for (int k = j; k < i; k++) {
-                if (max <= digits[k]) {
-                    max = digits[k];
-                    index = k;
+        for (int i = 0; i < digits.length; i++) {
+            for (int j = 9; j > digits[i] - '0'; j--) { // if the digit is larger than current digit
+                if (buckets[j] > i) {               // if the position is behind current digit
+                    char c = digits[i];
+                    digits[i] = (char)('0' + j);
+                    digits[buckets[j]] = c;
+                    return Integer.parseInt(new String(digits));
                 }
             }
-            
-            if (digits[j] != max) {
-                int tmp = digits[j];
-                digits[j] = digits[index];
-                digits[index] = tmp;
-                break;
-            }
         }
-        
-        int res = 0;
-        for (int v : digits) {
-            res = 10 * res + v;
-        }
-        return res;
+        return num;
     }
 }
