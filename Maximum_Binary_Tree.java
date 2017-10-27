@@ -7,23 +7,44 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-public class Solution {
+class Solution {
+    
+    // avg O(nlogn) worst case O(n^2) == > 6 5 4 3 2 1
     public TreeNode constructMaximumBinaryTree(int[] nums) {
-        int l = 0, r = nums.length-1;
-        return helper(nums, l, r);
+        return helper(nums, 0, nums.length-1);
     }
     
-    public TreeNode helper(int[] nums, int l, int r) {
-        if (r < l) return null;
-        int maxIndex = l;
-        for (int i = l; i <= r; i++) {
-            if (nums[i] > nums[maxIndex]) {
-                maxIndex = i;
+    public TreeNode helper (int[] nums, int left, int right) {
+        if (left > right) return null;
+        int index = -1, val = Integer.MIN_VALUE;
+        for (int i = left; i <= right; i++) {
+            if (val < nums[i]) {
+                val = nums[i];
+                index = i;
             }
         }
-        TreeNode node = new TreeNode(nums[maxIndex]);
-        node.left = helper(nums, l, maxIndex-1);
-        node.right = helper(nums, maxIndex+1, r);
+        TreeNode node = new TreeNode(nums[index]);
+        node.left = helper (nums, left, index-1);
+        node.right = helper (nums, index+1, right);
         return node;
+    }
+
+	// O(n)  iterative  
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        LinkedList<TreeNode> lklist = new LinkedList<>();
+        TreeNode left = null;
+        for (int num: nums){
+            TreeNode cur = new TreeNode(num);
+            while (!lklist.isEmpty() && lklist.peekFirst().val < cur.val){
+                cur.left = lklist.pop();
+            }
+            
+            if (!lklist.isEmpty()){
+                lklist.peekFirst().right = cur;
+            }
+            lklist.push(cur);
+        }
+        
+        return lklist.peekLast();
     }
 }
