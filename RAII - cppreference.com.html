@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://en.cppreference.com/w/cpp/language/raii -->
+<html lang="en" dir="ltr" class="client-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script async="" src="./RAII - cppreference.com_files/ace.js"></script>
+<title>RAII - cppreference.com</title>
+
+<meta name="generator" content="MediaWiki 1.21.2">
+<link rel="alternate" type="application/x-wiki" title="Edit" href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;action=edit">
+<link rel="edit" title="Edit" href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;action=edit">
+<link rel="shortcut icon" href="https://en.cppreference.com/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://en.cppreference.com/mwiki/opensearch_desc.php" title="cppreference.com (en)">
+<link rel="EditURI" type="application/rsd+xml" href="https://en.cppreference.com/mwiki/api.php?action=rsd">
+<link rel="alternate" type="application/atom+xml" title="cppreference.com Atom feed" href="https://en.cppreference.com/mwiki/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="stylesheet" href="./RAII - cppreference.com_files/load.php">
+<style>
+.t-example-live-link{display:block !important;position:relative;margin-top:1em;padding:0 1em;width:55em}.t-example-live-link > a{display:none}.coliru-btn{background-color:#eeeeee;background-image:linear-gradient(#ffffff,#eeeeee);background-repeat:repeat-x;border:1px solid #cccccc;border-radius:3px;box-shadow:0 1px 0 rgba(255,255,255,0.5);padding:3px;margin:3px;color:#333333;cursor:pointer;display:inline-block;font-size:0.8em;font-weight:bold;line-height:1em}.coliru-btn:hover{background-color:#dddddd;background-image:linear-gradient(#ffffff,#dddddd)}.coliru-btn-disabled{color:#888888}.coliru-btn-disabled:hover{background-color:#eeeeee;background-image:linear-gradient(#ffffff,#eeeeee)}.coliru-powered{font-size:0.8em;position:absolute;bottom:0;right:0}.ace_editor{display:block;position:relative !important;top:0;right:0;bottom:0;left:0;width:100%;height:30em;font-family:DejaVuSansMono,"DejaVu Sans Mono",courier,monospace !important}.t-example-code{margin-top:0 !important}.coliru-output{overflow:auto;max-height:15em}.coliru-output > div{display:table;width:100%}.coliru-output pre{border:none;display:table-row;padding:0;margin:0}.coliru-output-line-shell{background-color:#ffd8d8}.coliru-select-compiler select{background-color:#EEEEEE;background-image:linear-gradient(#FFFFFF,#EEEEEE);background-repeat:repeat-x;border:1px solid #CCCCCC;border-radius:3px 3px 3px 3px;box-shadow:0 1px 0 rgba(255,255,255,0.5);font-size:0.8em;line-height:1em;padding:0;width:12em}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:50a161ae2572e9a968ebbe7279923688 */
+.mw-collapsible-toggle{float:right} li .mw-collapsible-toggle{float:none} .mw-collapsible-toggle-li{list-style:none}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:4250852ed2349a0d4d0fc6509a3e7d4c */
+.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:none;z-index:1099;padding:0;margin:-1px -1px 0 0} html > body .suggestions{margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0}.suggestions-result{color:black;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left}.suggestions-result-current{background-color:#4C59A6;color:white}.suggestions-special .special-label{color:gray;text-align:left}.suggestions-special .special-query{color:black;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:silver}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:white}.autoellipsis-matched,.highlight{font-weight:bold}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:9780324491b653a3780e2d029bdc140c */</style><style>
+.suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:hover,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSuggest-link:focus{text-decoration:none;color:black}.suggestions-result-current a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-link:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.suggestions-result-current a.mw-searchSuggest-link:focus{color:white}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:52b1797f70c7e4094dfa4191101944e8 */</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="./RAII - cppreference.com_files/load(1).php">
+<style>a:lang(ar),a:lang(ckb),a:lang(fa),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}#toc{display:none}.editsection{display:none}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:472787eddcf4605d11de8c7ef047234f */</style>
+
+<script src="./RAII - cppreference.com_files/load(2).php"></script><script src="./RAII - cppreference.com_files/load(3).php"></script>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"cpp/language/raii","wgTitle":"cpp/language/raii","wgCurRevisionId":92027,"wgArticleId":13513,"wgIsArticle":true,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"cpp/language/raii","wgRestrictionEdit":[],"wgRestrictionMove":[]});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function(){mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"disablesuggest":0,"editfont":"default","editondblclick":0,"editsection":0,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":0,"extendwatchlist":0,"externaldiff":0,"externaleditor":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"imagesize":2,"justify":0,"math":1,"minordefault":0,"newpageshidepatrolled":0,"nocache":0,"noconvertlink":0,"norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"quickbar":5,"rcdays":7,"rclimit":50,"rememberpassword":0,"rows":25,"searchlimit":20,"showhiddencats":0,"showjumplinks":1,"shownumberswatching":1,"showtoc":0,"showtoolbar":1,"skin":"cppreference2","stubthreshold":0,"thumbsize":2,"underline":2,"uselivepreview":0,"usenewrc":0,"watchcreations":0,"watchdefault":0,"watchdeletion":0,
+"watchlistdays":3,"watchlisthideanons":0,"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,"variant":"en","language":"en","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"gadget-ColiruCompiler":1,"gadget-MathJax":1});;},{},{});mw.loader.implement("user.tokens",function(){mw.user.tokens.set({"editToken":"+\\","patrolToken":false,"watchToken":false});;},{},{});
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-js:7:9f05c6caceb9bb1a482b6cebd4c5a330 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax"]);
+}</script><script src="./RAII - cppreference.com_files/load(4).php"></script>
+<style type="text/css">/*<![CDATA[*/
+.source-cpp {line-height: normal;}
+.source-cpp li, .source-cpp pre {
+	line-height: normal; border: 0px none white;
+}
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for cpp
+ * CSS class: source-cpp, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.cpp.source-cpp .de1, .cpp.source-cpp .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.cpp.source-cpp  {font-family:monospace;}
+.cpp.source-cpp .imp {font-weight: bold; color: red;}
+.cpp.source-cpp li, .cpp.source-cpp .li1 {font-weight: normal; vertical-align:top;}
+.cpp.source-cpp .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.cpp.source-cpp .li2 {font-weight: bold; vertical-align:top;}
+.cpp.source-cpp .kw1 {color: #0000dd;}
+.cpp.source-cpp .kw2 {color: #0000ff;}
+.cpp.source-cpp .kw3 {color: #0000dd;}
+.cpp.source-cpp .kw4 {color: #0000ff;}
+.cpp.source-cpp .co1 {color: #909090;}
+.cpp.source-cpp .co2 {color: #339900;}
+.cpp.source-cpp .coMULTI {color: #ff0000; font-style: italic;}
+.cpp.source-cpp .es0 {color: #008000; font-weight: bold;}
+.cpp.source-cpp .es1 {color: #008000; font-weight: bold;}
+.cpp.source-cpp .es2 {color: #008000; font-weight: bold;}
+.cpp.source-cpp .es3 {color: #008000; font-weight: bold;}
+.cpp.source-cpp .es4 {color: #008000; font-weight: bold;}
+.cpp.source-cpp .es5 {color: #008000; font-weight: bold;}
+.cpp.source-cpp .br0 {color: #008000;}
+.cpp.source-cpp .sy0 {color: #008000;}
+.cpp.source-cpp .sy1 {color: #000080;}
+.cpp.source-cpp .sy2 {color: #000040;}
+.cpp.source-cpp .sy3 {color: #000040;}
+.cpp.source-cpp .sy4 {color: #008080;}
+.cpp.source-cpp .st0 {color: #008000;}
+.cpp.source-cpp .nu0 {color: #000080;}
+.cpp.source-cpp .nu6 {color: #000080;}
+.cpp.source-cpp .nu8 {color: #000080;}
+.cpp.source-cpp .nu12 {color: #000080;}
+.cpp.source-cpp .nu16 {color:#000080;}
+.cpp.source-cpp .nu17 {color:#000080;}
+.cpp.source-cpp .nu18 {color:#000080;}
+.cpp.source-cpp .nu19 {color:#000080;}
+.cpp.source-cpp .ln-xtra, .cpp.source-cpp li.ln-xtra, .cpp.source-cpp div.ln-xtra {background-color: #ffc;}
+.cpp.source-cpp span.xtra { display:block; }
+
+/*]]>*/
+</style><!--[if lt IE 7]><style type="text/css">body{behavior:url("/mwiki/skins/cppreference2/csshover.min.htc")}</style><![endif]--><script async="" src="./RAII - cppreference.com_files/load(5).php"></script></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-cpp_language_raii skin-cppreference2 action-view cpp-navbar">
+        <!-- header -->
+        <div id="mw-head" class="noprint">
+            <div id="cpp-head-first-base">
+                <div id="cpp-head-first">
+                    <h5><a href="https://en.cppreference.com/">
+                        cppreference.com                        </a></h5>
+                    <div id="cpp-head-search">
+                        
+<!-- 0 -->
+<div id="p-search">
+	<h5><label for="searchInput">Search</label></h5>
+	<form action="https://en.cppreference.com/mwiki/index.php" id="searchform">
+		<input type="hidden" name="title" value="Special:Search">
+				<div id="simpleSearch">
+						<input name="search" title="Search cppreference.com [ctrl-option-f]" accesskey="f" id="searchInput" autocomplete="off" placeholder="Search">						<button type="submit" name="button" title="Search the pages for this text" id="searchButton"><img src="./RAII - cppreference.com_files/search-ltr.png" alt="Search"></button>					</div>
+			</form>
+</div>
+
+<!-- /0 -->
+                    </div>
+                    <div id="cpp-head-personal">
+                        
+<!-- 0 -->
+<div id="p-personal" class="">
+<span id="pt-createaccount"><a href="https://en.cppreference.com/mwiki/index.php?title=Special:UserLogin&amp;returnto=cpp%2Flanguage%2Fraii&amp;type=signup">Create account</a></span>	<div class="menu">
+        <ul>
+<li id="pt-login"><a href="https://en.cppreference.com/mwiki/index.php?title=Special:UserLogin&amp;returnto=cpp%2Flanguage%2Fraii" title="You are encouraged to log in; however, it is not mandatory [ctrl-option-o]" accesskey="o">Log in</a></li>        </ul>
+    </div>
+</div>
+
+<!-- /0 -->
+                    </div>
+
+                </div>
+            </div>
+            <div id="cpp-head-second-base">
+                <div id="cpp-head-second">
+                    <div id="cpp-head-tools-left">
+                        
+<!-- 0 -->
+<div id="p-namespaces" class="vectorTabs">
+	<h5>Namespaces</h5>
+	<ul>
+					<li id="ca-nstab-main" class="selected"><span><a href="https://en.cppreference.com/w/cpp/language/raii" title="View the content page [ctrl-option-c]" accesskey="c">Page</a></span></li>
+					<li id="ca-talk" class="new"><span><a href="https://en.cppreference.com/mwiki/index.php?title=Talk:cpp/language/raii&amp;action=edit&amp;redlink=1" title="Discussion about the content page [ctrl-option-t]" accesskey="t">Discussion</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-variants" class="vectorMenu emptyPortlet">
+		<h5><span>Variants</span><a href="https://en.cppreference.com/w/cpp/language/raii#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+                    </div>
+                    <div id="cpp-head-tools-right">
+                        
+<!-- 0 -->
+<div id="p-views" class="vectorTabs">
+	<h5>Views</h5>
+	<ul>
+					<li id="ca-view" class="selected"><span><a href="https://en.cppreference.com/w/cpp/language/raii">View</a></span></li>
+					<li id="ca-edit"><span><a href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;action=edit" title="You can edit this page. Please use the preview button before saving [ctrl-option-e]" accesskey="e">Edit</a></span></li>
+					<li id="ca-history" class="collapsible"><span><a href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;action=history" title="Past revisions of this page [ctrl-option-h]" accesskey="h">History</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-cactions" class="vectorMenu emptyPortlet">
+	<h5><span>Actions</span><a href="https://en.cppreference.com/w/cpp/language/raii#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /header -->
+        <!-- content -->
+<style type="text/css">
+#carbonads {
+  display: block;
+  overflow: hidden;
+  position: absolute;
+  text-align: center;
+  left: -170px;
+  max-width: 150px;
+  border-radius: 4px;
+  border: solid 1px hsla(0, 0%, 0%, .1);
+  background-color: hsl(0, 0%, 98%);
+  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu,
+  Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+#carbonads a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#carbonads a:hover {
+  color: inherit;
+}
+
+#carbonads span {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.carbon-img {
+  display: block;
+  margin-bottom: 8px;
+  max-width: 150px;
+  line-height: 1;
+}
+
+.carbon-img img {
+  display: block;
+  margin: 0 auto;
+  max-width: 150px !important;
+  width: 150px;
+  height: auto;
+}
+
+.carbon-text {
+  display: block;
+  padding: 0 1em 8px;
+}
+
+.carbon-poweredby {
+  display: block;
+  padding: 8px 12px;
+  background: repeating-linear-gradient(-45deg, transparent, transparent 5px, hsla(0, 0%, 0%, .025) 5px, hsla(0, 0%, 0%, .025) 10px) hsla(203, 11%, 95%, .4);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 600;
+  font-size: 9px;
+  line-height: 1;
+}
+</style>
+        <div id="cpp-content-base">
+            <div id="content">
+                <a id="top"></a>
+                <div id="mw-js-message" style="display:none;"></div>
+                                <!-- firstHeading -->
+<script async="" type="text/javascript" src="./RAII - cppreference.com_files/carbon.js" id="_carbonads_js"></script>
+                <h1 id="firstHeading" class="firstHeading">RAII</h1>
+                <!-- /firstHeading -->
+                <!-- bodyContent -->
+                <div id="bodyContent">
+                                        <!-- tagline -->
+                    <div id="siteSub">From cppreference.com</div>
+                    <!-- /tagline -->
+                                        <!-- subtitle -->
+                    <div id="contentSub"><span class="subpages">&lt; <a href="https://en.cppreference.com/w/cpp" title="cpp">cpp</a>‎ | <a href="https://en.cppreference.com/w/cpp/language" title="cpp/language">language</a></span></div>
+                    <!-- /subtitle -->
+                                                            <!-- bodycontent -->
+                    <div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="t-navbar" style=""><div class="t-navbar-sep">&nbsp;</div><div class="t-navbar-head"><a href="https://en.cppreference.com/w/cpp" title="cpp"> C++</a><div class="t-navbar-menu"><div><div><table class="t-nv-begin" cellpadding="0" style="line-height:1.1em;">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language" title="cpp/language"> Language</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/header" title="cpp/header"> Standard Library Headers</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/freestanding" title="cpp/freestanding"> Freestanding and hosted implementations</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/named_req" title="cpp/named req"> Named requirements </a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/utility#Language_support" title="cpp/utility"> Language support library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/concepts" title="cpp/concepts"> Concepts library</a> <span class="t-mark-rev t-since-cxx20">(C++20)</span> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/error" title="cpp/error"> Diagnostics library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/utility" title="cpp/utility"> Utilities library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/string" title="cpp/string"> Strings library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/container" title="cpp/container"> Containers library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/iterator" title="cpp/iterator"> Iterators library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/ranges" title="cpp/ranges"> Ranges library</a> <span class="t-mark-rev t-since-cxx20">(C++20)</span> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/algorithm" title="cpp/algorithm"> Algorithms library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/numeric" title="cpp/numeric"> Numerics library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/io" title="cpp/io"> Input/output library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/locale" title="cpp/locale"> Localizations library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/regex" title="cpp/regex"> Regular expressions library</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/atomic" title="cpp/atomic"> Atomic operations library</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/thread" title="cpp/thread"> Thread support library</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/filesystem" title="cpp/filesystem"> Filesystem library</a> <span class="t-mark-rev t-since-cxx17">(C++17)</span> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/experimental" title="cpp/experimental"> Technical Specifications</a> </td></tr>
+</tbody></table></div><div><span class="editsection noprint plainlinks" title="Edit this template"><a rel="nofollow" class="external text" href="https://en.cppreference.com/mwiki/index.php?title=Template:cpp/navbar_content&amp;action=edit">[edit]</a></span></div></div></div></div><div class="t-navbar-sep">&nbsp;</div><div class="t-navbar-head"><a href="https://en.cppreference.com/w/cpp/language" title="cpp/language"> C++ language</a><div class="t-navbar-menu"><div><div style="display:inline-block">
+<div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv-h1"><td colspan="5"> General topics</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/preprocessor" title="cpp/preprocessor"> Preprocessor</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/comment" title="cpp/comment"> Comments</a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/keyword" title="cpp/keyword"> Keywords</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/escape" title="cpp/language/escape"> Escape sequences</a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h1"><td colspan="5"> Flow control</td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Conditional execution statements</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/if" title="cpp/language/if"> <code>if</code></a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/switch" title="cpp/language/switch"> <code>switch</code></a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Iteration statements (loops)</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/for" title="cpp/language/for"> <code>for</code></a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/range-for" title="cpp/language/range-for"> range-<code>for</code></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/while" title="cpp/language/while"> <code>while</code></a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/do" title="cpp/language/do"> <code>do-while</code></a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Jump statements </td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/continue" title="cpp/language/continue"> <code>continue</code></a> - <a href="https://en.cppreference.com/w/cpp/language/break" title="cpp/language/break"> <code>break</code></a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/goto" title="cpp/language/goto"> <code>goto</code></a> - <a href="https://en.cppreference.com/w/cpp/language/return" title="cpp/language/return"> <code>return</code></a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h1"><td colspan="5"> Functions</td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/function" title="cpp/language/function"> Function declaration</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/lambda" title="cpp/language/lambda"> Lambda function declaration</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/inline" title="cpp/language/inline"> <code>inline</code> specifier</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/except_spec" title="cpp/language/except spec"> Exception specifications</a> <span class="t-mark-rev t-until-cxx20">(until C++20)</span></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/noexcept_spec" title="cpp/language/noexcept spec"> <code>noexcept</code> specifier</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv-h1"><td colspan="5"> Exceptions</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/throw" title="cpp/language/throw"> <code>throw</code>-expression</a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/try_catch" title="cpp/language/try catch"> <code>try</code>-<code>catch</code> block</a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h1"><td colspan="5"> Namespaces</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/namespace" title="cpp/language/namespace"> Namespace declaration</a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/namespace_alias" title="cpp/language/namespace alias"> Namespace aliases</a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h1"><td colspan="5"> Types</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/types" title="cpp/language/types"> Fundamental types</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/enum" title="cpp/language/enum"> Enumeration types</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/function" title="cpp/language/function"> Function types</a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/class" title="cpp/language/class"> Compound types</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/union" title="cpp/language/union"> Union types</a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Specifiers</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/decltype" title="cpp/language/decltype"> <code>decltype</code></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/auto" title="cpp/language/auto"> <code>auto</code></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/alignas" title="cpp/language/alignas"> <code>alignas</code></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/cv" title="cpp/language/cv"> <code>const</code>/<code>volatile</code></a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/constexpr" title="cpp/language/constexpr"> <code>constexpr</code></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/storage_duration" title="cpp/language/storage duration"> Storage duration specifiers</a></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Initialization</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/default_initialization" title="cpp/language/default initialization"> Default initialization</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/value_initialization" title="cpp/language/value initialization"> Value initialization</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/zero_initialization" title="cpp/language/zero initialization"> Zero initialization</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/copy_initialization" title="cpp/language/copy initialization"> Copy initialization</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/direct_initialization" title="cpp/language/direct initialization"> Direct initialization</a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/aggregate_initialization" title="cpp/language/aggregate initialization"> Aggregate initialization</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/list_initialization" title="cpp/language/list initialization"> List initialization</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/constant_initialization" title="cpp/language/constant initialization"> Constant initialization</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/reference_initialization" title="cpp/language/reference initialization"> Reference initialization</a></td></tr>
+</tbody></table></div></td></tr>
+</tbody></table></div>
+</div>
+<div style="display:inline-block">
+<div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv-h1"><td colspan="5"> Expressions</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/value_category" title="cpp/language/value category"> Value categories</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/eval_order" title="cpp/language/eval order"> Order of evaluation</a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/operators" title="cpp/language/operators"> Operators</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/operator_precedence" title="cpp/language/operator precedence"> Operator precedence</a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/operator_alternative" title="cpp/language/operator alternative"> Alternative representations</a></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Literals</td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/bool_literal" title="cpp/language/bool literal"> Boolean</a> - <a href="https://en.cppreference.com/w/cpp/language/integer_literal" title="cpp/language/integer literal"> Integer</a> - <a href="https://en.cppreference.com/w/cpp/language/floating_literal" title="cpp/language/floating literal"> Floating-point</a></td></tr>   
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/character_literal" title="cpp/language/character literal"> Character</a> - <a href="https://en.cppreference.com/w/cpp/language/string_literal" title="cpp/language/string literal"> String</a> - <a href="https://en.cppreference.com/w/cpp/language/nullptr" title="cpp/language/nullptr"> <code>nullptr</code></a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr> 
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/user_literal" title="cpp/language/user literal"> User-defined</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv-h1"><td colspan="5"> Utilities</td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/attributes" title="cpp/language/attributes"> Attributes</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Types</td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/typedef" title="cpp/language/typedef"> <code>typedef</code> declaration</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/type_alias" title="cpp/language/type alias"> Type alias declaration</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Casts</td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/implicit_cast" title="cpp/language/implicit cast" class="mw-redirect"> Implicit conversions</a> - <a href="https://en.cppreference.com/w/cpp/language/explicit_cast" title="cpp/language/explicit cast"> Explicit conversions</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/static_cast" title="cpp/language/static cast"> <code>static_cast</code></a> - <a href="https://en.cppreference.com/w/cpp/language/dynamic_cast" title="cpp/language/dynamic cast"> <code>dynamic_cast</code></a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/const_cast" title="cpp/language/const cast"> <code>const_cast</code></a> - <a href="https://en.cppreference.com/w/cpp/language/reinterpret_cast" title="cpp/language/reinterpret cast"> <code>reinterpret_cast</code></a></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Memory allocation</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/new" title="cpp/language/new"> <code>new</code> expression</a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/delete" title="cpp/language/delete"> <code>delete</code> expression</a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h1"><td colspan="5"> Classes</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/class" title="cpp/language/class"> Class declaration</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/initializer_list" title="cpp/language/initializer list"> Initializer lists</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/this" title="cpp/language/this"> <code>this</code> pointer</a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/access" title="cpp/language/access"> Access specifiers</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/friend" title="cpp/language/friend"> <code>friend</code> specifier</a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Class-specific function properties</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/virtual" title="cpp/language/virtual"> Virtual function</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/override" title="cpp/language/override"> override specifier</a>  <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/final" title="cpp/language/final"> final specifier</a>  <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/explicit" title="cpp/language/explicit"> <code>explicit</code></a>  <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/static" title="cpp/language/static"> <code>static</code></a> </td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h2"><td colspan="5"> Special member functions</td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/default_constructor" title="cpp/language/default constructor"> Default constructor</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/copy_constructor" title="cpp/language/copy constructor"> Copy constructor</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/move_constructor" title="cpp/language/move constructor"> Move constructor</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/as_operator" title="cpp/language/as operator" class="mw-redirect"> Copy assignment</a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/move_operator" title="cpp/language/move operator" class="mw-redirect"> Move assignment</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/destructor" title="cpp/language/destructor"> Destructor</a></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h1"><td colspan="5">Templates </td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/class_template" title="cpp/language/class template"> Class template </a></td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/function_template" title="cpp/language/function template"> Function template </a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/template_specialization" title="cpp/language/template specialization"> Template specialization</a></td></tr>   
+<tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/parameter_pack" title="cpp/language/parameter pack"> Parameter packs</a> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td></tr>
+</tbody></table></div></td></tr>
+<tr class="t-nv-h1"><td colspan="5"> Miscellaneous </td></tr>
+<tr class="t-nv-col-table"><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/asm" title="cpp/language/asm"> Inline assembly</a></td></tr>
+</tbody></table></div></td><td><div><table class="t-nv-begin" cellpadding="0" style="">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="https://en.cppreference.com/w/cpp/language/history" title="cpp/language/history"> History of C++</a></td></tr>
+</tbody></table></div></td></tr>
+</tbody></table></div>
+</div><div><span class="editsection noprint plainlinks" title="Edit this template"><a rel="nofollow" class="external text" href="https://en.cppreference.com/mwiki/index.php?title=Template:cpp/language/navbar_content&amp;action=edit">[edit]</a></span></div></div></div></div><div class="t-navbar-sep">&nbsp;</div></div>
+<p><i>Resource Acquisition Is Initialization</i> or RAII, is a C++ programming technique<sup id="cite_ref-1" class="reference"><a href="https://en.cppreference.com/w/cpp/language/raii#cite_note-1">[1]</a></sup><sup id="cite_ref-2" class="reference"><a href="https://en.cppreference.com/w/cpp/language/raii#cite_note-2">[2]</a></sup> which binds the life cycle of a resource that must be acquired before use (allocated heap memory, thread of execution, open socket, open file, locked mutex, disk space, database connection—anything that exists in limited supply) to the <a href="https://en.cppreference.com/w/cpp/language/lifetime" title="cpp/language/lifetime">lifetime</a> of an object.
+</p><p>RAII guarantees that the resource is available to any function that may access the object (resource availability is a <a href="https://en.wikipedia.org/wiki/Class_invariant" class="extiw" title="enwiki:Class invariant">class invariant</a>, eliminating redundant runtime tests). It also guarantees that all resources are released when the lifetime of their controlling object ends, in reverse order of acquisition. Likewise, if resource acquisition fails (the constructor exits with an exception), all resources acquired by every fully-constructed member and base subobject are released in reverse order of initialization. This leverages the core language features (<a href="https://en.cppreference.com/w/cpp/language/lifetime" title="cpp/language/lifetime">object lifetime</a>, <a href="https://en.cppreference.com/w/cpp/language/statements" title="cpp/language/statements">scope exit</a>, <a href="https://en.cppreference.com/w/cpp/language/initializer_list#Initialization_order" title="cpp/language/initializer list">order of initialization</a> and <a href="https://en.cppreference.com/w/cpp/language/throw#Stack_unwinding" title="cpp/language/throw">stack unwinding</a>) to eliminate resource leaks and guarantee exception safety. Another name for this technique is <i>Scope-Bound Resource Management</i> (SBRM), after the basic use case where the lifetime of an RAII object ends due to scope exit.
+</p><p>RAII can be summarized as follows:
+</p>
+<ul><li> encapsulate each resource into a class, where
+</li></ul>
+<dl><dd><ul><li> the constructor acquires the resource and establishes all class invariants or throws an exception if that cannot be done,
+</li><li> the destructor releases the resource and never throws exceptions;
+</li></ul>
+</dd></dl>
+<ul><li> always use the resource via an instance of a RAII-class that either
+</li></ul>
+<dl><dd><ul><li> has automatic storage duration or temporary lifetime itself, or
+</li><li> has lifetime that is bounded by the lifetime of an automatic or temporary object
+</li></ul>
+</dd></dl>
+<p>Move semantics make it possible to safely transfer resource ownership between objects, across scopes, and in and out of threads, while maintaining resource safety.
+</p><p>Classes with open()/close(), lock()/unlock(), or init()/copyFrom()/destroy() member functions are typical examples of non-RAII classes:
+</p>
+<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="cpp source-cpp"><pre class="de1"><a href="http://en.cppreference.com/w/cpp/thread/mutex"><span class="kw2151">std::<span class="me2">mutex</span></span></a> m<span class="sy4">;</span>
+&nbsp;
+<span class="kw4">void</span> bad<span class="br0">(</span><span class="br0">)</span> 
+<span class="br0">{</span>
+    m.<span class="me1">lock</span><span class="br0">(</span><span class="br0">)</span><span class="sy4">;</span>                    <span class="co1">// acquire the mutex</span>
+    f<span class="br0">(</span><span class="br0">)</span><span class="sy4">;</span>                         <span class="co1">// if f() throws an exception, the mutex is never released</span>
+    <span class="kw1">if</span><span class="br0">(</span><span class="sy3">!</span>everything_ok<span class="br0">(</span><span class="br0">)</span><span class="br0">)</span> <span class="kw1">return</span><span class="sy4">;</span> <span class="co1">// early return, the mutex is never released</span>
+    m.<span class="me1">unlock</span><span class="br0">(</span><span class="br0">)</span><span class="sy4">;</span>                  <span class="co1">// if bad() reaches this statement, the mutex is released</span>
+<span class="br0">}</span>
+&nbsp;
+<span class="kw4">void</span> good<span class="br0">(</span><span class="br0">)</span>
+<span class="br0">{</span>
+    <a href="http://en.cppreference.com/w/cpp/thread/lock_guard"><span class="kw2163">std::<span class="me2">lock_guard</span></span></a><span class="sy1">&lt;</span><a href="http://en.cppreference.com/w/cpp/thread/mutex"><span class="kw2151">std::<span class="me2">mutex</span></span></a><span class="sy1">&gt;</span> lk<span class="br0">(</span>m<span class="br0">)</span><span class="sy4">;</span> <span class="co1">// RAII class: mutex acquisition is initialization</span>
+    f<span class="br0">(</span><span class="br0">)</span><span class="sy4">;</span>                               <span class="co1">// if f() throws an exception, the mutex is released</span>
+    <span class="kw1">if</span><span class="br0">(</span><span class="sy3">!</span>everything_ok<span class="br0">(</span><span class="br0">)</span><span class="br0">)</span> <span class="kw1">return</span><span class="sy4">;</span>       <span class="co1">// early return, the mutex is released</span>
+<span class="br0">}</span>                                      <span class="co1">// if good() returns normally, the mutex is released</span></pre></div></div>
+<h3><span class="editsection">[<a href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;action=edit&amp;section=1" title="Edit section: The standard library">edit</a>]</span> <span class="mw-headline" id="The_standard_library">The standard library</span></h3>
+<p>The C++ library classes that manage their own resources follow RAII: <span class="t-lc"><a href="https://en.cppreference.com/w/cpp/string/basic_string" title="cpp/string/basic string">std::string</a></span>, <span class="t-lc"><a href="https://en.cppreference.com/w/cpp/container/vector" title="cpp/container/vector">std::vector</a></span>, <span class="t-lc"><a href="https://en.cppreference.com/w/cpp/thread/thread" title="cpp/thread/thread">std::thread</a></span>, and many others acquire their resources in constructors (which throw exceptions on errors), release them in their destructors (which never throw), and don't require explicit cleanup.
+</p><p>In addition, the standard library offers several RAII wrappers to manage user-provided resources:
+</p>
+<ul><li> <span class="t-lc"><a href="https://en.cppreference.com/w/cpp/memory/unique_ptr" title="cpp/memory/unique ptr">std::unique_ptr</a></span> and <span class="t-lc"><a href="https://en.cppreference.com/w/cpp/memory/shared_ptr" title="cpp/memory/shared ptr">std::shared_ptr</a></span> to manage dynamically-allocated memory or, with a user-provided deleter, any resource represented by a plain pointer;
+</li><li> <span class="t-lc"><a href="https://en.cppreference.com/w/cpp/thread/lock_guard" title="cpp/thread/lock guard">std::lock_guard</a></span>, <span class="t-lc"><a href="https://en.cppreference.com/w/cpp/thread/unique_lock" title="cpp/thread/unique lock">std::unique_lock</a></span>, <span class="t-lc"><a href="https://en.cppreference.com/w/cpp/thread/shared_lock" title="cpp/thread/shared lock">std::shared_lock</a></span> to manage mutexes.
+</li></ul>
+<h3><span class="editsection">[<a href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;action=edit&amp;section=2" title="Edit section: Notes">edit</a>]</span> <span class="mw-headline" id="Notes">Notes</span></h3>
+<p>RAII does not apply to the management of the resources that are not acquired before use: CPU time, cores, and cache capacity, entropy pool capacity, network bandwidth, electric power consumption, stack memory.
+</p>
+<h2><span class="editsection">[<a href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;action=edit&amp;section=3" title="Edit section: References">edit</a>]</span> <span class="mw-headline" id="References">References</span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="https://en.cppreference.com/w/cpp/language/raii#cite_ref-1">↑</a></span> <span class="reference-text"><a rel="nofollow" class="external text" href="http://www.stroustrup.com/bs_faq2.html#finally">RAII in Stroustrup's C++ FAQ</a></span>
+</li>
+<li id="cite_note-2"><span class="mw-cite-backlink"><a href="https://en.cppreference.com/w/cpp/language/raii#cite_ref-2">↑</a></span> <span class="reference-text"><a rel="nofollow" class="external text" href="https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#e6-use-raii-to-prevent-leaks">C++ Core Guidelines E.6 "Use RAII to prevent leaks"</a></span>
+</li>
+</ol>
+
+<!-- 
+NewPP limit report
+Preprocessor visited node count: 1448/1000000
+Preprocessor generated node count: 4125/1000000
+Post‐expand include size: 101915/2097152 bytes
+Template argument size: 8772/2097152 bytes
+Highest expansion depth: 15/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key mwiki1-mwiki_en_:pcache:idhash:13513-0!*!0!!*!*!* and timestamp 20190209233827 -->
+</div>                    <!-- /bodycontent -->
+                                        <!-- printfooter -->
+                    <div class="printfooter">
+                    Retrieved from "<a href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;oldid=92027">https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;oldid=92027</a>"                    </div>
+                    <!-- /printfooter -->
+                                                            <!-- catlinks -->
+                    <div id="catlinks" class="catlinks catlinks-allhidden"></div>                    <!-- /catlinks -->
+                                                            <div class="visualClear"></div>
+                    <!-- debughtml -->
+                                        <!-- /debughtml -->
+                </div>
+                <!-- /bodyContent -->
+            </div>
+        </div>
+        <!-- /content -->
+        <!-- footer -->
+        <div id="cpp-footer-base" class="noprint">
+            <div id="footer">
+                        <div id="cpp-navigation">
+            <h5>Navigation</h5>
+            <ul>
+<li id="n-Support-us"><a href="http://www.cppreference.com/support" rel="nofollow">Support us</a></li><li id="n-recentchanges"><a href="https://en.cppreference.com/w/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li><li id="n-FAQ"><a href="https://en.cppreference.com/w/Cppreference:FAQ">FAQ</a></li><li id="n-Offline-version"><a href="https://en.cppreference.com/w/Cppreference:Archives">Offline version</a></li>            </ul>
+        </div>
+                        <div id="cpp-toolbox">
+            <h5><span>Toolbox</span><a href="https://en.cppreference.com/w/cpp/language/raii#"></a></h5>
+            <ul>
+<li id="t-whatlinkshere"><a href="https://en.cppreference.com/w/Special:WhatLinksHere/cpp/language/raii" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="https://en.cppreference.com/w/Special:RecentChangesLinked/cpp/language/raii" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-upload"><a href="http://upload.cppreference.com/w/Special:Upload" title="Upload files [u]" accesskey="u">Upload file</a></li><li id="t-specialpages"><a href="https://en.cppreference.com/w/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;oldid=92027" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="https://en.cppreference.com/mwiki/index.php?title=cpp/language/raii&amp;action=info">Page information</a></li>            </ul>
+        </div>
+                        <div id="cpp-languages">
+            <div><ul><li>In other languages</li></ul></div>
+            <div><ul>
+<li class="interwiki-zh"><a href="http://zh.cppreference.com/w/cpp/language/raii" title="cpp/language/raii" lang="zh" hreflang="zh">中文</a></li>            </ul></div>
+        </div>
+            <ul id="footer-info">
+                                    <li id="footer-info-lastmod"> This page was last modified on 2 April 2017, at 08:00.</li>
+                                    <li id="footer-info-viewcount">This page has been accessed 177,470 times.</li>
+                            </ul>
+                    <ul id="footer-places">
+                                    <li id="footer-places-privacy"><a href="https://en.cppreference.com/w/Cppreference:Privacy_policy" title="Cppreference:Privacy policy">Privacy policy</a></li>
+                                    <li id="footer-places-about"><a href="https://en.cppreference.com/w/Cppreference:About" title="Cppreference:About">About cppreference.com</a></li>
+                                    <li id="footer-places-disclaimer"><a href="https://en.cppreference.com/w/Cppreference:General_disclaimer" title="Cppreference:General disclaimer">Disclaimers</a></li>
+                            </ul>
+                                    <ul id="footer-icons" class="noprint">
+                                    <li id="footer-poweredbyico">
+                                            <a href="https://www.mediawiki.org/"><img src="./RAII - cppreference.com_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" width="88" height="31"></a>                                            <a href="http://qbnz.com/highlighter/"><img src="./RAII - cppreference.com_files/powered_by_geshi_88x31.png" alt="Powered by GeSHi" height="31" width="88"></a>                                            <a href="http://www.tigertech.net/referral/cppreference.com"><img src="./RAII - cppreference.com_files/powered_by_tigertech_88x31.png" alt="Hosted by Tiger Technologies" height="31" width="88"></a>                                        </li>
+                                </ul>
+                        <div style="clear:both">
+            </div>
+            </div>
+        </div>
+        <!-- /footer -->
+        <script>if(window.mw){
+mw.loader.state({"site":"loading","user":"missing","user.groups":"ready"});
+}</script>
+<script src="./RAII - cppreference.com_files/load(6).php"></script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.action.view.postEdit","mediawiki.user","mediawiki.page.ready","mediawiki.searchSuggest","mediawiki.hidpi","ext.gadget.ColiruCompiler","ext.gadget.MathJax"], null, true);
+}</script>
+<script src="./RAII - cppreference.com_files/load(7).php"></script>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./RAII - cppreference.com_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-2828341-1']);
+_gaq.push(['_setDomainName', 'cppreference.com']);
+_gaq.push(['_trackPageview']);
+</script><!-- Served in 0.407 secs. -->
+	
+<!-- Cached 20190209233827 -->
+
+<div class="suggestions" style="display: none; font-size: 11.2px;"><div class="suggestions-results"></div><div class="suggestions-special"></div></div></body></html>

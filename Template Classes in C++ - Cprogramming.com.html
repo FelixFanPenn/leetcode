@@ -1,0 +1,435 @@
+
+<!-- saved from url=(0052)https://www.cprogramming.com/tutorial/templates.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="https://feeds2.feedburner.com/Cprogrammingcom/">
+<link rel="stylesheet" href="./Template Classes in C++ - Cprogramming.com_files/style_responsive.css" type="text/css">
+<link rel="canonical" href="https://www.cprogramming.com/tutorial/templates.html">
+
+<link href="./Template Classes in C++ - Cprogramming.com_files/shCore.css" rel="stylesheet" type="text/css">
+<link href="./Template Classes in C++ - Cprogramming.com_files/shThemeDefault.css" rel="stylesheet" type="text/css">
+
+
+<meta name="Description" content="Learn and how to use template classes in C++ in this tutorial, including template syntax.">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Template Classes in C++ - Cprogramming.com</title>
+
+<!-- ADDED DFP -->
+<script type="text/javascript" async="" src="./Template Classes in C++ - Cprogramming.com_files/ga.js"></script><script async="async" src="./Template Classes in C++ - Cprogramming.com_files/gpt.js"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+<script>
+  googletag.cmd.push(function() {
+    var leaderboard_mapping = googletag.sizeMapping(). addSize([0, 0], []).addSize([768, 0], [728, 90]). build();
+    var skyscraper_mapping = googletag.sizeMapping(). addSize([0, 0], []).addSize([768, 0], [160, 600]). build();
+    googletag.defineSlot('/1038815/RunOfSite_ATF_leaderboard_728x90', [728, 90], 'div-gpt-ad-1526966597352-0').defineSizeMapping(leaderboard_mapping).addService(googletag.pubads());
+    googletag.defineSlot('/1038815/RunOfSite_ATF_skyscraper_160x600', [160, 600], 'div-gpt-ad-1526966597352-1').defineSizeMapping(skyscraper_mapping).addService(googletag.pubads());
+    googletag.defineSlot('/1038815/RunOfSite_LargeRectangle_ATF_336x280', [300, 250], 'div-gpt-ad-1526966597352-2').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+<!-- END ADDED DFP -->
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-7820175-1']);
+  _gaq.push(['_setVisitorCookieTimeout', 2592000]);
+  _gaq.push(['_setDomainName', '.cprogramming.com']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push (['_gat._anonymizeIp']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+<script> 
+function toggleclassforclass(targetclass, toggleclass) {
+    cx = document.getElementsByClassName(targetclass)[0].className;
+    if (cx.includes(toggleclass)) {
+        cx = cx.replace(toggleclass, "");
+    } else {
+        cx += " "+toggleclass;
+    }
+    document.getElementsByClassName(targetclass)[0].className = cx;
+}
+
+function togglemenu() {
+    toggleclassforclass('maincontent', 'mobile-menu-shown');
+    toggleclassforclass('leftcolumn', 'mobile-menu');
+}
+</script>
+<link rel="preload" href="./Template Classes in C++ - Cprogramming.com_files/f.txt" as="script"><script type="text/javascript" src="./Template Classes in C++ - Cprogramming.com_files/f.txt"></script><script src="./Template Classes in C++ - Cprogramming.com_files/pubads_impl_2019041801.js" async=""></script></head>
+
+<body>
+<div class="header">
+<button class="hamburger" onclick="togglemenu(); return false;"><img src="./Template Classes in C++ - Cprogramming.com_files/hamburger.svg" class="responsive-nav"></button>
+<a class="logo" href="https://www.cprogramming.com/"><img class="noprint logoimg" src="./Template Classes in C++ - Cprogramming.com_files/cprog.png" width="324" height="83" border="0"></a> 
+
+    	<div class="leaderboard">
+
+<!-- ADDED DFP -->
+<!-- /1038815/RunOfSite_ATF_leaderboard_728x90 -->
+<div id="div-gpt-ad-1526966597352-0" style="height:90px; width:728px;">
+<script>
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1526966597352-0'); });
+</script>
+</div>
+<!-- END ADDED DFP -->
+
+</div>
+        
+</div>
+  <table class="main">
+
+  <tbody><tr>
+
+     <td class="noprint leftcolumn" width="130" valign="top"> 
+     <div class="menu" valign="top">
+     <p class="navcategory" align="left">
+              Starting out
+     </p>
+
+     <p class="navlist" align="left">
+             <a href="https://www.cprogramming.com/begin.html">Get started programming</a><br>
+             <a href="https://www.cprogramming.com/c++book/">Get the book</a><br>
+     </p>
+
+     <p class="navcategory" align="left">
+          <br>
+           Tutorials
+     </p>
+
+     <p class="navlist" align="left">
+            <a href="https://www.cprogramming.com/tutorial/c-tutorial.html">C tutorial</a><br>
+            <a href="https://www.cprogramming.com/tutorial/c++-tutorial.html">C++ tutorial</a><br>
+            <a href="https://www.cprogramming.com/game-programming.html">Game programming</a><br>
+            <a href="https://www.cprogramming.com/graphics-programming.html">Graphics programming</a><br>
+            <a href="https://www.cprogramming.com/algorithms-and-data-structures.html">Algorithms</a><br>
+            <a href="https://www.cprogramming.com/tutorial.html">More tutorials</a><br>
+     </p>
+
+     <p class="navcategory" align="left">
+          <br>
+           Practice
+     </p>
+
+     <p class="navlist" align="left">
+            <a href="https://www.cprogramming.com/challenge.html">Practice problems</a><br>
+            <a href="https://www.cprogramming.com/quiz/">Quizzes</a><br>
+     </p>
+     <p class="navcategory" align="left">
+          <br>
+           Resources
+     </p>
+
+     <p class="navlist" align="left">
+            <a href="https://www.cprogramming.com/snippets/">Source code</a><br>
+            <a href="https://www.cprogramming.com/tips/">C and C++ tips</a><br>
+            <a href="https://www.cprogramming.com/compilers.html">Getting a compiler</a><br>
+            <a href="https://www.cprogramming.com/books.html">Book recommendations</a><br>
+            <a href="https://cboard.cprogramming.com/">Forum</a><br>
+     </p>
+
+     <p class="navcategory" align="left">
+          <br>
+           References
+     </p>
+
+     <p class="navlist" align="left">
+            <a href="https://www.cprogramming.com/function.html">Function reference</a><br>
+            <a href="https://www.cprogramming.com/reference/">Syntax reference</a><br>
+            <a href="https://faq.cprogramming.com/cgi-bin/smartfaq.cgi">Programming FAQ</a><br>
+     </p>
+
+             
+     </div>
+
+<center>
+      <br><br>
+<script async="" src="./Template Classes in C++ - Cprogramming.com_files/f(1).txt"></script>
+<!-- link_ads_responsive -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2560316224908115" data-ad-slot="4156953158" data-ad-format="link" data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</center>
+
+
+
+    </td>
+	<td class="content" valign="top">
+
+    			<div class="content2 maincontent">
+
+<h1>Templates and Template Classes in C++</h1>
+
+<div style="margin-right: 1em; float:left; padding: .4em; border-right: 1px solid #bbb"><img src="./Template Classes in C++ - Cprogramming.com_files/alex-50-50.jpg" border="0" style="padding: 0.25em;"><br><a href="https://plus.google.com/113987539774523532573?rel=author"> By Alex Allain</a></div>
+
+          <p>What's better than having several classes that do the same thing 
+            to different datatypes? One class that lets you choose which
+            datatype 
+            it acts on.</p>
+            <center>
+<div class="noprint">
+<!-- /1038815/RunOfSite_LargeRectangle_ATF_336x280 -->
+<div id="div-gpt-ad-1526966597352-2" style="height:250px; width:300px;">
+<script>
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1526966597352-2'); });
+</script>
+</div>
+</div>
+
+
+</center>
+
+          <p><font color="#009900">Templates</font> are a way of making your classes 
+            more abstract by letting you define the behavior of the class without 
+            actually knowing what datatype will be handled by the operations of 
+            the class. In essence, this is what is known as <font color="#009900">generic 
+            programming</font>; this term is a useful way to think about templates 
+            because it helps remind the programmer that a templated class does 
+            not depend on the datatype (or types) it deals with. To a large degree, 
+            a templated class is more focused on the algorithmic thought rather 
+            than the specific nuances of a single datatype. Templates can be used 
+            in conjunction with abstract datatypes in order to allow them to handle 
+            any type of data. For example, you could make a templated stack class 
+            that can handle a stack of any datatype, rather than having to create 
+            a stack class for every different datatype for which you want the 
+            stack to function. The ability to have a single class that can handle 
+            several different datatypes means the code is easier to maintain, 
+            and it makes classes more reusable.</p>
+          <p>The basic syntax for declaring a templated class is as follows:</p>
+          <div><div id="highlighter_874995" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp keyword bold">template</code> <code class="cpp plain">&lt;</code><code class="cpp keyword bold">class</code> <code class="cpp plain">a_type&gt; </code><code class="cpp keyword bold">class</code> <code class="cpp plain">a_class {...};</code></div></div></td></tr></tbody></table></div></div>
+          <p>The keyword 'class' above simply means that the identifier a_type 
+            will stand for a datatype. NB: a_type is not a keyword; it is an identifier 
+            that during the execution of the program will represent a single datatype. 
+            For example, you could, when defining variables in the class, use 
+            the following line:</p>
+          <div><div id="highlighter_12765" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp plain">a_type a_var;</code></div></div></td></tr></tbody></table></div></div>
+          <p>and when the programmer defines which datatype 'a_type' is to be 
+            when the program instantiates a particular instance of a_class, a_var 
+            will be of that type.</p>
+          <p>When defining a function as a member of a templated class, it is 
+            necessary to define it as a templated function:</p>
+          <div><div id="highlighter_240331" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp keyword bold">template</code><code class="cpp plain">&lt;</code><code class="cpp keyword bold">class</code> <code class="cpp plain">a_type&gt; </code><code class="cpp keyword bold">void</code> <code class="cpp plain">a_class&lt;a_type&gt;::a_function(){...}</code></div></div></td></tr></tbody></table></div></div>
+          <p>When declaring an instance of a templated class, the syntax is as 
+            follows:</p>
+          <div><div id="highlighter_203214" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp plain">a_class&lt;</code><code class="cpp color1 bold">int</code><code class="cpp plain">&gt; an_example_class;</code></div></div></td></tr></tbody></table></div></div>
+          <p>An instantiated object of a templated class is called a <font color="#009900">specialization</font>; 
+            the term specialization is useful to remember because it reminds us 
+            that the original class is a generic class, whereas a specific instantiation 
+            of a class is specialized for a single datatype (although it is possible 
+            to template multiple types).</p>
+          <p>Usually when writing code it is easiest to precede from concrete 
+            to abstract; therefore, it is easier to write a class for a specific 
+            datatype and then proceed to a templated - generic - class. For that 
+            brevity is the soul of wit, this example will be brief and therefore 
+            of little practical application.</p>
+          <p>We will define the first class to act only on integers.</p>
+          <div><div id="highlighter_854022" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp keyword bold">class</code> <code class="cpp plain">calc</code></div><div class="line number2 index1 alt1"><code class="cpp plain">{</code></div><div class="line number3 index2 alt2"><code class="cpp spaces">&nbsp;&nbsp;</code><code class="cpp keyword bold">public</code><code class="cpp plain">:</code></div><div class="line number4 index3 alt1"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp color1 bold">int</code> <code class="cpp plain">multiply(</code><code class="cpp color1 bold">int</code> <code class="cpp plain">x, </code><code class="cpp color1 bold">int</code> <code class="cpp plain">y);</code></div><div class="line number5 index4 alt2"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp color1 bold">int</code> <code class="cpp plain">add(</code><code class="cpp color1 bold">int</code> <code class="cpp plain">x, </code><code class="cpp color1 bold">int</code> <code class="cpp plain">y);</code></div><div class="line number6 index5 alt1"><code class="cpp spaces">&nbsp;</code><code class="cpp plain">};</code></div><div class="line number7 index6 alt2"><code class="cpp color1 bold">int</code> <code class="cpp plain">calc::multiply(</code><code class="cpp color1 bold">int</code> <code class="cpp plain">x, </code><code class="cpp color1 bold">int</code> <code class="cpp plain">y)</code></div><div class="line number8 index7 alt1"><code class="cpp plain">{</code></div><div class="line number9 index8 alt2"><code class="cpp spaces">&nbsp;&nbsp;</code><code class="cpp keyword bold">return</code> <code class="cpp plain">x*y;</code></div><div class="line number10 index9 alt1"><code class="cpp plain">}</code></div><div class="line number11 index10 alt2"><code class="cpp color1 bold">int</code> <code class="cpp plain">calc::add(</code><code class="cpp color1 bold">int</code> <code class="cpp plain">x, </code><code class="cpp color1 bold">int</code> <code class="cpp plain">y)</code></div><div class="line number12 index11 alt1"><code class="cpp plain">{</code></div><div class="line number13 index12 alt2"><code class="cpp spaces">&nbsp;&nbsp;</code><code class="cpp keyword bold">return</code> <code class="cpp plain">x+y;</code></div><div class="line number14 index13 alt1"><code class="cpp plain">}</code></div></div></td></tr></tbody></table></div></div>
+          <p>We now have a perfectly harmless little class that functions perfectly 
+            well for integers; but what if we decided we wanted a generic class 
+            that would work equally well for floating point numbers? We would 
+            use a template.</p>
+          <div><div id="highlighter_534002" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp keyword bold">template</code> <code class="cpp plain">&lt;</code><code class="cpp keyword bold">class</code> <code class="cpp plain">A_Type&gt; </code><code class="cpp keyword bold">class</code> <code class="cpp plain">calc</code></div><div class="line number2 index1 alt1"><code class="cpp plain">{</code></div><div class="line number3 index2 alt2"><code class="cpp spaces">&nbsp;&nbsp;</code><code class="cpp keyword bold">public</code><code class="cpp plain">:</code></div><div class="line number4 index3 alt1"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp plain">A_Type multiply(A_Type x, A_Type y);</code></div><div class="line number5 index4 alt2"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp plain">A_Type add(A_Type x, A_Type y);</code></div><div class="line number6 index5 alt1"><code class="cpp plain">};</code></div><div class="line number7 index6 alt2"><code class="cpp keyword bold">template</code> <code class="cpp plain">&lt;</code><code class="cpp keyword bold">class</code> <code class="cpp plain">A_Type&gt; A_Type calc&lt;A_Type&gt;::multiply(A_Type x,A_Type y)</code></div><div class="line number8 index7 alt1"><code class="cpp plain">{</code></div><div class="line number9 index8 alt2"><code class="cpp spaces">&nbsp;&nbsp;</code><code class="cpp keyword bold">return</code> <code class="cpp plain">x*y;</code></div><div class="line number10 index9 alt1"><code class="cpp plain">}</code></div><div class="line number11 index10 alt2"><code class="cpp keyword bold">template</code> <code class="cpp plain">&lt;</code><code class="cpp keyword bold">class</code> <code class="cpp plain">A_Type&gt; A_Type calc&lt;A_Type&gt;::add(A_Type x, A_Type y)</code></div><div class="line number12 index11 alt1"><code class="cpp plain">{</code></div><div class="line number13 index12 alt2"><code class="cpp spaces">&nbsp;&nbsp;</code><code class="cpp keyword bold">return</code> <code class="cpp plain">x+y;</code></div><div class="line number14 index13 alt1"><code class="cpp plain">}</code></div></div></td></tr></tbody></table></div></div>
+          <p>To understand the templated class, just think about replacing the 
+            identifier A_Type everywhere it appears, except as part of the template 
+            or class definition, with the keyword int. It would be the same as 
+            the above class; now when you instantiate an <br>
+            object of class calc you can choose which datatype the class will 
+            handle.</p>
+          <div><div id="highlighter_451288" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp plain">calc &lt;</code><code class="cpp color1 bold">double</code><code class="cpp plain">&gt; a_calc_class;</code></div></div></td></tr></tbody></table></div></div>
+          <p>Templates are handy for making your programs more generic and allowing 
+            your code to be reused later.</p>
+          <!-- #EndEditable --> 
+          <hr>
+<b>Related articles</b><br><br><a href="https://www.cprogramming.com/tutorial/templated_functions.html">Templated
+          Functions</a>
+          <br><br><a href="https://www.cprogramming.com/tutorial/template_specialization.html">Template
+          Specialization and Partial Specialization in C++</a><br><br><a href="https://www.cprogramming.com/tutorial/lesson12.html">Intro to
+          C++ classes</a><br><br><a href="https://www.cprogramming.com/tutorial/initialization-lists-c++.html">Initialization
+          lists</a>: Initialization lists are important for allowing template
+          types to work with both primitive and user-defined types<br><br><a href="https://www.cprogramming.com/tutorial/stl/stlintro.html">Standard
+          Template Library Introduction</a>
+          <br>
+
+<div id="footer" class="noprint">
+
+
+
+<div style="clear: both; margin-top: 10px;"></div>
+
+
+<script>
+function abTest(element_name_sets) {
+    var element_to_show;
+    var element_count = element_name_sets.length;
+    var i;
+    for ( i = 0; i < element_count; i++ )
+    {
+        if ( Math.random() <= 1 / ( element_count - i ) ) {
+                break;
+        }
+    }
+    var element_name_set = element_name_sets[ i ];
+    for ( i = 0; i < element_name_set.length; i++ )
+    {
+        element_to_show = document.getElementById( element_name_set[ i ] );
+        element_to_show.style.display = "block";
+    }
+}
+//abTest( [["old-ad", "new-ad"]] );
+</script>
+
+
+<div class="popularpages">
+<b>Popular pages</b>
+<ul>
+ <li><a href="https://www.cprogramming.com/begin.html">How to learn C++ or C</a> 
+</li><li><a href="https://www.cprogramming.com/tutorial/c-tutorial.html">C Tutorial</a>
+</li><li><a href="https://www.cprogramming.com/tutorial/c++-tutorial.html">C++ Tutorial</a>
+</li><li><a href="https://www.cprogramming.com/how_to_learn_to_program.html">5 ways you can learn to program faster</a> 
+</li><li><a href="https://www.cprogramming.com/beginner_programming_mistakes.html">The 5 Most Common Problems New Programmers Face</a>
+</li><li><a href="https://www.cprogramming.com/code_blocks/">How to set up a compiler</a>
+</li><li><a href="https://www.cprogramming.com/tutorial/game_programming/same_game_part1.html">How to make a game in 48 hours</a>
+</li></ul>
+</div>
+
+
+</div>
+
+<center>
+ 
+
+
+<div class="footer-links" style="padding:10px">
+<a href="https://www.cprogramming.com/advertising.html">Advertising</a> | <a href="https://www.cprogramming.com/privacy.html">Privacy policy</a> |
+<a href="https://www.cprogramming.com/use.html">Copyright © 2019 Cprogramming.com</a> | <a href="mailto:webmaster@cprogramming.com">Contact</a> | <a href="https://www.cprogramming.com/about.html">About</a>
+</div>
+</center></div>
+
+</td>
+    	
+
+
+<td class="content noprint rightcolumn" valign="top" rowspan="1">
+<div class="content2"><br><div class="verticalad">
+
+
+
+<script async="" src="./Template Classes in C++ - Cprogramming.com_files/f(1).txt"></script>
+<!-- skyscraper -->
+<ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-2560316224908115" data-ad-slot="9422137563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><br>
+
+<style type="text/css">
+.sidebar-box { width: 150px; margin-bottom:5px; }
+</style>
+    <div id="side-images">
+        <div style="padding:5px;margin-top:5px">
+            <div style="margin-bottom: 5px">
+                <b>Popular pages</b>
+            </div>
+            <div>
+                
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/tutorial/c++-tutorial.html">
+                    <img src="./Template Classes in C++ - Cprogramming.com_files/c++-img.png" border="0" height="75" width="75" alt="C++ tutorial">
+                    <br>
+                    C++ Tutorial</a>
+                </div>
+                
+                
+                <!--http://www.flickr.com/photos/baslow/5620208/sizes/o/in/photostream/ -->
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/tutorial/c-tutorial.html">
+                    <img src="./Template Classes in C++ - Cprogramming.com_files/5620208_bff9c514e6_s.jpg" border="0" height="75" width="75" alt="C tutorial">
+                    <br>
+                    C Tutorial
+                    </a>
+                </div>
+                
+
+                
+                <!--http://www.flickr.com/photos/29233640@N07/2855530649/sizes/sq/in/photostream/-->
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/begin.html">
+                    <img src="./Template Classes in C++ - Cprogramming.com_files/2855530649_905f7862fd_s.jpg" border="0" height="75" width="75" alt="Get started">
+                    <br>
+                    Exactly how to get started with C++ (or C) today</a>
+                </div>
+                
+
+                
+                <!--http://www.flickr.com/photos/mikecogh/6505012533/sizes/sq/in/photostream/-->
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/how_to_learn_to_program.html">
+                    <img src="./Template Classes in C++ - Cprogramming.com_files/6505012533_55c83fdfa0_s.jpg" border="0" height="75" width="75" alt="Learn to program">
+                    <br>
+                    5 ways you can learn to program faster</a>
+                </div>
+                
+
+
+                
+                <!--http://www.flickr.com/photos/giopuo/3441263816/sizes/sq/in/photostream/-->
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/beginner_programming_mistakes.html">
+                    <img src="./Template Classes in C++ - Cprogramming.com_files/3441263816_95f132a884_s.jpg" border="0" height="75" width="75" alt="Problems new programmers face">
+                    <br>
+                    The 5 Most Common Problems New Programmers Face</a>
+                </div>
+                
+
+                
+                <div class="sidebar-box">
+                   <a href="https://www.cprogramming.com/tutorial/game_programming/same_game_part1.html">
+                    <img src="./Template Classes in C++ - Cprogramming.com_files/same_game_small.png" border="0" height="42" width="42" alt="Learn to make a game">
+                    <br>
+                   How to make a game in 48 hours</a>
+                </div>
+                
+
+            </div>
+        </div>
+        <div style="display:block">
+            <a href="https://www.cprogramming.com/image_credits.html">Image credits</a>
+        </div>
+    </div>
+</div>
+</td>  	
+
+</tr>
+</tbody></table>
+
+
+
+
+
+<script type="text/javascript" src="./Template Classes in C++ - Cprogramming.com_files/shCore.js"></script>
+<script type="text/javascript" src="./Template Classes in C++ - Cprogramming.com_files/shBrushCpp.js"></script>
+
+<script type="text/javascript">
+         SyntaxHighlighter.all();
+</script>
+
+
+
+</body></html>

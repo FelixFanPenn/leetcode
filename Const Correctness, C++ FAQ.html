@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://isocpp.org/wiki/faq/const-correctness -->
+<html lang="en" class="wf-proximanova-n7-active wf-proximanova-i7-active wf-proximanova-n4-active wf-proximanovaextracondensed-n7-active wf-elenawebbasic-n7-active wf-elenawebbasic-n4-active wf-elenawebbasic-i4-active wf-proximanova-i4-active wf-proximanovaextracondensed-i7-active wf-proximanovaextracondensed-i4-active wf-proximanovaextracondensed-n4-active wf-elenawebbasic-i7-active wf-active"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Const Correctness, C++ FAQ</title>
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="https://isocpp.org/favicon.ico" rel="shortcut icon">
+    <link rel="apple-touch-icon" href="https://isocpp.org/wiki/faq/apple-touch-icon-57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://isocpp.org/wiki/faq/apple-touch-icon-72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://isocpp.org/wiki/faq/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://isocpp.org/wiki/faq/apple-touch-icon-144.png">
+    
+    <link href="./Const Correctness, C++ FAQ_files/saved_resource" rel="stylesheet" media="all" type="text/css">
+    <script type="text/javascript" async="" src="./Const Correctness, C++ FAQ_files/embed.js"></script><script type="text/javascript" src="./Const Correctness, C++ FAQ_files/prettify.min.js"></script>
+    
+    <link href="./Const Correctness, C++ FAQ_files/saved_resource(1)" rel="stylesheet" media="all" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    
+    <script src="./Const Correctness, C++ FAQ_files/saved_resource(2)" type="text/javascript"></script><script type="text/javascript" src="./Const Correctness, C++ FAQ_files/saved_resource(3)"></script>
+    
+    <script type="text/javascript" src="./Const Correctness, C++ FAQ_files/kml7swa.js"></script>
+    <style type="text/css">.tk-proxima-nova{font-family:"proxima-nova",sans-serif;}.tk-proxima-nova-extra-condensed{font-family:"proxima-nova-extra-condensed",sans-serif;}.tk-elena-web-basic{font-family:"elena-web-basic",sans-serif;}</style><style type="text/css">@font-face{font-family:proxima-nova;src:url(https://use.typekit.com/af/96204f/00000000000000000001499c/21/l?subset_id=2&fvd=n7&v=3) format("woff2"),url(https://use.typekit.com/af/96204f/00000000000000000001499c/21/d?subset_id=2&fvd=n7&v=3) format("woff"),url(https://use.typekit.com/af/96204f/00000000000000000001499c/21/a?subset_id=2&fvd=n7&v=3) format("opentype");font-weight:700;font-style:normal;}@font-face{font-family:proxima-nova;src:url(https://use.typekit.com/af/faeb9b/0000000000000000000148a9/21/l?subset_id=2&fvd=i7&v=3) format("woff2"),url(https://use.typekit.com/af/faeb9b/0000000000000000000148a9/21/d?subset_id=2&fvd=i7&v=3) format("woff"),url(https://use.typekit.com/af/faeb9b/0000000000000000000148a9/21/a?subset_id=2&fvd=i7&v=3) format("opentype");font-weight:700;font-style:italic;}@font-face{font-family:proxima-nova;src:url(https://use.typekit.com/af/fed79a/0000000000000000000148a4/21/l?subset_id=2&fvd=n4&v=3) format("woff2"),url(https://use.typekit.com/af/fed79a/0000000000000000000148a4/21/d?subset_id=2&fvd=n4&v=3) format("woff"),url(https://use.typekit.com/af/fed79a/0000000000000000000148a4/21/a?subset_id=2&fvd=n4&v=3) format("opentype");font-weight:400;font-style:normal;}@font-face{font-family:proxima-nova;src:url(https://use.typekit.com/af/d8b3eb/0000000000000000000148a5/21/l?subset_id=2&fvd=i4&v=3) format("woff2"),url(https://use.typekit.com/af/d8b3eb/0000000000000000000148a5/21/d?subset_id=2&fvd=i4&v=3) format("woff"),url(https://use.typekit.com/af/d8b3eb/0000000000000000000148a5/21/a?subset_id=2&fvd=i4&v=3) format("opentype");font-weight:400;font-style:italic;}@font-face{font-family:proxima-nova-extra-condensed;src:url(https://use.typekit.com/af/909da1/00000000000000000000ffe5/21/l?subset_id=2&fvd=i7&v=3) format("woff2"),url(https://use.typekit.com/af/909da1/00000000000000000000ffe5/21/d?subset_id=2&fvd=i7&v=3) format("woff"),url(https://use.typekit.com/af/909da1/00000000000000000000ffe5/21/a?subset_id=2&fvd=i7&v=3) format("opentype");font-weight:700;font-style:italic;}@font-face{font-family:proxima-nova-extra-condensed;src:url(https://use.typekit.com/af/ae0dc7/00000000000000000000ffe4/21/l?subset_id=2&fvd=n7&v=3) format("woff2"),url(https://use.typekit.com/af/ae0dc7/00000000000000000000ffe4/21/d?subset_id=2&fvd=n7&v=3) format("woff"),url(https://use.typekit.com/af/ae0dc7/00000000000000000000ffe4/21/a?subset_id=2&fvd=n7&v=3) format("opentype");font-weight:700;font-style:normal;}@font-face{font-family:proxima-nova-extra-condensed;src:url(https://use.typekit.com/af/4e2fe4/00000000000000000000ffe9/21/l?subset_id=2&fvd=i4&v=3) format("woff2"),url(https://use.typekit.com/af/4e2fe4/00000000000000000000ffe9/21/d?subset_id=2&fvd=i4&v=3) format("woff"),url(https://use.typekit.com/af/4e2fe4/00000000000000000000ffe9/21/a?subset_id=2&fvd=i4&v=3) format("opentype");font-weight:400;font-style:italic;}@font-face{font-family:proxima-nova-extra-condensed;src:url(https://use.typekit.com/af/1f40c3/00000000000000000000ffe8/21/l?subset_id=2&fvd=n4&v=3) format("woff2"),url(https://use.typekit.com/af/1f40c3/00000000000000000000ffe8/21/d?subset_id=2&fvd=n4&v=3) format("woff"),url(https://use.typekit.com/af/1f40c3/00000000000000000000ffe8/21/a?subset_id=2&fvd=n4&v=3) format("opentype");font-weight:400;font-style:normal;}@font-face{font-family:elena-web-basic;src:url(https://use.typekit.com/af/02706e/0000000000000000000151b1/21/l?subset_id=2&fvd=n7&v=3) format("woff2"),url(https://use.typekit.com/af/02706e/0000000000000000000151b1/21/d?subset_id=2&fvd=n7&v=3) format("woff"),url(https://use.typekit.com/af/02706e/0000000000000000000151b1/21/a?subset_id=2&fvd=n7&v=3) format("opentype");font-weight:700;font-style:normal;}@font-face{font-family:elena-web-basic;src:url(https://use.typekit.com/af/5928a6/0000000000000000000151b2/21/l?subset_id=2&fvd=i7&v=3) format("woff2"),url(https://use.typekit.com/af/5928a6/0000000000000000000151b2/21/d?subset_id=2&fvd=i7&v=3) format("woff"),url(https://use.typekit.com/af/5928a6/0000000000000000000151b2/21/a?subset_id=2&fvd=i7&v=3) format("opentype");font-weight:700;font-style:italic;}@font-face{font-family:elena-web-basic;src:url(https://use.typekit.com/af/31cb4e/0000000000000000000151af/21/l?subset_id=2&fvd=n4&v=3) format("woff2"),url(https://use.typekit.com/af/31cb4e/0000000000000000000151af/21/d?subset_id=2&fvd=n4&v=3) format("woff"),url(https://use.typekit.com/af/31cb4e/0000000000000000000151af/21/a?subset_id=2&fvd=n4&v=3) format("opentype");font-weight:400;font-style:normal;}@font-face{font-family:elena-web-basic;src:url(https://use.typekit.com/af/d20a2b/0000000000000000000151b0/21/l?subset_id=2&fvd=i4&v=3) format("woff2"),url(https://use.typekit.com/af/d20a2b/0000000000000000000151b0/21/d?subset_id=2&fvd=i4&v=3) format("woff"),url(https://use.typekit.com/af/d20a2b/0000000000000000000151b0/21/a?subset_id=2&fvd=i4&v=3) format("opentype");font-weight:400;font-style:italic;}</style><script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    
+  <script charset="utf-8" src="./Const Correctness, C++ FAQ_files/moment_timeline_tweet.6e5b62723488aee38af0c77681396a5b.js"></script><script charset="utf-8" src="./Const Correctness, C++ FAQ_files/timeline.4c6ab682148a0366f9efb1647a3f4799.js"></script></head>
+  
+  <body class="hide-sidebar">
+    <div id="root">
+    
+      <div id="crown">
+        <a id="sidebar-toggle" href="https://isocpp.org/wiki/faq/const-correctness#sidebar">Show sidebar »</a>
+        <ul class="user">
+                          <li><a href="https://isocpp.org/member/login">Sign In / Suggest an Article</a></li>
+          <li><a href="https://isocpp.org/member/register">Register</a></li>
+                </ul>
+      </div>
+
+      <header id="top" role="banner">
+        <div class="container">
+          <h1>
+            <a href="https://isocpp.org/"><img src="./Const Correctness, C++ FAQ_files/cpp_logo.png" alt="Standard C++"></a>
+          </h1>
+          <nav role="navigation">
+            <ul id="nav-sub">
+<li class="first"><a href="https://isocpp.org/get-started">Get Started!</a></li>
+<li><a href="https://isocpp.org/tour">Tour</a></li>
+<li><a href="https://isocpp.org/guidelines">Core Guidelines</a></li>
+<li><a href="https://isocpp.org/faq">Super-FAQ</a></li>
+<li><a href="https://isocpp.org/std">Standardization</a></li>
+<li class="last"><a href="https://isocpp.org/about">About</a></li>
+</ul>
+          </nav><select id="nav-select"><option value="" selected="selected">Go to...</option><option value="https://isocpp.org/get-started">Get Started!</option><option value="https://isocpp.org/tour">Tour</option><option value="https://isocpp.org/guidelines">Core Guidelines</option><option value="https://isocpp.org/faq">Super-FAQ</option><option value="https://isocpp.org/std">Standardization</option><option value="https://isocpp.org/about">About</option></select>
+          <form action="https://isocpp.org/search/google">
+            <input type="text" name="q" id="q" maxlength="100" value="" class="textbox">
+            <input type="submit" value="Search" class="button">
+          </form>
+          <!--
+          <form method="post" action="https://isocpp.org/"  >
+<div class='hiddenFields'>
+<input type="hidden" name="ACT" value="6" />
+<input type="hidden" name="XID" value="d8727f02fc86d5d2e2b57925987c5dc5b72010e3" />
+<input type="hidden" name="RES" value="" />
+<input type="hidden" name="meta" value="zYMKgX58Zs8+1aclN9tC7heLzqeMS/BIDf2KWaqfUPy9IuEVYHdFD1dlGh34VWoTLfYfqx2VVNOeAsrIgIvvoFDyH5RKx1rRrjSIJmrlV4WTNhwE+/Onu3ISLsbzAk2awqSU6A+hVvt+f/zJn30d7+qnYdsX9iFLWu40TELdyhIN7OvZg7LuJknFB0gZ7nQTklJ/9coWuk9SURbQpuERR2hTSI2C5xLtlwfiI61PqkKwyrlOKG6XDMBSEtvAIHOCp+adyiqHkYhNSPC8wgrdUEXu/O1ACVY3yqa/hYv3qY5COcgp3UflhKiNqQvGfAikDLrb28Jq5FJxzSTO4kcq1kRWnkMAIa+DJDX1Ri9lxnSoesPEDjJwSIcqjcXXIxh1l0qg2xNSdmuOrE+KB+C8x3zG6M/Rmrrfc9CHMGWIs3c=" />
+<input type="hidden" name="site_id" value="1" />
+</div>
+
+
+            <input type="text" name="keywords" id="keywords" maxlength="100" value="M50o93H7pQ09L8X1t49cHY01Z5j4TT91fGfr" class="textbox" />
+            <input type="submit" value="Search" class="button" />
+          </form>
+          -->
+        </div>
+      </header>
+
+      <div id="content" class="hide-sidebar" role="main">
+        <div class="container">
+
+    
+      <div id="sidebar">
+              <section>
+              <header>Features</header>
+            <div class="sidebar-section-content prettify">
+        <p>
+	<a href="https://isocpp.org/std/status">Current ISO C++ status</a></p>
+<p>
+	&nbsp;</p>
+<p>
+	<a href="https://isocpp.org/std/meetings-and-participation/upcoming-meetings">Upcoming ISO C++ meetings</a></p>
+<p>
+	&nbsp;</p>
+<p>
+	<a href="http://en.cppreference.com/w/cpp/compiler_support">Compiler conformance status</a></p>
+      </div>
+    </section>
+  
+  
+  
+        <nav>
+          <section>
+            <header>
+              Navigation
+            </header>
+            <ul>
+              <li><a href="https://isocpp.org/wiki/faq">FAQ Home</a></li>
+              <li><a href="https://isocpp.org/themes/wiki_themes/isocpp/rss/faq-revisions-rss.php" class="icon rss">FAQ RSS Feed</a></li>
+              <li><a href="https://isocpp.org/wiki/faq/editinfo">FAQ Help</a></li>
+                          </ul>
+          </section>
+        
+        
+          <section>
+            <header>
+              Search this Wiki
+            </header>
+            <form method="post" action="https://isocpp.org/wiki/faq/Special:Search_results">
+              <input type="hidden" name="XID" value="67c453ad1e9437311d47090d08fcf15f1dff2059">
+              <input type="text" class="input" name="keywords" size="20" value="" maxlength="80"><input type="submit" class="submit" value="Go">
+            </form>
+          </section>
+          
+          <section>
+            <header>
+              Go to Page
+            </header>
+            <form method="post" action="https://isocpp.org/wiki/faq/Special:Find_page">
+              <input type="hidden" name="XID" value="33af63f57cdefdd2ebc1ce0944854f3eb83fb889">
+              <input type="text" class="input" name="title" size="20" value="" maxlength="80"><input type="submit" class="submit" value="Go">
+            </form>
+          </section>
+        </nav>
+          
+      <section>
+              <header>Upcoming Events</header>
+            <div class="sidebar-section-content">
+        <p>
+	<strong><a href="http://cppconf.ru/en/">C++ R​ussia 2019</a></strong></p>
+<p>
+	Apr 19–20,&nbsp;Moscow, RU</p>
+<p>
+	&nbsp;</p>
+<p>
+	<strong><a href="http://cppnow.org/">C++ Now</a></strong></p>
+<p>
+	May 5-10, Aspen, CO, USA</p>
+<p>
+	&nbsp;</p>
+<p>
+	<a href="https://corecpp.org/"><strong>Core C++</strong></a></p>
+<p>
+	May 14-17, Tel Aviv, Israel</p>
+<p>
+	&nbsp;</p>
+<p>
+	<strong><a href="https://cppp.fr/">CPPP Conference</a></strong></p>
+<p>
+	June 15th, Paris, Fr</p>
+<p>
+	&nbsp;</p>
+<p>
+	<strong><a href="https://italiancpp.org/itcppcon19">Italian C++ Conference</a></strong></p>
+<p>
+	June 15th, Milan, It</p>
+<p>
+	&nbsp;</p>
+<p>
+	<a href="https://wg21.link/n4783"><strong>Summer ISO C++ meeting</strong></a></p>
+<p>
+	Cologne, Germany</p>
+<p>
+	&nbsp;</p>
+<p>
+	<strong><a href="https://codedive.pl/">code::dive 2019</a></strong></p>
+<p>
+	Nov 20-21, Wrocław, Pl</p>
+      </div>
+    </section>
+  
+      <section>
+              <header>Twitter Timeline</header>
+            <div class="sidebar-section-content">
+        <div class="twitter-container">
+	<iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="twitter-timeline twitter-timeline-rendered" style="position: static; visibility: visible; display: inline-block; width: 200px; height: 600px; padding: 0px; border: none; max-width: 100%; min-width: 180px; margin-top: 0px; margin-bottom: 0px; min-height: 200px;" data-widget-id="profile:isocpp" title="Twitter Timeline" src="./Const Correctness, C++ FAQ_files/saved_resource.html"></iframe> <script async="" src="./Const Correctness, C++ FAQ_files/widgets.js" charset="utf-8"></script></div>
+      </div>
+    </section>
+  
+      </div>
+
+      <div id="mainbar">
+        <header>
+          <div class="breadcrumbs">
+
+            <a href="https://isocpp.org/wiki/faq">Wiki Home</a>
+            <span class="breadcrumbspacer">&nbsp;&nbsp;&gt;&nbsp;&nbsp;</span>Const Correctness</div>
+          
+          <div class="wiki-page-actions">
+                    <a href="https://isocpp.org/wiki/faq/const-correctness">View</a>
+                              </div>
+          
+          <h2 class="section-title has-hover-pop-out">Const Correctness&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness" title="Permalink to this Section"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this Section" data-tooltip="#popup-suggest" data-hasqtip="0"><span>Δ</span></a></h2>
+
+          <div class="save-to-reader wiki">
+            <div class="title">Save to:</div>
+            <a href="http://www.instapaper.com/hello2?url=https%3A%2F%2Fisocpp.org%2Fwiki%2Ffaq%2Fconst-correctness&amp;title=const%20correctness" class="icon instapaper">Instapaper</a>
+            <a href="http://getpocket.com/create?url=https%3A%2F%2Fisocpp.org%2Fwiki%2Ffaq%2Fconst-correctness&amp;action=save&amp;k=3aNp2F20Aao4bvW884g224eUfud1nfI0" class="icon pocket">Pocket</a>
+            <a href="https://isocpp.org/wiki/faq/const-correctness#" class="icon readability">Readability</a>
+            <div class="rdbWrapper" data-show-read="1" data-show-send-to-kindle="1" data-show-print="1" data-show-email="1" data-orientation="0" data-version="1" data-bg-color="#ffffff"></div><script type="text/javascript">(function() {var s = document.getElementsByTagName("script")[0],rdb = document.createElement("script"); rdb.type = "text/javascript"; rdb.async = true; rdb.src = document.location.protocol + "//www.readability.com/embed.js"; s.parentNode.insertBefore(rdb, s); })();</script>
+          </div>
+          
+        </header>
+
+        <article>
+
+          <!-- Begin Main Content of Page -->
+
+          
+          
+
+          <div id="wiki-content">
+
+          
+
+          
+            <div class="prettify"><div id="msgbox-fail" class="fail-icon fail-banner" style="position: fixed; top: 40%; left: 40%; width: 30%; height: 130px; overflow-y: auto; display: none;"></div><div id="msgbox-warn" class="warn-icon warn-banner" style="position: fixed; top: 40%; left: 40%; width: 30%; height: 130px; overflow-y: auto; display: none;"></div><div id="msgbox-info" class="info-icon info-banner" style="position: fixed; top: 40%; left: 40%; width: 30%; height: 130px; overflow-y: auto; display: none;"></div><div id="msgbox-good" class="good-icon good-banner" style="position: fixed; top: 40%; left: 40%; width: 30%; height: 130px; overflow-y: auto; display: none;"></div>
+
+
+<h2 id="const-correctness">Const Correctness</h2><div id="section-toc"><h4>Contents of this section:</h4><ul><li><a href="https://isocpp.org/wiki/faq/const-correctness#overview-const" title="What is “const correctness”?">What is “<code>const</code> correctness”?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#const-and-type-safety" title="How is “const correctness” related to ordinary type safety?">How is “<code>const</code> correctness” related to ordinary type safety?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#retrofitting-const" title="Should I try to get things const correct “sooner” or “later”?">Should I try to get things <code>const</code> correct “sooner” or “later”?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#ptr-to-const" title="What does “const X* p” mean?">What does “<code>const X* p</code>” mean?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#const-ptr-vs-ptr-const" title="What’s the difference between “const X* p”, “X* const p” and “const X* const p”?">What’s the difference between “<code>const X* p</code>”, “<code>X* const p</code>” and “<code>const X* const p</code>”?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#ref-to-const" title="What does “const X&amp; x” mean?">What does “<code>const X&amp; x</code>” mean?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#const-ref-alt" title="What do “X const&amp; x” and “X const* p” mean?">What do “<code>X const&amp; x</code>” and “<code>X const* p</code>” mean?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#const-ref-nonsense" title="Does “X&amp; const x” make any sense?">Does “<code>X&amp; const x</code>” make any sense?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="What is a “const member function”?">What is a “<code>const</code> member function”?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#return-const-ref-from-const-memfn" title="What is the relationship between a return-by-reference and a const member function?">What is the relationship between a return-by-reference and a <code>const</code> member function?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#const-overloading" title="What’s the deal with “const-overloading”?">What’s the deal with “<code>const</code>-overloading”?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#logical-vs-physical-state" title="How can it help me design better classes if I distinguish logical state from physical state?">How can it help me design better classes if I distinguish <em>logical state</em> from <em>physical state</em>?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#logical-vs-physical-const" title="Should the constness of my public member functions be based on what the method does to the object’s logical state, or physical state?">Should the <code>const</code>ness of my <code>public</code> member functions be based on what the method does to the object’s <em>logical state</em>, or <em>physical state</em>?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#mutable-data-members" title="What do I do if I want a const member function to make an “invisible” change to a data member?">What do I do if I want a <code>const</code> member function to make an “invisible” change to a data member?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#const-cast-and-optimization" title="Does const_cast mean lost optimization opportunities?">Does <code>const_cast</code> mean lost optimization opportunities?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#aliasing-and-const" title="Why does the compiler allow me to change an int after I’ve pointed at it with a const int*?">Why does the compiler allow me to change an <code>int</code> after I’ve pointed at it with a <code>const int*</code>?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#ptr-to-const-aliasing" title="Does “const Fred* p” mean that *p can’t change?">Does “<code>const Fred* p</code>” mean that <code>*p</code> can’t change?</a></li><li><a href="https://isocpp.org/wiki/faq/const-correctness#constptrptr-conversion" title="Why am I getting an error converting a Foo** → const Foo**?">Why am I getting an error converting a <code>Foo**</code> → <code>const Foo**</code>?</a></li></ul></div>
+
+<h3 id="overview-const" class="faq-title has-hover-pop-out">What is “<code>const</code> correctness”?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#overview-const" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="1"><span>Δ</span></a></h3>
+
+<p>A good thing. It means using the keyword <code>const</code> to prevent <code>const</code> objects from getting mutated.</p>
+
+<p>For example, if you wanted to create a function <code>f()</code> that accepted a <code>std::string</code>, plus you want to promise callers
+not to change the caller’s <code>std::string</code> that gets passed to <code>f()</code>, you can have <code>f()</code> receive its <code>std::string</code>
+parameter…</p>
+
+<ul>
+<li><code>void f1(const std::string&amp; s);     </code> <em>// Pass by reference-to-<code>const</code></em></li>
+<li><code>void f2(const std::string* sptr);  </code> <em>// Pass by pointer-to-<code>const</code></em></li>
+<li><code>void f3(std::string s);            </code> <em>// Pass by value</em></li>
+</ul>
+
+<p>In the <em>pass by reference-to-<code>const</code></em> and <em>pass by pointer-to-<code>const</code></em> cases, any attempts to change the caller’s
+<code>std::string</code> within the <code>f()</code> functions would be flagged by the compiler as an error at compile-time. This check is
+done entirely at compile-time: there is no run-time space or speed cost for the <code>const</code>. In the <em>pass by value</em> case
+(<code>f3()</code>), the called function gets a copy of the caller’s <code>std::string</code>. This means that <code>f3()</code> can change its local
+copy, but the copy is destroyed when <code>f3()</code> returns. In particular <code>f3()</code> cannot change the caller’s <code>std::string</code>
+object.</p>
+
+<p>As an opposite example, suppose you wanted to create a function <code>g()</code> that accepted a <code>std::string</code>, but you want to let
+callers know that <code>g()</code> might change the caller’s <code>std::string</code> object. In this case you can have <code>g()</code> receive its
+<code>std::string</code> parameter…</p>
+
+<ul>
+<li><code>void g1(std::string&amp; s);     </code> <em>// Pass by reference-to-non-<code>const</code></em></li>
+<li><code>void g2(std::string* sptr);  </code> <em>// Pass by pointer-to-non-<code>const</code></em></li>
+</ul>
+
+<p>The lack of <code>const</code> in these functions tells the compiler that they are allowed to (but are not required to) change the
+caller’s <code>std::string</code> object. Thus they can pass their <code>std::string</code> to any of the <code>f()</code> functions, but only <code>f3()</code>
+(the one that receives its parameter “by value”) can pass its <code>std::string</code> to <code>g1()</code> or <code>g2()</code>. If <code>f1()</code> or <code>f2()</code>
+need to call either <code>g()</code> function, a local copy of the <code>std::string</code> object must be passed to the <code>g()</code> function; the
+parameter to <code>f1()</code> or <code>f2()</code> cannot be directly passed to either <code>g()</code> function. E.g.,</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">void</span><span class="pln"> g1</span><span class="pun">(</span><span class="pln">std</span><span class="pun">::</span><span class="pln">string</span><span class="pun">&amp;</span><span class="pln"> s</span><span class="pun">);</span></code></li><li class="L1"><code></code></li><li class="L2"><code><span class="kwd">void</span><span class="pln"> f1</span><span class="pun">(</span><span class="kwd">const</span><span class="pln"> std</span><span class="pun">::</span><span class="pln">string</span><span class="pun">&amp;</span><span class="pln"> s</span><span class="pun">)</span></code></li><li class="L3"><code><span class="pun">{</span></code></li><li class="L4"><code><span class="pln">  g1</span><span class="pun">(</span><span class="pln">s</span><span class="pun">);</span><span class="pln">          </span><span class="com">// Compile-time Error since s is const</span></code></li><li class="L5"><code></code></li><li class="L6"><code><span class="pln">  std</span><span class="pun">::</span><span class="pln">string localCopy </span><span class="pun">=</span><span class="pln"> s</span><span class="pun">;</span></code></li><li class="L7"><code><span class="pln">  g1</span><span class="pun">(</span><span class="pln">localCopy</span><span class="pun">);</span><span class="pln">  </span><span class="com">// Okay since localCopy is not const</span></code></li><li class="L8"><code><span class="pun">}</span></code></li></ol></pre>
+
+<p>Naturally in the above case, any changes that <code>g1()</code> makes are made to the <code>localCopy</code> object that is local to <code>f1()</code>.
+In particular, no changes will be made to the <code>const</code> parameter that was passed by reference to <code>f1()</code>.</p>
+
+<h3 id="const-and-type-safety" class="faq-title has-hover-pop-out">How is “<code>const</code> correctness” related to ordinary type safety?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#const-and-type-safety" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="2"><span>Δ</span></a></h3>
+
+<p>Declaring the <code>const</code>-ness of a parameter is just another form of type safety.</p>
+
+<p>If you find ordinary type safety helps you get systems correct (it does; especially in large systems), you’ll find
+<code>const</code> correctness helps also.</p>
+
+<p>The benefit of <code>const</code> correctness is that it prevents you from <em>inadvertently</em> modifying something you didn’t expect
+would be modified. You end up needing to decorate your code with a few extra keystrokes (the <code>const</code> keyword), with the
+benefit that you’re telling the compiler <em>and</em> other programmers some additional piece of important semantic information
+— information that the compiler uses to prevent mistakes and other programmers use as documentation.</p>
+
+<p>Conceptually you can imagine that <code>const std::string</code>, for example, is a different class than ordinary <code>std::string</code>,
+since the <code>const</code> variant is conceptually missing the various mutative operations that are available in the non-<code>const</code>
+variant. For example, you can conceptually imagine that a <code>const std::string</code> simply doesn’t have an assignment operator
+<code>+=</code> or any other mutative operations.</p>
+
+<h3 id="retrofitting-const" class="faq-title has-hover-pop-out">Should I try to get things <code>const</code> correct “sooner” or “later”?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#retrofitting-const" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="3"><span>Δ</span></a></h3>
+
+<p>At the very, very, <em>very</em> beginning.</p>
+
+<p>Back-patching <code>const</code> correctness results in a snowball effect: every <code>const</code> you add “over here” requires four more
+to be added “over there.”</p>
+
+<p>Add <code>const</code> early and often.</p>
+
+<h3 id="ptr-to-const" class="faq-title has-hover-pop-out">What does “<code>const X* p</code>” mean?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#ptr-to-const" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="4"><span>Δ</span></a></h3>
+
+<p>It means <code>p</code> points to an object of class <code>X</code>, but <code>p</code> can’t be used to change that <code>X</code> object (naturally <code>p</code> could also
+be <code>NULL</code>).</p>
+
+<p>Read it right-to-left: “p is a pointer to an X that is constant.”</p>
+
+<p>For example, if class <code>X</code> has a <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?"><code>const</code> member function</a> such as <code>inspect() const</code>, it is okay to say
+<code>p-&gt;inspect()</code>. But if class <code>X</code> has a <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?">non-<code>const</code> member function</a> called <code>mutate()</code>, it is an
+error if you say <code>p-&gt;mutate()</code>.</p>
+
+<p>Significantly, this error is caught by the compiler at compile-time — no run-time tests are done. That means <code>const</code>
+doesn’t slow down your program and doesn’t require you to write extra test-cases to check things at runtime — the
+compiler does the work at compile-time.</p>
+
+<h3 id="const-ptr-vs-ptr-const" class="faq-title has-hover-pop-out">What’s the difference between “<code>const X* p</code>”, “<code>X* const p</code>” and “<code>const X* const p</code>”?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#const-ptr-vs-ptr-const" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="5"><span>Δ</span></a></h3>
+
+<p>Read the pointer declarations right-to-left.</p>
+
+<ul>
+<li><code>const X* p</code> means “<code>p</code> points to an <code>X</code> that is <code>const</code>”: the <code>X</code> object can’t be changed <a href="https://isocpp.org/wiki/faq/const-correctness#ptr-to-const-aliasing" title="FAQ: Does &#39;const Fred* p&#39; mean that *p can&#39;t change?">via
+<code>p</code></a>.</li>
+<li><code>X* const p</code> means “<code>p</code> is a <code>const</code> pointer to an <code>X</code> that is non-<code>const</code>”: you can’t change the pointer <code>p</code>
+itself, but you can change the <code>X</code> object <a href="https://isocpp.org/wiki/faq/const-correctness#ptr-to-const-aliasing" title="FAQ: Does &#39;const Fred* p&#39; mean that *p can&#39;t change?">via <code>p</code></a>.</li>
+<li><code>const X* const p</code> means “<code>p</code> is a <code>const</code> pointer to an <code>X</code> that is <code>const</code>”: you can’t change the pointer <code>p</code>
+itself, nor can you change the <code>X</code> object <a href="https://isocpp.org/wiki/faq/const-correctness#ptr-to-const-aliasing" title="FAQ: Does &#39;const Fred* p&#39; mean that *p can&#39;t change?">via <code>p</code></a>.</li>
+</ul>
+
+<p>And, oh yea, did I mention to read your pointer declarations right-to-left?</p>
+
+<h3 id="ref-to-const" class="faq-title has-hover-pop-out">What does “<code>const X&amp; x</code>” mean?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#ref-to-const" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="6"><span>Δ</span></a></h3>
+
+<p>It means <code>x</code> aliases an <code>X</code> object, but you can’t change that <code>X</code> object <a href="https://isocpp.org/wiki/faq/const-correctness#ptr-to-const-aliasing" title="FAQ: Does &#39;const Fred* p&#39; mean that *p can&#39;t change?">via <code>x</code></a>.</p>
+
+<p>Read it right-to-left: “<code>x</code> is a reference to an <code>X</code> that is <code>const</code>.”</p>
+
+<p>For example, if class <code>X</code> has a <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?"><code>const</code> member function</a> such as <code>inspect() const</code>, it is okay to say
+<code>x.inspect()</code>. But if class <code>X</code> has a <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?">non-<code>const</code> member function</a> called <code>mutate()</code>, it is an error
+if you say <code>x.mutate()</code>.</p>
+
+<p>This is entirely symmetric with <a href="https://isocpp.org/wiki/faq/const-correctness#ptr-to-const" title="FAQ: What does &#39;const X* p&#39; mean?">pointers to const</a>, including the fact that the compiler does all the checking at compile-time, which means <code>const</code> doesn’t slow down your program and doesn’t require you to write extra test-cases to check things at runtime.</p>
+
+<h3 id="const-ref-alt" class="faq-title has-hover-pop-out">What do “<code>X const&amp; x</code>” and “<code>X const* p</code>” mean?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#const-ref-alt" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="7"><span>Δ</span></a></h3>
+
+<p><code>X const&amp; x</code> is equivalent to <a href="https://isocpp.org/wiki/faq/const-correctness#ref-to-const" title="FAQ: What does &#39;const X&amp; x&#39; mean?"><code>const X&amp; x</code></a>, and <code>X const* x</code> is equivalent to
+<a href="https://isocpp.org/wiki/faq/const-correctness#ref-to-const" title="FAQ: What does &#39;const X&amp; x&#39; mean?"><code>const X* x</code></a>.</p>
+
+<p>Some people prefer the <code>const</code>-on-the-right style, calling it “consistent <code>const</code>” or, using a term coined by Simon Brand, “East <code>const</code>.” Indeed the
+“East <code>const</code>” style can be more consistent than the alternative: the “East <code>const</code>” style <em>always</em>
+puts the <code>const</code> on the right of what it constifies, whereas the other style <em>sometimes</em> puts the <code>const</code> on the left
+and <em>sometimes</em> on the right (for <code>const</code> pointer declarations and <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?"><code>const</code> member functions</a>).</p>
+
+<p>With the “East <code>const</code>” style, a local variable that is <code>const</code> is defined with the <code>const</code> on the right:
+<code>int const a = 42;</code>. Similarly a <code>static</code> variable that is <code>const</code> is defined as <code>static double const x = 3.14;</code>.
+Basically every <code>const</code> ends up on the right of the thing it constifies, including the <code>const</code> that is <em>required</em> to be
+on the right: <code>const</code> pointer declarations and <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?">with a <code>const</code> member function</a>.</p>
+
+<p>The “East <code>const</code>” style is also less confusing when used with type aliases: Why do <code>foo</code> and <code>bar</code> have different types here?</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">using</span><span class="pln"> X_ptr </span><span class="pun">=</span><span class="pln"> X</span><span class="pun">*;</span></code></li><li class="L1"><code></code></li><li class="L2"><code><span class="kwd">const</span><span class="pln"> X_ptr foo</span><span class="pun">;</span></code></li><li class="L3"><code><span class="kwd">const</span><span class="pln"> X</span><span class="pun">*</span><span class="pln"> bar</span><span class="pun">;</span></code></li></ol></pre>
+
+<p>Using the “East <code>const</code>” style makes this clearer:</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">using</span><span class="pln"> X_ptr </span><span class="pun">=</span><span class="pln"> X</span><span class="pun">*;</span></code></li><li class="L1"><code></code></li><li class="L2"><code><span class="pln">X_ptr </span><span class="kwd">const</span><span class="pln"> foo</span><span class="pun">;</span></code></li><li class="L3"><code><span class="pln">X</span><span class="pun">*</span><span class="pln"> </span><span class="kwd">const</span><span class="pln"> foobar</span><span class="pun">;</span></code></li><li class="L4"><code><span class="pln">X </span><span class="kwd">const</span><span class="pun">*</span><span class="pln"> bar</span><span class="pun">;</span></code></li></ol></pre>
+
+<p>It is clearer here that <code>foo</code> and <code>foobar</code> are the same type and that <code>bar</code> is a different type.</p>
+
+<p>The “East <code>const</code>” style is also more consistent with pointer declarations. Contrast the traditional style:</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">const</span><span class="pln"> X</span><span class="pun">**</span><span class="pln"> foo</span><span class="pun">;</span></code></li><li class="L1"><code><span class="kwd">const</span><span class="pln"> X</span><span class="pun">*</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">*</span><span class="pln"> bar</span><span class="pun">;</span></code></li><li class="L2"><code><span class="kwd">const</span><span class="pln"> X</span><span class="pun">*</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">*</span><span class="pln"> </span><span class="kwd">const</span><span class="pln"> baz</span><span class="pun">;</span></code></li></ol></pre>
+
+<p>with the “East <code>const</code>” style</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="pln">X </span><span class="kwd">const</span><span class="pun">**</span><span class="pln"> foo</span><span class="pun">;</span></code></li><li class="L1"><code><span class="pln">X </span><span class="kwd">const</span><span class="pun">*</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">*</span><span class="pln"> bar</span><span class="pun">;</span></code></li><li class="L2"><code><span class="pln">X </span><span class="kwd">const</span><span class="pun">*</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">*</span><span class="pln"> </span><span class="kwd">const</span><span class="pln"> baz</span><span class="pun">;</span></code></li></ol></pre>
+
+<p>Despite these benefits, the <code>const</code>-on-the-right style is not yet popular, so legacy code tends to have the traditional style.</p>
+
+<h3 id="const-ref-nonsense" class="faq-title has-hover-pop-out">Does “<code>X&amp; const x</code>” make any sense?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#const-ref-nonsense" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="8"><span>Δ</span></a></h3>
+
+<p>No, it is nonsense.</p>
+
+<p>To find out what the above declaration means, <a href="https://isocpp.org/wiki/faq/const-correctness#const-ptr-vs-ptr-const" title="FAQ: What&#39;s the difference between &#39;const X* p&#39;, &#39;X* const p&#39; and &#39;const X* const p&#39;?">read it right-to-left</a>: “<code>x</code> is a <code>const</code>
+reference to a <code>X</code>”. But that is redundant — references are always <code>const</code>, in the sense that <a href="https://isocpp.org/wiki/faq/references#reseating-refs" title="FAQ: How can you reseat a reference to make it refer to a different object?">you can never reseat a
+reference to make it refer to a different object</a>. Never. With or without the <code>const</code>.</p>
+
+<p>In other words, “<code>X&amp; const x</code>” is functionally equivalent to “<code>X&amp; x</code>”. Since you’re gaining nothing by adding the
+<code>const</code> after the <code>&amp;</code>, you shouldn’t add it: it will confuse people — the <code>const</code> will make some people think that
+the <code>X</code> is <code>const</code>, as if you had said “<code>const X&amp; x</code>”.</p>
+
+<h3 id="const-member-fns" class="faq-title has-hover-pop-out">What is a “<code>const</code> member function”?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="9"><span>Δ</span></a></h3>
+
+<p>A member function that inspects (rather than mutates) its object.</p>
+
+<p>A <code>const</code> member function is indicated by a <code>const</code> suffix just after the member function’s parameter list. Member
+functions with a <code>const</code> suffix are called “<code>const</code> member functions” or “inspectors.” Member functions without a
+<code>const</code> suffix are called “non-<code>const</code> member functions” or “mutators.”</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">class</span><span class="pln"> </span><span class="typ">Fred</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L1"><code><span class="kwd">public</span><span class="pun">:</span></code></li><li class="L2"><code><span class="pln">  </span><span class="kwd">void</span><span class="pln"> inspect</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">;</span><span class="pln">   </span><span class="com">// This member promises NOT to change *this</span></code></li><li class="L3"><code><span class="pln">  </span><span class="kwd">void</span><span class="pln"> mutate</span><span class="pun">();</span><span class="pln">          </span><span class="com">// This member function might change *this</span></code></li><li class="L4"><code><span class="pun">};</span></code></li><li class="L5"><code></code></li><li class="L6"><code><span class="kwd">void</span><span class="pln"> userCode</span><span class="pun">(</span><span class="typ">Fred</span><span class="pun">&amp;</span><span class="pln"> changeable</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">const</span><span class="pln"> </span><span class="typ">Fred</span><span class="pun">&amp;</span><span class="pln"> unchangeable</span><span class="pun">)</span></code></li><li class="L7"><code><span class="pun">{</span></code></li><li class="L8"><code><span class="pln">  changeable</span><span class="pun">.</span><span class="pln">inspect</span><span class="pun">();</span><span class="pln">   </span><span class="com">// Okay: doesn't change a changeable object</span></code></li><li class="L9"><code><span class="pln">  changeable</span><span class="pun">.</span><span class="pln">mutate</span><span class="pun">();</span><span class="pln">    </span><span class="com">// Okay: changes a changeable object</span></code></li><li class="L0"><code></code></li><li class="L1"><code><span class="pln">  unchangeable</span><span class="pun">.</span><span class="pln">inspect</span><span class="pun">();</span><span class="pln"> </span><span class="com">// Okay: doesn't change an unchangeable object</span></code></li><li class="L2"><code><span class="pln">  unchangeable</span><span class="pun">.</span><span class="pln">mutate</span><span class="pun">();</span><span class="pln">  </span><span class="com">// ERROR: attempt to change unchangeable object</span></code></li><li class="L3"><code><span class="pun">}</span></code></li></ol></pre>
+
+<p>The attempt to call <code>unchangeable.mutate()</code> is an error caught at compile time. There is no runtime space or speed
+penalty for <code>const</code>, and you don’t need to write test-cases to check it at runtime.</p>
+
+<p>The trailing <code>const</code> on <code>inspect()</code> member function should be used to mean the method won’t change the object’s
+<em>abstract</em> (client-visible) state. That is slightly different from saying the method won’t change the “raw bits” of the
+object’s <code>struct</code>. C++ compilers aren’t allowed to take the “bitwise” interpretation unless they can solve the
+aliasing problem, which normally can’t be solved (i.e., a non-<code>const</code> alias could exist which could modify the state of
+the object). Another (important) insight from this aliasing issue: pointing at an object with a pointer-to-<code>const</code>
+doesn’t guarantee that the object won’t change; it merely promises that the object won’t change <em>via that pointer</em>.</p>
+
+<h3 id="return-const-ref-from-const-memfn" class="faq-title has-hover-pop-out">What is the relationship between a return-by-reference and a <code>const</code> member function?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#return-const-ref-from-const-memfn" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="10"><span>Δ</span></a></h3>
+
+<p>If you want to return a member of your <code>this</code> object by reference from <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?">an inspector method</a>, you
+should return it using reference-to-const (<code>const X&amp; inspect() const</code>) or by value (<code>X inspect() const</code>).</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">class</span><span class="pln"> </span><span class="typ">Person</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L1"><code><span class="kwd">public</span><span class="pun">:</span></code></li><li class="L2"><code><span class="pln">  </span><span class="kwd">const</span><span class="pln"> std</span><span class="pun">::</span><span class="pln">string</span><span class="pun">&amp;</span><span class="pln"> name_good</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">;</span><span class="pln">  </span><span class="com">// Right: the caller can't change the Person's name</span></code></li><li class="L3"><code><span class="pln">  std</span><span class="pun">::</span><span class="pln">string</span><span class="pun">&amp;</span><span class="pln"> name_evil</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">;</span><span class="pln">        </span><span class="com">// Wrong: the caller can change the Person's name</span></code></li><li class="L4"><code><span class="pln">  </span><span class="typ">int</span><span class="pln"> age</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">;</span><span class="pln">                       </span><span class="com">// Also right: the caller can't change the Person's age</span></code></li><li class="L5"><code><span class="pln">  </span><span class="com">// ...</span></code></li><li class="L6"><code><span class="pun">};</span></code></li><li class="L7"><code></code></li><li class="L8"><code><span class="kwd">void</span><span class="pln"> myCode</span><span class="pun">(</span><span class="kwd">const</span><span class="pln"> </span><span class="typ">Person</span><span class="pun">&amp;</span><span class="pln"> p</span><span class="pun">)</span><span class="pln">  </span><span class="com">// myCode() promises not to change the Person object...</span></code></li><li class="L9"><code><span class="pun">{</span></code></li><li class="L0"><code><span class="pln">  p</span><span class="pun">.</span><span class="pln">name_evil</span><span class="pun">()</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="str">"Igor"</span><span class="pun">;</span><span class="pln">     </span><span class="com">// But myCode() changed it anyway!!</span></code></li><li class="L1"><code><span class="pun">}</span></code></li></ol></pre>
+
+<p>The good news is that the compiler will <em>often</em> catch you if you get this wrong. In particular, if you accidentally
+return a member of your <code>this</code> object by non-<code>const</code> reference, such as in <code>Person::name_evil()</code> above, the compiler
+will <em>often</em> detect it and give you a compile-time error while compiling the innards of, in this case,
+<code>Person::name_evil()</code>.</p>
+
+<p>The bad news is that the compiler <em>won’t always</em> catch you: there are some cases where the compiler simply won’t ever
+give you a compile-time error message.</p>
+
+<p>Translation: you need to <em>think</em>. If that scares you, find another line of work; “think” is not a four-letter word.</p>
+
+<p>Remember <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?">the “<code>const</code> philosophy” spread throughout this section</a>: a <code>const</code> member function must
+not change (or allow a caller to change) the <code>this</code> object’s <em>logical</em> state (AKA <em>abstract</em> state AKA <em>meaningwise</em>
+state). Think of what an object <em>means</em>, not how it is internally implemented. A Person’s age and name are logically
+part of the Person, but the Person’s neighbor and employer are not. An inspector method that returns part of the <code>this</code>
+object’s logical / abstract / meaningwise state <em>must not</em> return a non-<code>const</code> pointer (or reference) to that part,
+independent of whether that part is internally implemented as a direct data-member physically embedded within the
+<code>this</code> object or some other way.</p>
+
+<h3 id="const-overloading" class="faq-title has-hover-pop-out">What’s the deal with “<code>const</code>-overloading”?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#const-overloading" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="11"><span>Δ</span></a></h3>
+
+<p><code>const</code> overloading helps you achieve <code>const</code> correctness.</p>
+
+<p><code>const</code> overloading is when you have an <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?">inspector method</a> and a <a href="https://isocpp.org/wiki/faq/const-correctness#const-member-fns" title="FAQ: What is a &#39;const member function&#39;?">mutator method</a>
+with the same name and the same number of and types of parameters. The two distinct methods differ only in that the
+inspector is <code>const</code> and the mutator is non-<code>const</code>.</p>
+
+<p>The most common use of <code>const</code> overloading is with the subscript operator. You should generally try to use <a href="https://isocpp.org/wiki/faq/class-libraries#stl" title="FAQ: What is the &#39;STL&#39;?">one of the
+standard container templates</a>, such as <code>std::vector</code>, but if you need to create your own class that has a subscript
+operator, here’s the rule of thumb: <strong>subscript operators often come in pairs.</strong></p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">class</span><span class="pln"> </span><span class="typ">Fred</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="com">/*...*/</span><span class="pln"> </span><span class="pun">};</span></code></li><li class="L1"><code></code></li><li class="L2"><code><span class="kwd">class</span><span class="pln"> </span><span class="typ">MyFredList</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L3"><code><span class="kwd">public</span><span class="pun">:</span></code></li><li class="L4"><code><span class="pln">  </span><span class="kwd">const</span><span class="pln"> </span><span class="typ">Fred</span><span class="pun">&amp;</span><span class="pln"> </span><span class="kwd">operator</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">unsigned</span><span class="pln"> index</span><span class="pun">)</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">;</span><span class="pln">  </span><span class="com">// Subscript operators often come in pairs</span></code></li><li class="L5"><code><span class="pln">  </span><span class="typ">Fred</span><span class="pun">&amp;</span><span class="pln">       </span><span class="kwd">operator</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">unsigned</span><span class="pln"> index</span><span class="pun">);</span><span class="pln">        </span><span class="com">// Subscript operators often come in pairs</span></code></li><li class="L6"><code><span class="pln">  </span><span class="com">// ...</span></code></li><li class="L7"><code><span class="pun">};</span></code></li></ol></pre>
+
+<p>The <code>const</code> subscript operator returns a <code>const</code>-reference, so the compiler will prevent callers from inadvertently
+mutating/changing the <code>Fred</code>. The non-<code>const</code> subscript operator returns a non-<code>const</code> reference, which is your way of
+telling your callers (and the compiler) that your callers are allowed to modify the <code>Fred</code> object.</p>
+
+<p>When a user of your <code>MyFredList</code> class calls the subscript operator, the compiler selects which overload to call based
+on the constness of <em>their</em> <code>MyFredList</code>. If the caller has a <code>MyFredList a</code> or <code>MyFredList&amp; a</code>, then <code>a[3]</code> will call
+the non-<code>const</code> subscript operator, and the caller will end up with a non-<code>const</code> reference to a <code>Fred</code>:</p>
+
+<p>For example, suppose <code>class Fred</code> has an inspector-method <code>inspect() const</code> and a mutator-method <code>mutate()</code>:</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">void</span><span class="pln"> f</span><span class="pun">(</span><span class="typ">MyFredList</span><span class="pun">&amp;</span><span class="pln"> a</span><span class="pun">)</span><span class="pln">  </span><span class="com">// The MyFredList is non-const</span></code></li><li class="L1"><code><span class="pun">{</span></code></li><li class="L2"><code><span class="pln">  </span><span class="com">// Okay to call methods that inspect (look but not mutate/change) the Fred at a[3]:</span></code></li><li class="L3"><code><span class="pln">  </span><span class="typ">Fred</span><span class="pln"> x </span><span class="pun">=</span><span class="pln"> a</span><span class="pun">[</span><span class="lit">3</span><span class="pun">];</span><span class="pln">       </span><span class="com">// Doesn't change to the Fred at a[3]: merely makes a copy of that Fred</span></code></li><li class="L4"><code><span class="pln">  a</span><span class="pun">[</span><span class="lit">3</span><span class="pun">].</span><span class="pln">inspect</span><span class="pun">();</span><span class="pln">      </span><span class="com">// Doesn't change to the Fred at a[3]: inspect() const is an inspector-method</span></code></li><li class="L5"><code></code></li><li class="L6"><code><span class="pln">  </span><span class="com">// Okay to call methods that DO change the Fred at a[3]:</span></code></li><li class="L7"><code><span class="pln">  </span><span class="typ">Fred</span><span class="pln"> y</span><span class="pun">;</span></code></li><li class="L8"><code><span class="pln">  a</span><span class="pun">[</span><span class="lit">3</span><span class="pun">]</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> y</span><span class="pun">;</span><span class="pln">            </span><span class="com">// Changes the Fred at a[3]</span></code></li><li class="L9"><code><span class="pln">  a</span><span class="pun">[</span><span class="lit">3</span><span class="pun">].</span><span class="pln">mutate</span><span class="pun">();</span><span class="pln">       </span><span class="com">// Changes the Fred at a[3]: mutate() is a mutator-method</span></code></li><li class="L0"><code><span class="pun">}</span></code></li></ol></pre>
+
+<p>However if the caller has a <code>const MyFredList a</code> or <code>const MyFredList&amp; a</code>, then <code>a[3]</code> will call the <code>const</code> subscript
+operator, and the caller will end up with a <code>const</code> reference to a <code>Fred</code>. This allows the caller to inspect the <code>Fred</code>
+at <code>a[3]</code>, but it prevents the caller from inadvertently mutating/changing the <code>Fred</code> at <code>a[3]</code>.</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">void</span><span class="pln"> f</span><span class="pun">(</span><span class="kwd">const</span><span class="pln"> </span><span class="typ">MyFredList</span><span class="pun">&amp;</span><span class="pln"> a</span><span class="pun">)</span><span class="pln">  </span><span class="com">// The MyFredList is const</span></code></li><li class="L1"><code><span class="pun">{</span></code></li><li class="L2"><code><span class="pln">  </span><span class="com">// Okay to call methods that DON'T change the Fred at a[3]:</span></code></li><li class="L3"><code><span class="pln">  </span><span class="typ">Fred</span><span class="pln"> x </span><span class="pun">=</span><span class="pln"> a</span><span class="pun">[</span><span class="lit">3</span><span class="pun">];</span></code></li><li class="L4"><code><span class="pln">  a</span><span class="pun">[</span><span class="lit">3</span><span class="pun">].</span><span class="pln">inspect</span><span class="pun">();</span></code></li><li class="L5"><code></code></li><li class="L6"><code><span class="pln">  </span><span class="com">// Compile-time error (fortunately!) if you try to mutate/change the Fred at a[3]:</span></code></li><li class="L7"><code><span class="pln">  </span><span class="typ">Fred</span><span class="pln"> y</span><span class="pun">;</span></code></li><li class="L8"><code><span class="pln">  a</span><span class="pun">[</span><span class="lit">3</span><span class="pun">]</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> y</span><span class="pun">;</span><span class="pln">       </span><span class="com">// Fortunately(!) the compiler catches this error at compile-time</span></code></li><li class="L9"><code><span class="pln">  a</span><span class="pun">[</span><span class="lit">3</span><span class="pun">].</span><span class="pln">mutate</span><span class="pun">();</span><span class="pln">  </span><span class="com">// Fortunately(!) the compiler catches this error at compile-time</span></code></li><li class="L0"><code><span class="pun">}</span></code></li></ol></pre>
+
+<p>Const overloading for subscript- and funcall-operators is illustrated <a href="https://isocpp.org/wiki/faq/operator-overloading#matrix-subscript-op" title="FAQ: How do I create a subscript operator for a Matrix class?">here</a>,
+<a href="https://isocpp.org/wiki/faq/freestore-mgmt#multidim-arrays2" title="FAQ: But the previous FAQ&#39;s code is SOOOO tricky and error prone! Isn&#39;t there a simpler way?">here</a>, <a href="https://isocpp.org/wiki/faq/freestore-mgmt#multidim-arrays3" title="FAQ: But the above Matrix class is specific to Fred! Isn&#39;t there a way to make it generic?">here</a>, <a href="https://isocpp.org/wiki/faq/freestore-mgmt#multidim-arrays4" title="FAQ: What&#39;s another way to build a Matrix template?">here</a>, and <a href="https://isocpp.org/wiki/faq/templates#class-templates" title="FAQ: What&#39;s the syntax / semantics for a &#39;class template&#39;?">here</a>.</p>
+
+<p>You can, of course, also use <code>const</code>-overloading for things other than the subscript operator.</p>
+
+<h3 id="logical-vs-physical-state" class="faq-title has-hover-pop-out">How can it help me design better classes if I distinguish <em>logical state</em> from <em>physical state</em>?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#logical-vs-physical-state" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="12"><span>Δ</span></a></h3>
+
+<p>Because that encourages you to design your classes from the outside-in rather than from the inside-out, which in turn
+makes your classes and objects easier to understand and use, more intuitive, less error prone, and faster. (Okay, that’s
+a slight over-simplification. To understand all the if’s and’s and but’s, you’ll just have to read the rest of this
+answer!)</p>
+
+<p>Let’s understand this from the inside-out — <a href="https://isocpp.org/wiki/faq/operator-overloading#design-interfaces-first" title="FAQ: Should I design my classes from the outside (interfaces first) or from the inside (data first)?">you will (should) design your classes from the
+outside-in</a>, but if you’re new to this concept, it’s easier to understand from the
+inside-out.</p>
+
+<p>On the inside, your objects have physical (or concrete or bitwise) state. This is the state that’s easy for programmers
+to see and understand; it’s the state that would be there if the class were just a C-style <code>struct</code>.</p>
+
+<p>On the outside, your objects have users of your class, and these users are restricted to using only <code>public</code> member
+functions and <a href="https://isocpp.org/wiki/faq/friends" title="Section: Friends"><code>friend</code>s</a>. These external users also perceive the object as having state, for example, if the
+object is of class <code>Rectangle</code> with methods <code>width()</code>, <code>height()</code> and <code>area()</code>, your users would say that those three
+are all part of the object’s logical (or abstract or meaningwise) state. To an external user, the <code>Rectangle</code> object
+actually has an area, even if that area is computed on the fly (e.g., if the <code>area()</code> method returns the product of the
+object’s width and height). In fact, and this is the important point, your users don’t know and don’t care how you
+implement any of these methods; your users still perceive, from their perspective, that your object logically has a
+meaningwise state of width, height, and area.</p>
+
+<p>The <code>area()</code> example shows a case where the logical state can contain elements that are not directly realized in the
+physical state. The opposite is also true: classes sometimes intentionally hide part of their objects’ physical
+(concrete, bitwise) state from users — they intentionally do not provide any <code>public</code> member functions or
+<a href="https://isocpp.org/wiki/faq/friends" title="Section: Friends"><code>friend</code>s</a> that would allow users to read or write or even know about this hidden state. That means there are
+bits in the object’s physical state that have no corresponding elements in the object’s logical state.</p>
+
+<p>As an example of this latter case, a collection-object might cache its last lookup in hopes of improving the
+performance of its next lookup. This cache is certainly part of the object’s physical state, but there it is an internal
+implementation detail that will probably not be exposed to users — it will probably not be part of the object’s
+logical state. Telling what’s what is easy if you think from the outside-in: if the collection-object’s users have no
+way to check the state of the cache itself, then the cache is <em>transparent</em>, and is not part of the object’s logical
+state.</p>
+
+<h3 id="logical-vs-physical-const" class="faq-title has-hover-pop-out">Should the <code>const</code>ness of my <code>public</code> member functions be based on what the method does to the object’s <em>logical state</em>, or <em>physical state</em>?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#logical-vs-physical-const" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="13"><span>Δ</span></a></h3>
+
+<p>Logical.</p>
+
+<p>There’s no way to make this next part easy. It <em>is</em> going to hurt. Best recommendation is to sit down. And please, for
+your safety, make sure there are no sharp implements nearby.</p>
+
+<p>Let’s go back to <a href="https://isocpp.org/wiki/faq/const-correctness#logical-vs-physical-state" title="FAQ: How can it help me design better classes if I distinguish logical state from physical state?">the collection-object example</a>. Remember: there’s a lookup method that
+caches the last lookup in hopes to speed up future lookups.</p>
+
+<p>Let’s state what is probably obvious: assume that the lookup method makes <em>no</em> changes to <em>any</em> of the
+collection-object’s logical state.</p>
+
+<p>So… the time has come to hurt you. Are you ready?</p>
+
+<p>Here comes: if the lookup method does not make any change to any of the collection-object’s logical state, but it
+<em>does</em> change the collection-object’s <em>physical</em> state (it makes a very real change to the very real cache), should the
+lookup method be <code>const</code>?</p>
+
+<p>The answer is a resounding Yes. (There are exceptions to every rule, so “Yes” should really have an asterisk next to it,
+but the vast majority of the time, the answer is Yes.)</p>
+
+<p>This is all about “<em>logical</em> <code>const</code>” over “<em>physical</em> <code>const</code>.” It means the decision about whether to decorate a
+method with <code>const</code> should hinge primarily on whether that method leaves the <em>logical</em> state unchanged, <em>irrespective</em>
+(are you sitting down?) (you might want to sit down) <em>irrespective</em> of whether the method happens to make very real
+changes to the object’s very real physical state.</p>
+
+<p>In case that didn’t sink in, or in case you are not yet in pain, let’s tease it apart into two cases:</p>
+
+<ul>
+<li>If a method changes any part of the object’s logical state, it logically is a mutator; it should not be <code>const</code> <em>even
+if</em> (as actually happens!) the method doesn’t change any physical bits of the object’s concrete state.</li>
+<li>Conversely, a method is logically an inspector and should be <code>const</code> if it never changes any part of the object’s
+logical state, even if (as actually happens!) the method changes physical bits of the object’s concrete state.</li>
+</ul>
+
+<p>If you’re confused, read it again.</p>
+
+<p>If you’re not confused but are angry, good: you may not like it yet, but at least you understand it. Take a deep breath
+and repeat after me: <em>“The <code>const</code>ness of a method should makes sense from outside the object.”</em></p>
+
+<p>If you’re still angry, repeat this three times: <em>“The constness of a method must make sense to the object’s users, and those users can see only the object’s logical state.”</em></p>
+
+<p>If you’re still angry, sorry, it is what it is. Suck it up and live with it. Yes, there will be exceptions; every rule
+has them. But as a rule, in the main, this <em>logical <code>const</code></em> notion is good for you and good for your software.</p>
+
+<p>One more thing. This is going to get inane, but let’s be precise about whether a method changes the object’s logical
+state. If you are <em>outside</em> the class — you are a normal user, every experiment you could perform (every method or
+sequence of methods you call) would have the <em>same results</em> (same return values, same exceptions or lack of exceptions)
+irrespective of whether you first called that lookup method. If the lookup function changed <em>any</em> future behavior of
+<em>any</em> future method (not just making it faster but changed the outcome, changed the return value, changed the
+exception), then the lookup method changed the object’s logical state — it is a mutuator. But if the lookup method
+changed nothing other than perhaps making some things faster, then it is an inspector.</p>
+
+<h3 id="mutable-data-members" class="faq-title has-hover-pop-out">What do I do if I want a <code>const</code> member function to make an “invisible” change to a data member?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#mutable-data-members" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="14"><span>Δ</span></a></h3>
+
+<p>Use <code>mutable</code> (or, as a last resort, use <code>const_cast</code>).</p>
+
+<p>A small percentage of inspectors need to make changes to an object’s physical state that cannot be observed by external
+users — changes to <a href="https://isocpp.org/wiki/faq/const-correctness#logical-vs-physical-state" title="FAQ: How can it help me design better classes if I distinguish logical state from physical state?">the physical but not logical state</a>.</p>
+
+<p>For example, <a href="https://isocpp.org/wiki/faq/const-correctness#logical-vs-physical-state" title="FAQ: How can it help me design better classes if I distinguish logical state from physical state?">the collection-object discussed earlier</a> cached its last lookup in hopes of
+improving the performance of its next lookup. Since the cache, in this example, cannot be directly observed by any part
+of the collection-object’s public interface (other than timing), its existence and state is not part of the object’s
+logical state, so changes to it are invisible to external users. The lookup method is an inspector <a href="https://isocpp.org/wiki/faq/const-correctness#logical-vs-physical-const" title="FAQ: Should the constness of my public member functions be based on what the method does to the object&#39;s logical state, or physical state?">since it never
+changes the object’s logical state, irrespective of the fact that, at least for the present implementation, it changes
+the object’s physical state</a>.</p>
+
+<p>When methods change the physical but not logical state, the method should generally be marked as <code>const</code> since it really
+is an inspector-method. That creates a problem: when the compiler sees your <code>const</code> method changing the physical state
+of the <code>this</code> object, it will complain — it will give your code an error message.</p>
+
+<p>The C++ compiler language uses the <code>mutable</code> keyword to help you embrace this <em>logical <code>const</code></em> notion. In this case,
+you would mark the cache with the <code>mutable</code> keyword, that way the compiler knows it is allowed to change inside a
+<code>const</code> method or via any other <code>const</code> pointer or reference. In our lingo, the <code>mutable</code> keyword marks those portions
+of the object’s physical state which are not part of the logical state.</p>
+
+<p>The <code>mutable</code> keyword goes just before the data member’s declaration, that is, the same place where you could put
+<code>const</code>. The other approach, not preferred, is to cast away the <code>const</code>‘ness of the <code>this</code> pointer, probably via the
+<code>const_cast</code> keyword:</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="typ">Set</span><span class="pun">*</span><span class="pln"> self </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">const_cast</span><span class="pun">&lt;</span><span class="typ">Set</span><span class="pun">*&gt;(</span><span class="kwd">this</span><span class="pun">);</span></code></li><li class="L1"><code><span class="pln">  </span><span class="com">// See the NOTE below before doing this!</span></code></li></ol></pre>
+
+<p>After this line, <code>self</code> will have the same bits as <code>this</code>, that is, <code>self == this</code>, but <code>self</code> is a <code>Set*</code> rather than a
+<code>const Set*</code> (technically <code>this</code> is a <code>const Set* const</code>, but the right-most <code>const</code> is irrelevant to this discussion).
+That means you can use <code>self</code> to modify the object pointed to by <code>this</code>.</p>
+
+<p><strong>NOTE:</strong> there is an extremely unlikely error that can occur with <code>const_cast</code>. It only happens when three very rare
+things are combined at the same time: a data member that ought to be <code>mutable</code> (such as is discussed above), a compiler
+that doesn’t support the <code>mutable</code> keyword and/or a programmer who doesn’t use it, and an object that was originally
+defined to be <code>const</code> (as opposed to a normal, non-<code>const</code> object that is pointed to by a pointer-to-<code>const</code>).
+Although this combination is so rare that it may never happen to you, if it ever did happen, the code may not work (the
+Standard says the behavior is undefined).</p>
+
+<p>If you ever want to use <code>const_cast</code>, use <code>mutable</code> instead. In other words, if you ever need to change a member of an
+object, and that object is pointed to by a pointer-to-<code>const</code>, the safest and simplest thing to do is add <code>mutable</code> to
+the member’s declaration. You can use <code>const_cast</code> if you are <em>sure</em> that the actual object isn’t <code>const</code> (e.g., if you
+are sure the object is declared something like this: <code>Set</code> <code>s;</code>), but if the object itself might be <code>const</code> (e.g., if
+it might be declared like: <code>const Set s;</code>), use <code>mutable</code> rather than <code>const_cast</code>.</p>
+
+<p><em>Please</em> don’t write saying version <em>X</em> of compiler <em>Y</em> on machine <em>Z</em> lets you change a non-<code>mutable</code> member of a
+<code>const</code> object. I don’t care — it is illegal according to the language and your code will probably fail on a different
+compiler or even a different version (an upgrade) of the same compiler. Just say no. Use <code>mutable</code> instead. Write code
+that is <em>guaranteed to work,</em> not code that <em>doesn’t seem to break.</em></p>
+
+<h3 id="const-cast-and-optimization" class="faq-title has-hover-pop-out">Does <code>const_cast</code> mean lost optimization opportunities?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#const-cast-and-optimization" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="15"><span>Δ</span></a></h3>
+
+<p>In theory, yes; in practice, no.</p>
+
+<p>Even if the language outlawed <code>const_cast</code>, the only way to avoid flushing the register cache across a <code>const</code> member
+function call would be to solve the aliasing problem (i.e., to prove that there are no non-<code>const</code> pointers that point
+to the object). This can happen only in rare cases (when the object is constructed in the scope of the <code>const</code> member
+function invocation, and when all the non-<code>const</code> member function invocations between the object’s construction and the
+<code>const</code> member function invocation are statically bound, and when every one of these invocations is also <code>inline</code>d, and
+when the constructor itself is <code>inline</code>d, and when any member functions the constructor calls are <code>inline</code>).</p>
+
+<h3 id="aliasing-and-const" class="faq-title has-hover-pop-out">Why does the compiler allow me to change an <code>int</code> after I’ve pointed at it with a <code>const int*</code>?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#aliasing-and-const" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="16"><span>Δ</span></a></h3>
+
+<p>Because “<code>const int* p</code>” means “<code>p</code> promises not to change the <code>*p</code>,” <em>not</em> “<code>*p</code> promises not to change.”</p>
+
+<p>Causing a <code>const int*</code> to point to an <code>int</code> doesn’t <code>const</code>-ify the <code>int</code>. The <code>int</code> can’t be changed via the
+<code>const int*</code>, but if someone else has an <code>int*</code> (note: no <code>const</code>) that points to (“aliases”) the same <code>int</code>, then that
+<code>int*</code> can be used to change the <code>int</code>. For example:</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">void</span><span class="pln"> f</span><span class="pun">(</span><span class="kwd">const</span><span class="pln"> </span><span class="typ">int</span><span class="pun">*</span><span class="pln"> p1</span><span class="pun">,</span><span class="pln"> </span><span class="typ">int</span><span class="pun">*</span><span class="pln"> p2</span><span class="pun">)</span></code></li><li class="L1"><code><span class="pun">{</span></code></li><li class="L2"><code><span class="pln">  </span><span class="typ">int</span><span class="pln"> i </span><span class="pun">=</span><span class="pln"> </span><span class="pun">*</span><span class="pln">p1</span><span class="pun">;</span><span class="pln">         </span><span class="com">// Get the (original) value of *p1</span></code></li><li class="L3"><code><span class="pln">  </span><span class="pun">*</span><span class="pln">p2 </span><span class="pun">=</span><span class="pln"> </span><span class="lit">7</span><span class="pun">;</span><span class="pln">             </span><span class="com">// If p1 == p2, this will also change *p1</span></code></li><li class="L4"><code><span class="pln">  </span><span class="typ">int</span><span class="pln"> j </span><span class="pun">=</span><span class="pln"> </span><span class="pun">*</span><span class="pln">p1</span><span class="pun">;</span><span class="pln">         </span><span class="com">// Get the (possibly new) value of *p1</span></code></li><li class="L5"><code><span class="pln">  </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">i </span><span class="pun">!=</span><span class="pln"> j</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L6"><code><span class="pln">    std</span><span class="pun">::</span><span class="pln">cout </span><span class="pun">&lt;&lt;</span><span class="pln"> </span><span class="str">"*p1 changed, but it didn't change via pointer p1!\n"</span><span class="pun">;</span></code></li><li class="L7"><code><span class="pln">    assert</span><span class="pun">(</span><span class="pln">p1 </span><span class="pun">==</span><span class="pln"> p2</span><span class="pun">);</span><span class="pln">  </span><span class="com">// This is the only way *p1 could be different</span></code></li><li class="L8"><code><span class="pln">  </span><span class="pun">}</span></code></li><li class="L9"><code><span class="pun">}</span></code></li><li class="L0"><code></code></li><li class="L1"><code><span class="typ">int</span><span class="pln"> main</span><span class="pun">()</span></code></li><li class="L2"><code><span class="pun">{</span></code></li><li class="L3"><code><span class="pln">  </span><span class="typ">int</span><span class="pln"> x </span><span class="pun">=</span><span class="pln"> </span><span class="lit">5</span><span class="pun">;</span></code></li><li class="L4"><code><span class="pln">  f</span><span class="pun">(&amp;</span><span class="pln">x</span><span class="pun">,</span><span class="pln"> </span><span class="pun">&amp;</span><span class="pln">x</span><span class="pun">);</span><span class="pln">           </span><span class="com">// This is perfectly legal (and even moral!)</span></code></li><li class="L5"><code><span class="pln">  </span><span class="com">// ...</span></code></li><li class="L6"><code><span class="pun">}</span></code></li></ol></pre>
+
+<p>Note that <code>main()</code> and <code>f(const int*,int*)</code> could be in different compilation units that are compiled on different days
+of the week. In that case there is no way the compiler can possibly detect the aliasing at compile time. Therefore there
+is no way we could make a language rule that prohibits this sort of thing. In fact, we wouldn’t even want to make such a
+rule, since in general it’s considered a feature that you can have many pointers pointing to the same thing. The fact
+that one of those pointers promises not to change the underlying “thing” is just a promise made by the <em>pointer;</em> it’s
+<em>not</em> a promise made by the “thing”.</p>
+
+<h3 id="ptr-to-const-aliasing" class="faq-title has-hover-pop-out">Does “<code>const Fred* p</code>” mean that <code>*p</code> can’t change?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#ptr-to-const-aliasing" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="17"><span>Δ</span></a></h3>
+
+<p>No! (This is related to <a href="https://isocpp.org/wiki/faq/const-correctness#aliasing-and-const" title="FAQ: Why does the compiler allow me to change an int after I&#39;ve pointed at it with a const int*?">the FAQ about aliasing of <code>int</code> pointers</a>.)</p>
+
+<p>“<code>const Fred* p</code>” means that the <code>Fred</code> can’t be changed via pointer <code>p</code>, but there might be other ways to get at the
+object without going through a <code>const</code> (such as an aliased non-<code>const</code> pointer such as a <code>Fred*</code>). For example, if you
+have two pointers “<code>const Fred* p</code>” and “<code>Fred* q</code>” that point to the same <code>Fred</code> object (aliasing), pointer <code>q</code> can be
+used to change the <code>Fred</code> object but pointer <code>p</code> cannot.</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">class</span><span class="pln"> </span><span class="typ">Fred</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L1"><code><span class="kwd">public</span><span class="pun">:</span></code></li><li class="L2"><code><span class="pln">  </span><span class="kwd">void</span><span class="pln"> inspect</span><span class="pun">()</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">;</span><span class="pln">   </span><span class="com">// A const member function</span></code></li><li class="L3"><code><span class="pln">  </span><span class="kwd">void</span><span class="pln"> mutate</span><span class="pun">();</span><span class="pln">          </span><span class="com">// A non-const member function</span></code></li><li class="L4"><code><span class="pun">};</span></code></li><li class="L5"><code></code></li><li class="L6"><code><span class="typ">int</span><span class="pln"> main</span><span class="pun">()</span></code></li><li class="L7"><code><span class="pun">{</span></code></li><li class="L8"><code><span class="pln">  </span><span class="typ">Fred</span><span class="pln"> f</span><span class="pun">;</span></code></li><li class="L9"><code><span class="pln">  </span><span class="kwd">const</span><span class="pln"> </span><span class="typ">Fred</span><span class="pun">*</span><span class="pln"> p </span><span class="pun">=</span><span class="pln"> </span><span class="pun">&amp;</span><span class="pln">f</span><span class="pun">;</span></code></li><li class="L0"><code><span class="pln">  </span><span class="typ">Fred</span><span class="pun">*</span><span class="pln">       q </span><span class="pun">=</span><span class="pln"> </span><span class="pun">&amp;</span><span class="pln">f</span><span class="pun">;</span></code></li><li class="L1"><code></code></li><li class="L2"><code><span class="pln">  p</span><span class="pun">-&gt;</span><span class="pln">inspect</span><span class="pun">();</span><span class="pln">    </span><span class="com">// Okay: No change to *p</span></code></li><li class="L3"><code><span class="pln">  p</span><span class="pun">-&gt;</span><span class="pln">mutate</span><span class="pun">();</span><span class="pln">     </span><span class="com">// Error: Can't change *p via p</span></code></li><li class="L4"><code></code></li><li class="L5"><code><span class="pln">  q</span><span class="pun">-&gt;</span><span class="pln">inspect</span><span class="pun">();</span><span class="pln">    </span><span class="com">// Okay: q is allowed to inspect the object</span></code></li><li class="L6"><code><span class="pln">  q</span><span class="pun">-&gt;</span><span class="pln">mutate</span><span class="pun">();</span><span class="pln">     </span><span class="com">// Okay: q is allowed to mutate the object</span></code></li><li class="L7"><code></code></li><li class="L8"><code><span class="pln">  f</span><span class="pun">.</span><span class="pln">inspect</span><span class="pun">();</span><span class="pln">     </span><span class="com">// Okay: f is allowed to inspect the object</span></code></li><li class="L9"><code><span class="pln">  f</span><span class="pun">.</span><span class="pln">mutate</span><span class="pun">();</span><span class="pln">      </span><span class="com">// Okay: f is allowed to mutate the object</span></code></li><li class="L0"><code></code></li><li class="L1"><code><span class="pln">  </span><span class="com">// ...</span></code></li><li class="L2"><code><span class="pun">}</span></code></li></ol></pre>
+
+<h3 id="constptrptr-conversion" class="faq-title has-hover-pop-out">Why am I getting an error converting a <code>Foo**</code> → <code>const Foo**</code>?&nbsp;<a class="hover-pop-out" href="https://isocpp.org/wiki/faq/const-correctness#constptrptr-conversion" title="Permalink to this FAQ"><span>¶</span></a>&nbsp;<a class="hover-pop-out js-inline-popup" href="https://isocpp.org/wiki/faq/const-correctness#" title="Recommend an improvement to this FAQ" data-tooltip="#popup-suggest" data-hasqtip="18"><span>Δ</span></a></h3>
+
+<p>Because converting <code>Foo**</code> → <code>const Foo**</code> would be invalid and dangerous.</p>
+
+<p>C++ allows the (safe) conversion <code>Foo*</code> → <code>Foo const*</code>, but gives an error if you try to implicitly convert <code>Foo**</code> →
+<code>const Foo**</code>.</p>
+
+<p>The rationale for why that error is a good thing is given below. But first, here is the most common solution: simply
+change <code>const Foo**</code> to <code>const Foo* const*</code>:</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">class</span><span class="pln"> </span><span class="typ">Foo</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="com">/* ... */</span><span class="pln"> </span><span class="pun">};</span></code></li><li class="L1"><code></code></li><li class="L2"><code><span class="kwd">void</span><span class="pln"> f</span><span class="pun">(</span><span class="kwd">const</span><span class="pln"> </span><span class="typ">Foo</span><span class="pun">**</span><span class="pln"> p</span><span class="pun">);</span></code></li><li class="L3"><code><span class="kwd">void</span><span class="pln"> g</span><span class="pun">(</span><span class="kwd">const</span><span class="pln"> </span><span class="typ">Foo</span><span class="pun">*</span><span class="pln"> </span><span class="kwd">const</span><span class="pun">*</span><span class="pln"> p</span><span class="pun">);</span></code></li><li class="L4"><code></code></li><li class="L5"><code><span class="typ">int</span><span class="pln"> main</span><span class="pun">()</span></code></li><li class="L6"><code><span class="pun">{</span></code></li><li class="L7"><code><span class="pln">  </span><span class="typ">Foo</span><span class="pun">**</span><span class="pln"> p </span><span class="pun">=</span><span class="pln"> </span><span class="com">/*...*/</span><span class="pun">;</span></code></li><li class="L8"><code><span class="pln">  </span><span class="com">// ...</span></code></li><li class="L9"><code><span class="pln">  f</span><span class="pun">(</span><span class="pln">p</span><span class="pun">);</span><span class="pln">  </span><span class="com">// ERROR: it's illegal and immoral to convert Foo** to const Foo**</span></code></li><li class="L0"><code><span class="pln">  g</span><span class="pun">(</span><span class="pln">p</span><span class="pun">);</span><span class="pln">  </span><span class="com">// Okay: it's legal and moral to convert Foo** to const Foo* const*</span></code></li><li class="L1"><code><span class="pln">  </span><span class="com">// ...</span></code></li><li class="L2"><code><span class="pun">}</span></code></li></ol></pre>
+
+<p>The reason the conversion from <code>Foo**</code> → <code>const Foo**</code> is dangerous is that it would let you silently and accidentally
+modify a <code>const Foo</code> object without a cast:</p>
+
+<pre class="prettyprint linenums lang-cpp prettyprinted" style=""><ol class="linenums"><li class="L0"><code><span class="kwd">class</span><span class="pln"> </span><span class="typ">Foo</span><span class="pln"> </span><span class="pun">{</span></code></li><li class="L1"><code><span class="kwd">public</span><span class="pun">:</span></code></li><li class="L2"><code><span class="pln">  </span><span class="kwd">void</span><span class="pln"> modify</span><span class="pun">();</span><span class="pln">  </span><span class="com">// make some modification to the this object</span></code></li><li class="L3"><code><span class="pun">};</span></code></li><li class="L4"><code></code></li><li class="L5"><code><span class="typ">int</span><span class="pln"> main</span><span class="pun">()</span></code></li><li class="L6"><code><span class="pun">{</span></code></li><li class="L7"><code><span class="pln">  </span><span class="kwd">const</span><span class="pln"> </span><span class="typ">Foo</span><span class="pln"> x</span><span class="pun">;</span></code></li><li class="L8"><code><span class="pln">  </span><span class="typ">Foo</span><span class="pun">*</span><span class="pln"> p</span><span class="pun">;</span></code></li><li class="L9"><code><span class="pln">  </span><span class="kwd">const</span><span class="pln"> </span><span class="typ">Foo</span><span class="pun">**</span><span class="pln"> q </span><span class="pun">=</span><span class="pln"> </span><span class="pun">&amp;</span><span class="pln">p</span><span class="pun">;</span><span class="pln">  </span><span class="com">// q now points to p; this is (fortunately!) an error</span></code></li><li class="L0"><code><span class="pln">  </span><span class="pun">*</span><span class="pln">q </span><span class="pun">=</span><span class="pln"> </span><span class="pun">&amp;</span><span class="pln">x</span><span class="pun">;</span><span class="pln">             </span><span class="com">// p now points to x</span></code></li><li class="L1"><code><span class="pln">  p</span><span class="pun">-&gt;</span><span class="pln">modify</span><span class="pun">();</span><span class="pln">         </span><span class="com">// Ouch: modifies a const Foo!!</span></code></li><li class="L2"><code><span class="pln">  </span><span class="com">// ...</span></code></li><li class="L3"><code><span class="pun">}</span></code></li></ol></pre>
+
+<p>If the <code>q = &amp;p</code> line were legal, <code>q</code> would be pointing at <code>p</code>. The next line, <code>*q = &amp;x</code>, changes <code>p</code> itself (since <code>*q</code>
+is <code>p</code>) to point at <code>x</code>. That would be a bad thing, since we would have lost the <code>const</code> qualifier: <code>p</code> is a <code>Foo*</code> but
+<code>x</code> is a <code>const Foo</code>. The <code>p-&gt;modify()</code> line exploits <code>p</code>’s ability to modify its referent, which is the real problem,
+since we ended up modifying a <code>const Foo</code>.</p>
+
+<p>By way of analogy, if you hide a criminal under a lawful disguise, he can then exploit the trust given to that disguise.
+That’s bad.</p>
+
+<p>Thankfully C++ prevents you from doing this: the line <code>q = &amp;p</code> is flagged by the C++ compiler as a compile-time
+error. Reminder: <em>please</em> do <em>not</em> pointer-cast your way around that compile-time error message. Just Say No!</p>
+
+<p>(Note: there is a conceptual similarity between this and <a href="https://isocpp.org/wiki/faq/proper-inheritance#derivedptrptr-to-baseptrptr" title="FAQ: Converting Derived* → Base* works okay; why doesn&#39;t Derived** → Base** work?">the prohibition against converting <code>Derived**</code> to
+<code>Base**</code></a>.)</p>
+
+<!--
+File: id-defns
+
+Defines IDs for each FAQ and section.
+
+Rule:
+  FAQ editors should always use these IDs for every internal cross-reference within the FAQ.
+  Always use indirect links ('[description][id-of-target]')  when linking to the FAQ from within the FAQ.
+  Never  use  direct  links ('[description](url-of-target)') when linking to the FAQ from within the FAQ.
+
+Reason:
+  The FAQ is a living document -- we will split/join sections and move FAQs between sections.
+  Those changes result in changes to the URL of the moved FAQs, which breaks all direct links -- many changes.
+  However using indirect links means we need only change one thing in one place: this id-defns file.
+
+Caveat:
+  This rule applies only to internal cross-reference links, not to links to resources outside the FAQ.
+  E.g., if you are making a link from FAQ 'x' to FAQ 'y', then you should always use FAQ 'y's link-ID.
+  However if you are making a link from FAQ 'x' to some resource outside the FAQ, you have two choices:
+  You can use a direct link to the external resource's URL ('[description](url-of-external-resource)'),
+  or you can add the external resource to this file then link indirectly ('[description][id-of-external-resource]').
+  Typically you would do the latter only when the FAQ contains more than one link to that external resource.
+-->
+
+<p><!-- special resources -->
+<!-- /wiki/faq/index = 'C++ FAQ' -->
+<!-- /wiki/faq/big-picture = 'Big Picture Issues' -->
+<!-- /wiki/faq/classes-and-objects = 'Classes and Objects' -->
+<!-- /wiki/faq/references = 'References' -->
+<!-- /wiki/faq/inline-functions = 'Inline Functions' -->
+<!-- /wiki/faq/ctors = 'Constructors' -->
+<!-- /wiki/faq/dtors = 'Destructors' -->
+<!-- /wiki/faq/assignment-operators = 'Assignment Operators' -->
+<!-- /wiki/faq/operator-overloading = 'Operator Overloading' -->
+<!-- /wiki/faq/friends = 'Friends' -->
+<!-- /wiki/faq/input-output = 'Input/output via <iostream> and <cstdio>' -->
+<!-- /wiki/faq/freestore-mgmt = 'Memory Management' -->
+<!-- /wiki/faq/exceptions = 'Exceptions and Error Handling' -->
+<!-- /wiki/faq/const-correctness = 'Const Correctness' -->
+<!-- /wiki/faq/big3 = 'The Big Three' -->
+<!-- /wiki/faq/basics-of-inheritance = 'Inheritance — Basics' -->
+<!-- /wiki/faq/virtual-functions = 'Inheritance — virtual functions' -->
+<!-- /wiki/faq/proper-inheritance = 'Inheritance — Proper Inheritance and Substitutability' -->
+<!-- /wiki/faq/abcs = 'Inheritance — Abstract Base Classes (ABCs)' -->
+<!-- /wiki/faq/strange-inheritance = 'Inheritance — What your mother never told you' -->
+<!-- /wiki/faq/private-inheritance = 'Inheritance — private and protected inheritance' -->
+<!-- /wiki/faq/multiple-inheritance = 'Inheritance — Multiple and Virtual Inheritance' -->
+<!-- /wiki/faq/intrinsic-types = 'Built-in / Intrinsic / Primitive Data Types' -->
+<!-- /wiki/faq/coding-standards = 'Coding Standards' -->
+<!-- /wiki/faq/how-to-learn-cpp = 'Learning C++' -->
+<!-- /wiki/faq/newbie = 'Newbie Questions & Answers' -->
+<!-- /wiki/faq/objective-c = 'Learning C++ if you already know Objective-C' -->
+<!-- /wiki/faq/c = 'Learning C++ if you already know C' -->
+<!-- /wiki/faq/csharp-java = 'Learning C++ if you already know C# or Java' -->
+<!-- /wiki/faq/myths = 'Myths and Urban Legends About C++' -->
+<!-- /wiki/faq/value-vs-ref-semantics = 'Reference and Value Semantics' -->
+<!-- /wiki/faq/mixing-c-and-cpp = 'How to mix C and C++' -->
+<!-- /wiki/faq/pointers-to-members = 'Pointers to Member Functions' -->
+<!-- /wiki/faq/containers = 'Container Classes' -->
+<!-- /wiki/faq/templates = 'Templates' -->
+<!-- /wiki/faq/serialization = 'Serialization and Unserialization' -->
+<!-- /wiki/faq/class-libraries = 'Class Libraries' -->
+<!-- /wiki/faq/compiler-dependencies = 'Compiler Dependencies' -->
+<!-- /wiki/faq/misc-technical-issues = 'Miscellaneous Technical Issues' -->
+<!-- /wiki/faq/misc-environmental-issues = 'Miscellaneous Environmental Issues' -->
+<!-- /wiki/faq/style-and-techniques = 'Miscellaneous Style Issues' -->
+<!-- /wiki/faq/user-groups-worldwide = 'User Groups Worldwide' -->
+<!-- /wiki/faq/cpp11 = 'C++11 Overview' -->
+<!-- /wiki/faq/cpp11-language = 'C++11 Language Extensions --- General Features' -->
+<!-- /wiki/faq/cpp11-language-classes = 'C++11 Language Extensions -- Classes' -->
+<!-- /wiki/faq/cpp11-language-concurrency = 'C++11 Language Extensions --- Concurrency' -->
+<!-- /wiki/faq/cpp11-language-misc = 'C++11 Language Extensions --- Miscellaneous Language Features' -->
+<!-- /wiki/faq/cpp11-language-templates = 'C++11 Language Extensions -- Templates' -->
+<!-- /wiki/faq/cpp11-language-types = 'C++11 Language Extensions --- Other Types' -->
+<!-- /wiki/faq/cpp11-library = 'C++11 Library Extensions --- General Libraries' -->
+<!-- /wiki/faq/cpp11-library-concurrency = 'C++11 Standard Library Extensions --- Concurrency' -->
+<!-- /wiki/faq/cpp11-library-stl = 'C++11 Standard Library Extensions --- Containers and Algorithms' -->
+<!-- /wiki/faq/cpp0x-concepts-history = 'C++0x Concepts --- Historical FAQs' -->
+<!-- /wiki/faq/cpp14 = 'C++14 Overview' -->
+<!-- /wiki/faq/cpp14-language = 'C++14 Language Extensions' -->
+<!-- /wiki/faq/cpp14-library = 'C++14 Library Extensions' -->
+<!-- /wiki/faq/wg21 = 'WG21 Members' -->
+<!-- /wiki/faq/subject-index = 'Subject Index' --></p>
+
+<!-- BEGIN 'Category' Namespace Stuff -->
+
+
+<!-- END 'Category' Namespace Stuff -->
+
+
+<!-- BEGIN Categories for Page -->
+
+
+<!-- END Categories for Page -->
+
+
+</div>
+          
+
+
+          </div>
+
+        </article>
+
+      </div>
+      
+<div id="popup-suggest" class="wiki-popup">
+  <p>Please <a href="https://isocpp.org/member/login">Login</a> to submit a recommendation.</p>
+  <p>If you don’t have an account, you can <a href="https://isocpp.org/member/register">register for free.</a></p>
+</div>
+
+        </div>
+        
+        <div id="root-footer"></div>
+      </div>
+    </div>
+
+    <footer id="bottom" role="contentinfo">
+      <div class="container">
+        © <a href="https://isocpp.org/home/terms-of-use">Copyright</a> 2019 Standard C++ Foundation. 
+        All rights reserved. 
+        <ul id="nav-sub">
+<li class="first"><a href="https://isocpp.org/home/terms-of-use">Terms of Use</a></li>
+<li class="last"><a href="https://isocpp.org/home/privacy-policy">Privacy Policy</a></li>
+</ul>
+      </div>
+    </footer>
+
+    <script src="./Const Correctness, C++ FAQ_files/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="https://isocpp.org/javascript/jquery.min"><\/script>')</script>
+    <script src="./Const Correctness, C++ FAQ_files/jquery-ui.min.js"></script>
+    <script>window.jQuery.ui || document.write('<script src="https://isocpp.org/javascript/jquery-ui.min"><\/script>')</script>
+    
+    <script type="text/javascript" charset="utf-8" src="./Const Correctness, C++ FAQ_files/saved_resource(4)"></script>
+    <script type="text/javascript">
+	        					$(document).ready(function() {
+									$("*[id^=likee_]").click(function(){
+										var ids = $(this).attr("id").split("_");
+										if (ids[1]=="c"){
+											id=ids[2];
+											c="c_";
+											isCom="true";
+										} else {
+											id=ids[1];
+											c="";
+											isCom="false";
+										}
+										
+										$.ajax({
+	   										type: "POST",
+	   										url: "/wiki/faq/const-correctness",
+	   										data: "likee=true&entry_id="+id+"&isCom="+isCom,
+	   										success: function(msg){
+	     										//alert( "Data Saved: " + msg );
+	   										}
+	 									});
+	 									
+	 									$(this).replaceWith("<strong>"+$(this).html()+"</strong>");
+	 									$("#dislikee_"+c+id).replaceWith("<span>"+$("#dislikee_"+c+id).html()+"</span>");
+	 									$("#scoreeCount_"+c+id).html(parseInt($("#scoreeCount_"+c+id).html())+1);
+	 									$("#likeeCount_"+c+id).html(parseInt($("#likeeCount_"+c+id).html())+1);
+	 									$("#likeeReplace_"+c+id).replaceWith("");
+	 									$("#likeeShow_"+c+id).replaceWith($("#likeeShow_"+c+id).html());
+									});
+									
+									$("*[id^=dislikee_]").click(function(){
+										var ids = $(this).attr("id").split("_");
+										if (ids[1]=="c"){
+											id=ids[2];
+											c="c_";
+											isCom="true";
+										} else {
+											id=ids[1];
+											c="";
+											isCom="false";
+										}
+										$.ajax({
+	   										type: "POST",
+	   										url: "/wiki/faq/const-correctness",
+	   										data: "dislikee=true&entry_id="+id+"&isCom="+isCom,
+	   										success: function(msg){
+	     										//alert( "Data Saved: " + msg );
+	   										}
+	 									});
+	 									
+	 									$(this).replaceWith("<strong>"+$(this).html()+"</strong>");
+	 									$("#likee_"+c+id).replaceWith("<span>"+$("#likee_"+c+id).html()+"</span>");
+	 									$("#scoreeCount_"+c+id).html(parseInt($("#scoreeCount_"+c+id).html())-1);
+	 									$("#dislikeeCount_"+c+id).html(parseInt($("#dislikeeCount_"+c+id).html())+1);
+	 									$("#likeeReplace_"+c+id).replaceWith("");
+	 									$("#likeeShow_"+c+id).replaceWith($("#likeeShow_"+c+id).html());
+									});
+								
+								});	
+	        			  </script>
+    
+    <script type="text/javascript" src="./Const Correctness, C++ FAQ_files/isocpp.lib.min.js"></script>
+    <script type="text/javascript" src="./Const Correctness, C++ FAQ_files/global.js"></script>
+    
+    <script type="text/javascript" src="./Const Correctness, C++ FAQ_files/magnific.min.js"></script>
+    <script type="text/javascript" src="./Const Correctness, C++ FAQ_files/qtip.min.js"></script>
+    <script type="text/javascript" src="./Const Correctness, C++ FAQ_files/wiki.js"></script>
+    
+    
+    <script type="text/javascript">
+      $("#top nav a").each(function() {
+        var aSeg1 = $(this).attr("href").replace("http://", "").replace("https://", "").split("/")[1];
+        if (aSeg1 == "wiki") {$(this).parent().addClass("here");}
+      });
+    </script>
+
+  
+
+<iframe scrolling="no" frameborder="0" allowtransparency="true" src="./Const Correctness, C++ FAQ_files/widget_iframe.2e9f365dae390394eb8d923cba8c5b11.html" title="Twitter settings iframe" style="display: none;"></iframe><iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: none;" title="Twitter analytics iframe" src="./Const Correctness, C++ FAQ_files/saved_resource(5).html"></iframe></body></html>

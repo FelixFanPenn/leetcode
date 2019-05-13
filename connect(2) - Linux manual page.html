@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- saved from url=(0051)http://man7.org/linux/man-pages/man2/connect.2.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="./connect(2) - Linux manual page_files/style.css" title="style">
+    <link rel="stylesheet" type="text/css" href="./connect(2) - Linux manual page_files/style(1).css" title="style">
+    
+
+    <title>connect(2) - Linux manual page</title>
+</head>
+
+<body>
+
+<div class="page-top"><a id="top_of_page"></a></div>
+<!--%%%TOP_BAR%%%-->
+    <div class="nav-bar">
+        <table class="nav-table">
+            <tbody><tr>
+                <td class="nav-cell">
+                    <p class="nav-text">
+                        <a href="http://man7.org/index.html">man7.org</a> &gt; Linux &gt; <a href="http://man7.org/linux/man-pages/index.html">man-pages</a>
+                    </p>
+                </td>
+                <td class="training-cell">
+                    <p class="training-text"><a class="training-link" href="http://man7.org/training/">Linux/UNIX system programming training</a></p>
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+
+<hr class="nav-end">
+
+<!--%%%PAGE_START%%%-->
+
+
+<table class="sec-table">
+<tbody><tr>
+    <td>
+        <p class="section-dir">
+<a href="http://man7.org/linux/man-pages/man2/connect.2.html#NAME">NAME</a> | <a href="http://man7.org/linux/man-pages/man2/connect.2.html#SYNOPSIS">SYNOPSIS</a> | <a href="http://man7.org/linux/man-pages/man2/connect.2.html#DESCRIPTION">DESCRIPTION</a> | <a href="http://man7.org/linux/man-pages/man2/connect.2.html#RETURN_VALUE">RETURN&nbsp;VALUE</a> | <a href="http://man7.org/linux/man-pages/man2/connect.2.html#ERRORS">ERRORS</a> | <a href="http://man7.org/linux/man-pages/man2/connect.2.html#CONFORMING_TO">CONFORMING&nbsp;TO</a> | <a href="http://man7.org/linux/man-pages/man2/connect.2.html#NOTES">NOTES</a> | <a href="http://man7.org/linux/man-pages/man2/connect.2.html#EXAMPLE">EXAMPLE</a> | <a href="http://man7.org/linux/man-pages/man2/connect.2.html#SEE_ALSO">SEE&nbsp;ALSO</a> | <a href="http://man7.org/linux/man-pages/man2/connect.2.html#COLOPHON">COLOPHON</a>
+        </p>
+    </td>
+    <td class="search-box">
+        <div class="man-search-box">
+
+            <form method="get" action="http://www.google.com/search">
+                <fieldset class="man-search">
+                    <input type="text" name="q" size="10" maxlength="255" value="">
+                    <input type="hidden" name="sitesearch" value="man7.org/linux/man-pages">
+                    <input type="submit" name="sa" value="Search online pages">
+                </fieldset>
+            </form>
+
+        </div>
+    </td>
+    <td> </td>
+</tr>
+</tbody></table>
+
+<pre><span class="headline">CONNECT(2)                Linux Programmer's Manual               CONNECT(2)</span>
+</pre>
+<h2><a id="NAME" href="http://man7.org/linux/man-pages/man2/connect.2.html#NAME"></a>NAME  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       connect - initiate a connection on a socket
+</pre>
+<h2><a id="SYNOPSIS" href="http://man7.org/linux/man-pages/man2/connect.2.html#SYNOPSIS"></a>SYNOPSIS  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       <b>#include &lt;sys/types.h&gt;          </b>/* See NOTES */
+       <b>#include &lt;sys/socket.h&gt;</b>
+
+       <b>int connect(int </b><i>sockfd</i><b>, const struct sockaddr *</b><i>addr</i><b>,</b>
+                   <b>socklen_t </b><i>addrlen</i><b>);</b>
+</pre>
+<h2><a id="DESCRIPTION" href="http://man7.org/linux/man-pages/man2/connect.2.html#DESCRIPTION"></a>DESCRIPTION  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       The <b>connect</b>() system call connects the socket referred to by the file
+       descriptor <i>sockfd</i> to the address specified by <i>addr</i>.  The <i>addrlen</i>
+       argument specifies the size of <i>addr</i>.  The format of the address in
+       <i>addr</i> is determined by the address space of the socket <i>sockfd</i>; see
+       <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket(2)</a> for further details.
+
+       If the socket <i>sockfd</i> is of type <b>SOCK_DGRAM</b>, then <i>addr</i> is the address
+       to which datagrams are sent by default, and the only address from
+       which datagrams are received.  If the socket is of type <b>SOCK_STREAM</b>
+       or <b>SOCK_SEQPACKET</b>, this call attempts to make a connection to the
+       socket that is bound to the address specified by <i>addr</i>.
+
+       Generally, connection-based protocol sockets may successfully
+       <b>connect</b>() only once; connectionless protocol sockets may use
+       <b>connect</b>() multiple times to change their association.  Connectionless
+       sockets may dissolve the association by connecting to an address with
+       the <i>sa_family</i> member of <i>sockaddr</i> set to <b>AF_UNSPEC </b>(supported on Linux
+       since kernel 2.2).
+</pre>
+<h2><a id="RETURN_VALUE" href="http://man7.org/linux/man-pages/man2/connect.2.html#RETURN_VALUE"></a>RETURN VALUE  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       If the connection or binding succeeds, zero is returned.  On error,
+       -1 is returned, and <i><a href="http://man7.org/linux/man-pages/man3/errno.3.html">errno</a></i> is set appropriately.
+</pre>
+<h2><a id="ERRORS" href="http://man7.org/linux/man-pages/man2/connect.2.html#ERRORS"></a>ERRORS  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       The following are general socket errors only.  There may be other
+       domain-specific error codes.
+
+       <b>EACCES </b>For UNIX domain sockets, which are identified by pathname:
+              Write permission is denied on the socket file, or search
+              permission is denied for one of the directories in the path
+              prefix.  (See also <a href="http://man7.org/linux/man-pages/man7/path_resolution.7.html">path_resolution(7)</a>.)
+
+       <b>EACCES</b>, <b>EPERM</b>
+              The user tried to connect to a broadcast address without
+              having the socket broadcast flag enabled or the connection
+              request failed because of a local firewall rule.
+
+       <b>EADDRINUSE</b>
+              Local address is already in use.
+
+       <b>EADDRNOTAVAIL</b>
+              (Internet domain sockets) The socket referred to by <i>sockfd</i> had
+              not previously been bound to an address and, upon attempting
+              to bind it to an ephemeral port, it was determined that all
+              port numbers in the ephemeral port range are currently in use.
+              See the discussion of <i>/proc/sys/net/ipv4/ip_local_port_range</i>
+              in <a href="http://man7.org/linux/man-pages/man7/ip.7.html">ip(7)</a>.
+
+       <b>EAFNOSUPPORT</b>
+              The passed address didn't have the correct address family in
+              its <i>sa_family</i> field.
+
+       <b>EAGAIN </b>For nonblocking UNIX domain sockets, the socket is
+              nonblocking, and the connection cannot be completed
+              immediately.  For other socket families, there are
+              insufficient entries in the routing cache.
+
+       <b>EALREADY</b>
+              The socket is nonblocking and a previous connection attempt
+              has not yet been completed.
+
+       <b>EBADF  </b><i>sockfd</i> is not a valid open file descriptor.
+
+       <b>ECONNREFUSED</b>
+              A <b>connect</b>() on a stream socket found no one listening on the
+              remote address.
+
+       <b>EFAULT </b>The socket structure address is outside the user's address
+              space.
+
+       <b>EINPROGRESS</b>
+              The socket is nonblocking and the connection cannot be
+              completed immediately.  (UNIX domain sockets failed with
+              <b>EAGAIN </b>instead.)  It is possible to <a href="http://man7.org/linux/man-pages/man2/select.2.html">select(2)</a> or <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a> for
+              completion by selecting the socket for writing.  After
+              <a href="http://man7.org/linux/man-pages/man2/select.2.html">select(2)</a> indicates writability, use <a href="http://man7.org/linux/man-pages/man2/getsockopt.2.html">getsockopt(2)</a> to read the
+              <b>SO_ERROR </b>option at level <b>SOL_SOCKET </b>to determine whether
+              <b>connect</b>() completed successfully (<b>SO_ERROR </b>is zero) or
+              unsuccessfully (<b>SO_ERROR </b>is one of the usual error codes
+              listed here, explaining the reason for the failure).
+
+       <b>EINTR  </b>The system call was interrupted by a signal that was caught;
+              see <a href="http://man7.org/linux/man-pages/man7/signal.7.html">signal(7)</a>.
+
+       <b>EISCONN</b>
+              The socket is already connected.
+
+       <b>ENETUNREACH</b>
+              Network is unreachable.
+
+       <b>ENOTSOCK</b>
+              The file descriptor <i>sockfd</i> does not refer to a socket.
+
+       <b>EPROTOTYPE</b>
+              The socket type does not support the requested communications
+              protocol.  This error can occur, for example, on an attempt to
+              connect a UNIX domain datagram socket to a stream socket.
+
+       <b>ETIMEDOUT</b>
+              Timeout while attempting connection.  The server may be too
+              busy to accept new connections.  Note that for IP sockets the
+              timeout may be very long when syncookies are enabled on the
+              server.
+</pre>
+<h2><a id="CONFORMING_TO" href="http://man7.org/linux/man-pages/man2/connect.2.html#CONFORMING_TO"></a>CONFORMING TO  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       POSIX.1-2001, POSIX.1-2008, SVr4, 4.4BSD, (connect<b>() </b>first appeared
+       in 4.2BSD).
+</pre>
+<h2><a id="NOTES" href="http://man7.org/linux/man-pages/man2/connect.2.html#NOTES"></a>NOTES  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       POSIX.1 does not require the inclusion of <i>&lt;sys/types.h&gt;</i>, and this
+       header file is not required on Linux.  However, some historical (BSD)
+       implementations required this header file, and portable applications
+       are probably wise to include it.
+
+       For background on the <i>socklen_t</i> type, see <a href="http://man7.org/linux/man-pages/man2/accept.2.html">accept(2)</a>.
+
+       If <b>connect</b>() fails, consider the state of the socket as unspecified.
+       Portable applications should close the socket and create a new one
+       for reconnecting.
+</pre>
+<h2><a id="EXAMPLE" href="http://man7.org/linux/man-pages/man2/connect.2.html#EXAMPLE"></a>EXAMPLE  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       An example of the use of <b>connect</b>() is shown in <a href="http://man7.org/linux/man-pages/man3/getaddrinfo.3.html">getaddrinfo(3)</a>.
+</pre>
+<h2><a id="SEE_ALSO" href="http://man7.org/linux/man-pages/man2/connect.2.html#SEE_ALSO"></a>SEE ALSO  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       <a href="http://man7.org/linux/man-pages/man2/accept.2.html">accept(2)</a>, <a href="http://man7.org/linux/man-pages/man2/bind.2.html">bind(2)</a>, <a href="http://man7.org/linux/man-pages/man2/getsockname.2.html">getsockname(2)</a>, <a href="http://man7.org/linux/man-pages/man2/listen.2.html">listen(2)</a>, <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket(2)</a>,
+       <a href="http://man7.org/linux/man-pages/man7/path_resolution.7.html">path_resolution(7)</a>
+</pre>
+<h2><a id="COLOPHON" href="http://man7.org/linux/man-pages/man2/connect.2.html#COLOPHON"></a>COLOPHON  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/connect.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       This page is part of release 5.00 of the Linux <i>man-pages</i> project.  A
+       description of the project, information about reporting bugs, and the
+       latest version of this page, can be found at
+       <a href="https://www.kernel.org/doc/man-pages/">https://www.kernel.org/doc/man-pages/</a>.
+
+<span class="footline">Linux                            2019-03-06                       CONNECT(2)</span>
+</pre>
+
+<hr class="end-man-text">
+<p>Pages that refer to this page: 
+    <a href="http://man7.org/linux/man-pages/man1/pmsocks.1.html">pmsocks(1)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man1/telnet-probe.1.html">telnet-probe(1)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/accept.2.html">accept(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/bind.2.html">bind(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/getpeername.2.html">getpeername(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/listen.2.html">listen(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/recv.2.html">recv(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/select.2.html">select(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/select_tut.2.html">select_tut(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/shutdown.2.html">shutdown(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/socketcall.2.html">socketcall(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/syscalls.2.html">syscalls(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/write.2.html">write(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/getaddrinfo.3.html">getaddrinfo(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/ldap_get_option.3.html">ldap_get_option(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/rtime.3.html">rtime(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man5/slapd-asyncmeta.5.html">slapd-asyncmeta(5)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man5/slapd-ldap.5.html">slapd-ldap(5)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man5/slapd-meta.5.html">slapd-meta(5)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/ddp.7.html">ddp(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/ip.7.html">ip(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/netlink.7.html">netlink(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/packet.7.html">packet(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/sctp.7.html">sctp(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/signal.7.html">signal(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/signal-safety.7.html">signal-safety(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/sock_diag.7.html">sock_diag(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/socket.7.html">socket(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/tcp.7.html">tcp(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/udp.7.html">udp(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/unix.7.html">unix(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/vsock.7.html">vsock(7)</a>
+</p>
+<hr>
+
+<p class="page-copyright"><a href="http://man7.org/linux/man-pages/man2/connect.2.license.html">Copyright and license for this manual page</a></p> 
+<hr class="start-footer">
+
+<div class="footer"> 
+
+<table class="colophon-table">
+    <tbody><tr>
+    <td class="pub-info">
+        <p>
+            HTML rendering created 2019-03-06
+            by <a href="http://man7.org/mtk/index.html">Michael Kerrisk</a>, 
+            author of 
+            <a href="http://man7.org/tlpi/"><em>The Linux Programming Interface</em></a>, 
+            maintainer of the 
+            <a href="https://www.kernel.org/doc/man-pages/">Linux <em>man-pages</em> project</a>.
+        </p>
+        <p>
+            For details of in-depth
+            <strong>Linux/UNIX system programming training courses</strong>
+            that I teach, look <a href="http://man7.org/training/">here</a>.
+        </p>
+        <p>
+            Hosting by <a href="http://www.jambit.com/index_en.html">jambit GmbH</a>.
+        </p>
+        <p>
+            <a href="http://validator.w3.org/check?uri=referer">
+            <img src="./connect(2) - Linux manual page_files/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88">
+            </a>
+        </p>
+    </td>
+    <td class="colophon-divider">
+    </td>
+    <td class="tlpi-cover">
+        <a href="http://man7.org/tlpi/"><img src="./connect(2) - Linux manual page_files/TLPI-front-cover-vsmall.png" alt="Cover of TLPI"></a>
+    </td>
+    </tr>
+</tbody></table>
+
+</div>
+
+<hr class="end-footer">
+
+
+
+<!--BEGIN-SITETRACKING-->
+<!-- SITETRACKING.man7.org_linux_man-pages -->
+
+<!-- Start of StatCounter Code (xhtml) -->
+
+<script type="text/javascript" async="" src="./connect(2) - Linux manual page_files/ga.js"></script><script type="text/javascript">
+//<![CDATA[
+var sc_project=7422636; 
+var sc_invisible=1; 
+var sc_security="9b6714ff"; 
+//]]>
+</script>
+<script type="text/javascript" src="./connect(2) - Linux manual page_files/counter_xhtml.js"></script>
+<noscript><div class="statcounter"><a title="website
+statistics" href="http://statcounter.com/"
+class="statcounter"><img class="statcounter"
+src="http://c.statcounter.com/7422636/0/9b6714ff/1/"
+alt="website statistics" /></a></div></noscript>
+
+<!-- End of StatCounter Code -->
+
+
+<!-- Start of Google Analytics Code -->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-9830363-8']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<!-- End of Google Analytics Code -->
+
+<!--END-SITETRACKING-->
+
+
+
+</body></html>

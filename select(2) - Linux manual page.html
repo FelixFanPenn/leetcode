@@ -1,0 +1,598 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- saved from url=(0050)http://man7.org/linux/man-pages/man2/select.2.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="./select(2) - Linux manual page_files/style.css" title="style">
+    <link rel="stylesheet" type="text/css" href="./select(2) - Linux manual page_files/style(1).css" title="style">
+    
+
+    <title>select(2) - Linux manual page</title>
+</head>
+
+<body>
+
+<div class="page-top"><a id="top_of_page"></a></div>
+<!--%%%TOP_BAR%%%-->
+    <div class="nav-bar">
+        <table class="nav-table">
+            <tbody><tr>
+                <td class="nav-cell">
+                    <p class="nav-text">
+                        <a href="http://man7.org/index.html">man7.org</a> &gt; Linux &gt; <a href="http://man7.org/linux/man-pages/index.html">man-pages</a>
+                    </p>
+                </td>
+                <td class="training-cell">
+                    <p class="training-text"><a class="training-link" href="http://man7.org/training/">Linux/UNIX system programming training</a></p>
+                </td>
+            </tr>
+        </tbody></table>
+    </div>
+
+<hr class="nav-end">
+
+<!--%%%PAGE_START%%%-->
+
+
+<table class="sec-table">
+<tbody><tr>
+    <td>
+        <p class="section-dir">
+<a href="http://man7.org/linux/man-pages/man2/select.2.html#NAME">NAME</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#SYNOPSIS">SYNOPSIS</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#DESCRIPTION">DESCRIPTION</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#RETURN_VALUE">RETURN&nbsp;VALUE</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#ERRORS">ERRORS</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#VERSIONS">VERSIONS</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#CONFORMING_TO">CONFORMING&nbsp;TO</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#NOTES">NOTES</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#BUGS">BUGS</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#EXAMPLE">EXAMPLE</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#SEE_ALSO">SEE&nbsp;ALSO</a> | <a href="http://man7.org/linux/man-pages/man2/select.2.html#COLOPHON">COLOPHON</a>
+        </p>
+    </td>
+    <td class="search-box">
+        <div class="man-search-box">
+
+            <form method="get" action="http://www.google.com/search">
+                <fieldset class="man-search">
+                    <input type="text" name="q" size="10" maxlength="255" value="">
+                    <input type="hidden" name="sitesearch" value="man7.org/linux/man-pages">
+                    <input type="submit" name="sa" value="Search online pages">
+                </fieldset>
+            </form>
+
+        </div>
+    </td>
+    <td> </td>
+</tr>
+</tbody></table>
+
+<pre><span class="headline">SELECT(2)                 Linux Programmer's Manual                SELECT(2)</span>
+</pre>
+<h2><a id="NAME" href="http://man7.org/linux/man-pages/man2/select.2.html#NAME"></a>NAME  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       select,  pselect, FD_CLR, FD_ISSET, FD_SET, FD_ZERO - synchronous I/O
+       multiplexing
+</pre>
+<h2><a id="SYNOPSIS" href="http://man7.org/linux/man-pages/man2/select.2.html#SYNOPSIS"></a>SYNOPSIS  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       /* According to POSIX.1-2001, POSIX.1-2008 */
+       <b>#include &lt;sys/select.h&gt;</b>
+
+       /* According to earlier standards */
+       <b>#include &lt;sys/time.h&gt;</b>
+       <b>#include &lt;sys/types.h&gt;</b>
+       <b>#include &lt;unistd.h&gt;</b>
+
+       <b>int select(int </b><i>nfds</i><b>, fd_set *</b><i>readfds</i><b>, fd_set *</b><i>writefds</i><b>,</b>
+                  <b>fd_set *</b><i>exceptfds</i><b>, struct timeval *</b><i>timeout</i><b>);</b>
+
+       <b>void FD_CLR(int </b><i>fd</i><b>, fd_set *</b><i>set</i><b>);</b>
+       <b>int  FD_ISSET(int </b><i>fd</i><b>, fd_set *</b><i>set</i><b>);</b>
+       <b>void FD_SET(int </b><i>fd</i><b>, fd_set *</b><i>set</i><b>);</b>
+       <b>void FD_ZERO(fd_set *</b><i>set</i><b>);</b>
+
+       <b>#include &lt;sys/select.h&gt;</b>
+
+       <b>int pselect(int </b><i>nfds</i><b>, fd_set *</b><i>readfds</i><b>, fd_set *</b><i>writefds</i><b>,</b>
+                   <b>fd_set *</b><i>exceptfds</i><b>, const struct timespec *</b><i>timeout</i><b>,</b>
+                   <b>const sigset_t *</b><i>sigmask</i><b>);</b>
+
+   Feature Test Macro Requirements for glibc (see <a href="http://man7.org/linux/man-pages/man7/feature_test_macros.7.html">feature_test_macros(7)</a>):
+
+       <b>pselect</b>(): _POSIX_C_SOURCE &gt;= 200112L
+</pre>
+<h2><a id="DESCRIPTION" href="http://man7.org/linux/man-pages/man2/select.2.html#DESCRIPTION"></a>DESCRIPTION  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       <b>select</b>() and <b>pselect</b>() allow a program to monitor multiple file
+       descriptors, waiting until one or more of the file descriptors become
+       "ready" for some class of I/O operation (e.g., input possible).  A
+       file descriptor is considered ready if it is possible to perform a
+       corresponding I/O operation (e.g., <a href="http://man7.org/linux/man-pages/man2/read.2.html">read(2)</a>, or a sufficiently small
+       <a href="http://man7.org/linux/man-pages/man2/write.2.html">write(2)</a>) without blocking.
+
+       <b>select</b>() can monitor only file descriptors numbers that are less than
+       <b>FD_SETSIZE</b>; <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a> does not have this limitation.  See BUGS.
+
+       The operation of <b>select</b>() and <b>pselect</b>() is identical, other than
+       these three differences:
+
+       (i)    <b>select</b>() uses a timeout that is a <i>struct timeval</i> (with seconds
+              and microseconds), while <b>pselect</b>() uses a <i>struct timespec</i>
+              (with seconds and nanoseconds).
+
+       (ii)   <b>select</b>() may update the <i>timeout</i> argument to indicate how much
+              time was left.  <b>pselect</b>() does not change this argument.
+
+       (iii)  <b>select</b>() has no <i>sigmask</i> argument, and behaves as <b>pselect</b>()
+              called with NULL <i>sigmask</i>.
+
+       Three independent sets of file descriptors are watched.  The file
+       descriptors listed in <i>readfds</i> will be watched to see if characters
+       become available for reading (more precisely, to see if a read will
+       not block; in particular, a file descriptor is also ready on end-of-
+       file).  The file descriptors in <i>writefds</i> will be watched to see if
+       space is available for write (though a large write may still block).
+       The file descriptors in <i>exceptfds</i> will be watched for exceptional
+       conditions.  (For examples of some exceptional conditions, see the
+       discussion of <b>POLLPRI </b>in <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a>.)
+
+       On exit, each of the file descriptor sets is modified in place to
+       indicate which file descriptors actually changed status.  (Thus, if
+       using <b>select</b>() within a loop, the sets must be reinitialized before
+       each call.)
+
+       Each of the three file descriptor sets may be specified as NULL if no
+       file descriptors are to be watched for the corresponding class of
+       events.
+
+       Four macros are provided to manipulate the sets.  <b>FD_ZERO</b>() clears a
+       set.  <b>FD_SET</b>() and <b>FD_CLR</b>() add and remove a given file descriptor
+       from a set.  <b>FD_ISSET</b>() tests to see if a file descriptor is part of
+       the set; this is useful after <b>select</b>() returns.
+
+       <i>nfds</i> should be set to the highest-numbered file descriptor in any of
+       the three sets, plus 1.  The indicated file descriptors in each set
+       are checked, up to this limit (but see BUGS).
+
+       The <i>timeout</i> argument specifies the interval that <b>select</b>() should
+       block waiting for a file descriptor to become ready.  The call will
+       block until either:
+
+       *  a file descriptor becomes ready;
+
+       *  the call is interrupted by a signal handler; or
+
+       *  the timeout expires.
+
+       Note that the <i>timeout</i> interval will be rounded up to the system clock
+       granularity, and kernel scheduling delays mean that the blocking
+       interval may overrun by a small amount.  If both fields of the
+       <i>timeval</i> structure are zero, then <b>select</b>() returns immediately.  (This
+       is useful for polling.)  If <i>timeout</i> is NULL (no timeout), <b>select</b>()
+       can block indefinitely.
+
+       <i>sigmask</i> is a pointer to a signal mask (see <a href="http://man7.org/linux/man-pages/man2/sigprocmask.2.html">sigprocmask(2)</a>); if it is
+       not NULL, then <b>pselect</b>() first replaces the current signal mask by
+       the one pointed to by <i>sigmask</i>, then does the "select" function, and
+       then restores the original signal mask.
+
+       Other than the difference in the precision of the <i>timeout</i> argument,
+       the following <b>pselect</b>() call:
+
+           ready = pselect(nfds, &amp;readfds, &amp;writefds, &amp;exceptfds,
+                           timeout, &amp;sigmask);
+
+       is equivalent to <i>atomically</i> executing the following calls:
+
+           sigset_t origmask;
+
+           pthread_sigmask(SIG_SETMASK, &amp;sigmask, &amp;origmask);
+           ready = select(nfds, &amp;readfds, &amp;writefds, &amp;exceptfds, timeout);
+           pthread_sigmask(SIG_SETMASK, &amp;origmask, NULL);
+
+       The reason that <b>pselect</b>() is needed is that if one wants to wait for
+       either a signal or for a file descriptor to become ready, then an
+       atomic test is needed to prevent race conditions.  (Suppose the sig‐
+       nal handler sets a global flag and returns.  Then a test of this
+       global flag followed by a call of <b>select</b>() could hang indefinitely if
+       the signal arrived just after the test but just before the call.  By
+       contrast, <b>pselect</b>() allows one to first block signals, handle the
+       signals that have come in, then call <b>pselect</b>() with the desired <i>sig‐</i>
+       <i>mask</i>, avoiding the race.)
+
+   <b>The timeout</b>
+       The time structures involved are defined in <i>&lt;sys/time.h&gt;</i> and look
+       like
+
+           struct timeval {
+               long    tv_sec;         /* seconds */
+               long    tv_usec;        /* microseconds */
+           };
+
+       and
+
+           struct timespec {
+               long    tv_sec;         /* seconds */
+               long    tv_nsec;        /* nanoseconds */
+           };
+
+       (However, see below on the POSIX.1 versions.)
+
+       Some code calls <b>select</b>() with all three sets empty, <i>nfds</i> zero, and a
+       non-NULL <i>timeout</i> as a fairly portable way to sleep with subsecond
+       precision.
+
+       On Linux, <b>select</b>() modifies <i>timeout</i> to reflect the amount of time not
+       slept; most other implementations do not do this.  (POSIX.1 permits
+       either behavior.)  This causes problems both when Linux code which
+       reads <i>timeout</i> is ported to other operating systems, and when code is
+       ported to Linux that reuses a <i>struct timeval</i> for multiple <b>select</b>()s
+       in a loop without reinitializing it.  Consider <i>timeout</i> to be unde‐
+       fined after <b>select</b>() returns.
+</pre>
+<h2><a id="RETURN_VALUE" href="http://man7.org/linux/man-pages/man2/select.2.html#RETURN_VALUE"></a>RETURN VALUE  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       On success, <b>select</b>() and <b>pselect</b>() return the number of file
+       descriptors contained in the three returned descriptor sets (that is,
+       the total number of bits that are set in <i>readfds</i>, <i>writefds</i>,
+       <i>exceptfds</i>) which may be zero if the timeout expires before anything
+       interesting happens.  On error, -1 is returned, and <i><a href="http://man7.org/linux/man-pages/man3/errno.3.html">errno</a></i> is set to
+       indicate the error; the file descriptor sets are unmodified, and
+       <i>timeout</i> becomes undefined.
+</pre>
+<h2><a id="ERRORS" href="http://man7.org/linux/man-pages/man2/select.2.html#ERRORS"></a>ERRORS  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       <b>EBADF  </b>An invalid file descriptor was given in one of the sets.
+              (Perhaps a file descriptor that was already closed, or one on
+              which an error has occurred.)  However, see BUGS.
+
+       <b>EINTR  </b>A signal was caught; see <a href="http://man7.org/linux/man-pages/man7/signal.7.html">signal(7)</a>.
+
+       <b>EINVAL </b><i>nfds</i> is negative or exceeds the <b>RLIMIT_NOFILE </b>resource limit
+              (see <a href="http://man7.org/linux/man-pages/man2/getrlimit.2.html">getrlimit(2)</a>).
+
+       <b>EINVAL </b>The value contained within <i>timeout</i> is invalid.
+
+       <b>ENOMEM </b>Unable to allocate memory for internal tables.
+</pre>
+<h2><a id="VERSIONS" href="http://man7.org/linux/man-pages/man2/select.2.html#VERSIONS"></a>VERSIONS  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       <b>pselect</b>() was added to Linux in kernel 2.6.16.  Prior to this,
+       <b>pselect</b>() was emulated in glibc (but see BUGS).
+</pre>
+<h2><a id="CONFORMING_TO" href="http://man7.org/linux/man-pages/man2/select.2.html#CONFORMING_TO"></a>CONFORMING TO  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       <b>select</b>() conforms to POSIX.1-2001, POSIX.1-2008, and 4.4BSD (<b>select</b>()
+       first appeared in 4.2BSD).  Generally portable to/from non-BSD
+       systems supporting clones of the BSD socket layer (including System V
+       variants).  However, note that the System V variant typically sets
+       the timeout variable before exit, but the BSD variant does not.
+
+       <b>pselect</b>() is defined in POSIX.1g, and in POSIX.1-2001 and
+       POSIX.1-2008.
+</pre>
+<h2><a id="NOTES" href="http://man7.org/linux/man-pages/man2/select.2.html#NOTES"></a>NOTES  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       An <i>fd_set</i> is a fixed size buffer.  Executing <b>FD_CLR</b>() or <b>FD_SET</b>()
+       with a value of <i>fd</i> that is negative or is equal to or larger than
+       <b>FD_SETSIZE </b>will result in undefined behavior.  Moreover, POSIX
+       requires <i>fd</i> to be a valid file descriptor.
+
+       The operation of <b>select</b>() and <b>pselect</b>() is not affected by the
+       <b>O_NONBLOCK </b>flag.
+
+       On some other UNIX systems, <b>select</b>() can fail with the error <b>EAGAIN</b>
+       if the system fails to allocate kernel-internal resources, rather
+       than <b>ENOMEM </b>as Linux does.  POSIX specifies this error for <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a>,
+       but not for <b>select</b>().  Portable programs may wish to check for <b>EAGAIN</b>
+       and loop, just as with <b>EINTR</b>.
+
+       On systems that lack <b>pselect</b>(), reliable (and more portable) signal
+       trapping can be achieved using the self-pipe trick.  In this
+       technique, a signal handler writes a byte to a pipe whose other end
+       is monitored by <b>select</b>() in the main program.  (To avoid possibly
+       blocking when writing to a pipe that may be full or reading from a
+       pipe that may be empty, nonblocking I/O is used when reading from and
+       writing to the pipe.)
+
+       Concerning the types involved, the classical situation is that the
+       two fields of a <i>timeval</i> structure are typed as <i>long</i> (as shown above),
+       and the structure is defined in <i>&lt;sys/time.h&gt;</i>.  The POSIX.1 situation
+       is
+
+           struct timeval {
+               time_t         tv_sec;     /* seconds */
+               suseconds_t    tv_usec;    /* microseconds */
+           };
+
+       where the structure is defined in <i>&lt;sys/select.h&gt;</i> and the data types
+       <i>time_t</i> and <i>suseconds_t</i> are defined in <i>&lt;sys/types.h&gt;</i>.
+
+       Concerning prototypes, the classical situation is that one should
+       include <i>&lt;time.h&gt;</i> for <b>select</b>().  The POSIX.1 situation is that one
+       should include <i>&lt;sys/select.h&gt;</i> for <b>select</b>() and <b>pselect</b>().
+
+       Under glibc 2.0, <i>&lt;sys/select.h&gt;</i> gives the wrong prototype for <b>pse‐</b>
+       <b>lect</b>().  Under glibc 2.1 to 2.2.1, it gives <b>pselect</b>() when
+       <b>_GNU_SOURCE </b>is defined.  Since glibc 2.2.2, the requirements are as
+       shown in the SYNOPSIS.
+
+   <b>Correspondence between select() and poll() notifications</b>
+       Within the Linux kernel source, we find the following definitions
+       which show the correspondence between the readable, writable, and
+       exceptional condition notifications of <b>select</b>() and the event notifi‐
+       cations provided by <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a> (and <a href="http://man7.org/linux/man-pages/man7/epoll.7.html">epoll(7)</a>):
+
+           #define POLLIN_SET (POLLRDNORM | POLLRDBAND | POLLIN | POLLHUP |
+                               POLLERR)
+                              /* Ready for reading */
+           #define POLLOUT_SET (POLLWRBAND | POLLWRNORM | POLLOUT | POLLERR)
+                              /* Ready for writing */
+           #define POLLEX_SET (POLLPRI)
+                              /* Exceptional condition */
+
+   <b>Multithreaded applications</b>
+       If a file descriptor being monitored by <b>select</b>() is closed in another
+       thread, the result is unspecified.  On some UNIX systems, <b>select</b>()
+       unblocks and returns, with an indication that the file descriptor is
+       ready (a subsequent I/O operation will likely fail with an error,
+       unless another process reopens file descriptor between the time
+       <b>select</b>() returned and the I/O operation is performed).  On Linux (and
+       some other systems), closing the file descriptor in another thread
+       has no effect on <b>select</b>().  In summary, any application that relies
+       on a particular behavior in this scenario must be considered buggy.
+
+   <b>C library/kernel differences</b>
+       The Linux kernel allows file descriptor sets of arbitrary size,
+       determining the length of the sets to be checked from the value of
+       <i>nfds</i>.  However, in the glibc implementation, the <i>fd_set</i> type is fixed
+       in size.  See also BUGS.
+
+       The <b>pselect</b>() interface described in this page is implemented by
+       glibc.  The underlying Linux system call is named <b>pselect6</b>().  This
+       system call has somewhat different behavior from the glibc wrapper
+       function.
+
+       The Linux <b>pselect6</b>() system call modifies its <i>timeout</i> argument.  How‐
+       ever, the glibc wrapper function hides this behavior by using a local
+       variable for the timeout argument that is passed to the system call.
+       Thus, the glibc <b>pselect</b>() function does not modify its <i>timeout</i> argu‐
+       ment; this is the behavior required by POSIX.1-2001.
+
+       The final argument of the <b>pselect6</b>() system call is not a <i>sigset_t *</i>
+       pointer, but is instead a structure of the form:
+
+           struct {
+               const kernel_sigset_t *ss;   /* Pointer to signal set */
+               size_t ss_len;               /* Size (in bytes) of object
+                                               pointed to by 'ss' */
+           };
+
+       This allows the system call to obtain both a pointer to the signal
+       set and its size, while allowing for the fact that most architectures
+       support a maximum of 6 arguments to a system call.  See
+       <a href="http://man7.org/linux/man-pages/man2/sigprocmask.2.html">sigprocmask(2)</a> for a discussion of the difference between the kernel
+       and libc notion of the signal set.
+</pre>
+<h2><a id="BUGS" href="http://man7.org/linux/man-pages/man2/select.2.html#BUGS"></a>BUGS  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       POSIX allows an implementation to define an upper limit, advertised
+       via the constant <b>FD_SETSIZE</b>, on the range of file descriptors that
+       can be specified in a file descriptor set.  The Linux kernel imposes
+       no fixed limit, but the glibc implementation makes <i>fd_set</i> a fixed-
+       size type, with <b>FD_SETSIZE </b>defined as 1024, and the <b>FD_*</b>() macros
+       operating according to that limit.  To monitor file descriptors
+       greater than 1023, use <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a> instead.
+
+       The implementation of the <i>fd_set</i> arguments as value-result arguments
+       means that they must be reinitialized on each call to <b>select</b>().  This
+       design error is avoided by <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a>, which uses separate structure
+       fields for the input and output of the call.
+
+       According to POSIX, <b>select</b>() should check all specified file
+       descriptors in the three file descriptor sets, up to the limit
+       <i>nfds-1</i>.  However, the current implementation ignores any file
+       descriptor in these sets that is greater than the maximum file
+       descriptor number that the process currently has open.  According to
+       POSIX, any such file descriptor that is specified in one of the sets
+       should result in the error <b>EBADF</b>.
+
+       Glibc 2.0 provided a version of <b>pselect</b>() that did not take a <i>sigmask</i>
+       argument.
+
+       Starting with version 2.1, glibc provided an emulation of <b>pselect</b>()
+       that was implemented using <a href="http://man7.org/linux/man-pages/man2/sigprocmask.2.html">sigprocmask(2)</a> and <b>select</b>().  This
+       implementation remained vulnerable to the very race condition that
+       <b>pselect</b>() was designed to prevent.  Modern versions of glibc use the
+       (race-free) <b>pselect</b>() system call on kernels where it is provided.
+
+       Under Linux, <b>select</b>() may report a socket file descriptor as "ready
+       for reading", while nevertheless a subsequent read blocks.  This
+       could for example happen when data has arrived but upon examination
+       has wrong checksum and is discarded.  There may be other
+       circumstances in which a file descriptor is spuriously reported as
+       ready.  Thus it may be safer to use <b>O_NONBLOCK </b>on sockets that should
+       not block.
+
+       On Linux, <b>select</b>() also modifies <i>timeout</i> if the call is interrupted
+       by a signal handler (i.e., the <b>EINTR </b>error return).  This is not
+       permitted by POSIX.1.  The Linux <b>pselect</b>() system call has the same
+       behavior, but the glibc wrapper hides this behavior by internally
+       copying the <i>timeout</i> to a local variable and passing that variable to
+       the system call.
+</pre>
+<h2><a id="EXAMPLE" href="http://man7.org/linux/man-pages/man2/select.2.html#EXAMPLE"></a>EXAMPLE  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       #include &lt;stdio.h&gt;
+       #include &lt;stdlib.h&gt;
+       #include &lt;sys/time.h&gt;
+       #include &lt;sys/types.h&gt;
+       #include &lt;unistd.h&gt;
+
+       int
+       main(void)
+       {
+           fd_set rfds;
+           struct timeval tv;
+           int retval;
+
+           /* Watch stdin (fd 0) to see when it has input. */
+
+           FD_ZERO(&amp;rfds);
+           FD_SET(0, &amp;rfds);
+
+           /* Wait up to five seconds. */
+
+           tv.tv_sec = 5;
+           tv.tv_usec = 0;
+
+           retval = select(1, &amp;rfds, NULL, NULL, &amp;tv);
+           /* Don't rely on the value of tv now! */
+
+           if (retval == -1)
+               perror("select()");
+           else if (retval)
+               printf("Data is available now.\n");
+               /* FD_ISSET(0, &amp;rfds) will be true. */
+           else
+               printf("No data within five seconds.\n");
+
+           exit(EXIT_SUCCESS);
+       }
+</pre>
+<h2><a id="SEE_ALSO" href="http://man7.org/linux/man-pages/man2/select.2.html#SEE_ALSO"></a>SEE ALSO  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       <a href="http://man7.org/linux/man-pages/man2/accept.2.html">accept(2)</a>, <a href="http://man7.org/linux/man-pages/man2/connect.2.html">connect(2)</a>, <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a>, <a href="http://man7.org/linux/man-pages/man2/read.2.html">read(2)</a>, <a href="http://man7.org/linux/man-pages/man2/recv.2.html">recv(2)</a>, <a href="http://man7.org/linux/man-pages/man2/restart_syscall.2.html">restart_syscall(2)</a>,
+       <a href="http://man7.org/linux/man-pages/man2/send.2.html">send(2)</a>, <a href="http://man7.org/linux/man-pages/man2/sigprocmask.2.html">sigprocmask(2)</a>, <a href="http://man7.org/linux/man-pages/man2/write.2.html">write(2)</a>, <a href="http://man7.org/linux/man-pages/man7/epoll.7.html">epoll(7)</a>, <a href="http://man7.org/linux/man-pages/man7/time.7.html">time(7)</a>
+
+       For a tutorial with discussion and examples, see <a href="http://man7.org/linux/man-pages/man2/select_tut.2.html">select_tut(2)</a>.
+</pre>
+<h2><a id="COLOPHON" href="http://man7.org/linux/man-pages/man2/select.2.html#COLOPHON"></a>COLOPHON  &nbsp; &nbsp; &nbsp; &nbsp; <a href="http://man7.org/linux/man-pages/man2/select.2.html#top_of_page"><span class="top-link">top</span></a></h2><pre>       This page is part of release 5.00 of the Linux <i>man-pages</i> project.  A
+       description of the project, information about reporting bugs, and the
+       latest version of this page, can be found at
+       <a href="https://www.kernel.org/doc/man-pages/">https://www.kernel.org/doc/man-pages/</a>.
+
+<span class="footline">Linux                            2019-03-06                        SELECT(2)</span>
+</pre>
+
+<hr class="end-man-text">
+<p>Pages that refer to this page: 
+    <a href="http://man7.org/linux/man-pages/man2/accept.2.html">accept(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/alarm.2.html">alarm(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/connect.2.html">connect(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/epoll_wait.2.html">epoll_wait(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/eventfd.2.html">eventfd(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/fcntl.2.html">fcntl(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/futex.2.html">futex(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/ioctl_tty.2.html">ioctl_tty(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/migrate_pages.2.html">migrate_pages(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/open.2.html">open(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/pause.2.html">pause(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/perf_event_open.2.html">perf_event_open(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/perfmonctl.2.html">perfmonctl(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/personality.2.html">personality(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/prctl.2.html">prctl(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/read.2.html">read(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/recv.2.html">recv(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/restart_syscall.2.html">restart_syscall(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/select_tut.2.html">select_tut(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/send.2.html">send(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/signalfd.2.html">signalfd(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/socket.2.html">socket(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/syscalls.2.html">syscalls(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/timerfd_create.2.html">timerfd_create(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/userfaultfd.2.html">userfaultfd(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man2/write.2.html">write(2)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/avc_netlink_loop.3.html">avc_netlink_loop(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/ldap_get_option.3.html">ldap_get_option(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/ldap_result.3.html">ldap_result(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/pcap.3pcap.html">pcap(3pcap)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/pcap_get_required_select_timeout.3pcap.html">pcap_get_required_select_timeout(3pcap)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/pcap_get_selectable_fd.3pcap.html">pcap_get_selectable_fd(3pcap)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/pmafm.3.html">pmafm(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/pmtime.3.html">pmtime(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/rpc.3.html">rpc(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/sctp_connectx.3.html">sctp_connectx(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/ualarm.3.html">ualarm(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man3/usleep.3.html">usleep(3)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man4/random.4.html">random(4)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man4/rtc.4.html">rtc(4)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man5/proc.5.html">proc(5)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man5/slapd-asyncmeta.5.html">slapd-asyncmeta(5)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man5/slapd-ldap.5.html">slapd-ldap(5)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man5/slapd-meta.5.html">slapd-meta(5)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man5/systemd.exec.5.html">systemd.exec(5)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/epoll.7.html">epoll(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/fanotify.7.html">fanotify(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/inotify.7.html">inotify(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/mq_overview.7.html">mq_overview(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/pipe.7.html">pipe(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/pty.7.html">pty(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/signal.7.html">signal(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/signal-safety.7.html">signal-safety(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/socket.7.html">socket(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/tcp.7.html">tcp(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/time.7.html">time(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man7/udp.7.html">udp(7)</a>,&nbsp; 
+    <a href="http://man7.org/linux/man-pages/man8/setarch.8.html">setarch(8)</a>
+</p>
+<hr>
+
+<p class="page-copyright"><a href="http://man7.org/linux/man-pages/man2/select.2.license.html">Copyright and license for this manual page</a></p> 
+<hr class="start-footer">
+
+<div class="footer"> 
+
+<table class="colophon-table">
+    <tbody><tr>
+    <td class="pub-info">
+        <p>
+            HTML rendering created 2019-03-06
+            by <a href="http://man7.org/mtk/index.html">Michael Kerrisk</a>, 
+            author of 
+            <a href="http://man7.org/tlpi/"><em>The Linux Programming Interface</em></a>, 
+            maintainer of the 
+            <a href="https://www.kernel.org/doc/man-pages/">Linux <em>man-pages</em> project</a>.
+        </p>
+        <p>
+            For details of in-depth
+            <strong>Linux/UNIX system programming training courses</strong>
+            that I teach, look <a href="http://man7.org/training/">here</a>.
+        </p>
+        <p>
+            Hosting by <a href="http://www.jambit.com/index_en.html">jambit GmbH</a>.
+        </p>
+        <p>
+            <a href="http://validator.w3.org/check?uri=referer">
+            <img src="./select(2) - Linux manual page_files/valid-xhtml11" alt="Valid XHTML 1.1" height="31" width="88">
+            </a>
+        </p>
+    </td>
+    <td class="colophon-divider">
+    </td>
+    <td class="tlpi-cover">
+        <a href="http://man7.org/tlpi/"><img src="./select(2) - Linux manual page_files/TLPI-front-cover-vsmall.png" alt="Cover of TLPI"></a>
+    </td>
+    </tr>
+</tbody></table>
+
+</div>
+
+<hr class="end-footer">
+
+
+
+<!--BEGIN-SITETRACKING-->
+<!-- SITETRACKING.man7.org_linux_man-pages -->
+
+<!-- Start of StatCounter Code (xhtml) -->
+
+<script type="text/javascript" async="" src="./select(2) - Linux manual page_files/ga.js"></script><script type="text/javascript">
+//<![CDATA[
+var sc_project=7422636; 
+var sc_invisible=1; 
+var sc_security="9b6714ff"; 
+//]]>
+</script>
+<script type="text/javascript" src="./select(2) - Linux manual page_files/counter_xhtml.js"></script>
+<noscript><div class="statcounter"><a title="website
+statistics" href="http://statcounter.com/"
+class="statcounter"><img class="statcounter"
+src="http://c.statcounter.com/7422636/0/9b6714ff/1/"
+alt="website statistics" /></a></div></noscript>
+
+<!-- End of StatCounter Code -->
+
+
+<!-- Start of Google Analytics Code -->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-9830363-8']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<!-- End of Google Analytics Code -->
+
+<!--END-SITETRACKING-->
+
+
+
+</body></html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)https://linux.die.net/man/4/epoll -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>epoll(4): I/O event notification facility - Linux man page</title>
+<!--<base href="https://linux.die.net/man/4/epoll">--><base href=".">
+<link rel="canonical" href="https://linux.die.net/man/4/epoll">
+<link rel="stylesheet" type="text/css" href="./epoll(4)_ I_O event notification facility - Linux man page_files/white.css">
+<link rel="shortcut icon" href="https://linux.die.net/favicon.ico" type="image/x-icon">
+<link href="https://linux.die.net/style/search.xml" rel="search" title="Search the die.net site" type="application/opensearchdescription+xml">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="epoll is a variant of poll(2) that can be used either as Edge or Level Triggered interface and scales well to large numbers of watched fds.">
+<script type="text/javascript" async="" src="./epoll(4)_ I_O event notification facility - Linux man page_files/ga.js"></script><script type="text/javascript">
+<!--
+var _gaq = _gaq || [];_gaq.push(['_setAccount', 'UA-50820-6']);_gaq.push(['_trackPageview']);
+window.google_analytics_uacct = 'UA-50820-6';
+// -->
+</script>
+</head>
+
+<body>
+<div id="bg">
+<div id="logo">
+<a href="https://www.die.net/"><img src="./epoll(4)_ I_O event notification facility - Linux man page_files/logo.svg" alt="die.net" width="120" height="120" onerror="this.onerror=null; this.src=&#39;/style/logo.png&#39;"></a>
+</div>
+<div id="content">
+
+<!-- google_ad_section_start -->
+<h1>epoll(4) - Linux man page</h1>
+
+<h2>Name</h2>
+epoll - I/O event notification facility
+<h2>Synopsis</h2>
+<b>#include &lt;<a href="https://linux.die.net/include/sys/epoll.h" rel="nofollow">sys/epoll.h</a>&gt;</b>
+<h2>Description</h2>
+<div id="adright">
+<script async="" src="./epoll(4)_ I_O event notification facility - Linux man page_files/f.txt"></script>
+<ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-5823754184406795" data-ad-slot="7130739364"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<b>epoll</b> is a variant of <i><b><a href="https://linux.die.net/man/2/poll">poll</a></b>(2)</i> that can be used either as Edge or Level
+Triggered interface and scales well to large numbers of watched fds. Three system calls are provided to set up and control an <b>epoll</b> set:
+<i><b><a href="https://linux.die.net/man/2/epoll_create">epoll_create</a></b>(2)</i>, <i><b><a href="https://linux.die.net/man/2/epoll_ctl">epoll_ctl</a></b>(2)</i>, <i><b><a href="https://linux.die.net/man/2/epoll_wait">epoll_wait</a></b>(2)</i>.
+<p>An <b>epoll</b> set is connected to a file descriptor created by <i><b><a href="https://linux.die.net/man/2/epoll_create" rel="nofollow">epoll_create</a></b>(2)</i>. Interest for certain file descriptors is then registered via
+<i><b><a href="https://linux.die.net/man/2/epoll_ctl" rel="nofollow">epoll_ctl</a></b>(2)</i>. Finally, the actual wait is started by <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i>.
+</p><h2>Notes</h2>
+The <b>epoll</b> event distribution interface is able to behave both as Edge Triggered ( ET ) and
+Level Triggered ( LT ). The difference between ET and LT event distribution mechanism can be described as follows. Suppose that this scenario happens :
+<ol>
+<li>The file descriptor that represents the read side of a pipe ( <b>RFD</b> ) is added inside the <b>epoll</b> device.
+</li><li>Pipe writer writes 2Kb of data on the write side of the pipe.
+</li><li>A call to <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i> is done that will return <b>RFD</b> as ready file descriptor.
+</li><li>The pipe reader reads 1Kb of data from <b>RFD</b>.
+</li><li>A call to <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i> is done.</li></ol>
+<p>If the <b>RFD</b> file descriptor has been added to the <b>epoll</b> interface using the <b>EPOLLET</b> flag, the call to <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i> done
+in step <b>5</b> will probably hang because of the available data still present in the file input buffers and the remote peer might be expecting a response
+based on the data it already sent. The reason for this is that Edge Triggered event distribution delivers events only when events happens on the monitored
+file. So, in step <b>5</b> the caller might end up waiting for some data that is already present inside the input buffer. In the above example, an event on
+<b>RFD</b> will be generated because of the write done in <b>2</b> , and the event is consumed in <b>3</b>. Since the read operation done in <b>4</b> does not
+consume the whole buffer data, the call to <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i> done in step <b>5</b> might lock indefinitely. The <b>epoll</b> interface, when used
+with the <b>EPOLLET</b> flag ( Edge Triggered ) should use non-blocking file descriptors to avoid having a blocking read or write starve the task that is
+handling multiple file descriptors. The suggested way to use <b>epoll</b> as an Edge Triggered ( <b>EPOLLET</b> ) interface is below, and possible pitfalls to
+avoid follow.
+</p><blockquote>
+<dl compact="">
+<dt><b>i</b>
+</dt><dd>with non-blocking file descriptors
+</dd><dt><b>ii</b>
+</dt><dd>by going to wait for an event only after <i><b><a href="https://linux.die.net/man/2/read">read</a></b>(2)</i> or <i><b><a href="https://linux.die.net/man/2/write">write</a></b>(2)</i></dd></dl>return EAGAIN</blockquote>
+<p>On the contrary, when used as a Level Triggered interface, <b>epoll</b> is by all means a faster <i><b><a href="https://linux.die.net/man/2/poll" rel="nofollow">poll</a></b>(2)</i>, and can be used wherever the latter
+is used since it shares the same semantics. Since even with the Edge Triggered <b>epoll</b> multiple events can be generated up on receival of multiple chunks
+of data, the caller has the option to specify the <b>EPOLLONESHOT</b> flag, to tell <b>epoll</b> to disable the associated file descriptor after the receival
+of an event with <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i>. When the <b>EPOLLONESHOT</b> flag is specified, it is caller responsibility to rearm the file descriptor using
+<i><b><a href="https://linux.die.net/man/2/epoll_ctl" rel="nofollow">epoll_ctl</a></b>(2)</i> with <b>EPOLL_CTL_MOD</b>.
+</p><h2>Example for Suggested Usage</h2>
+<p>While the usage of <b>epoll</b> when employed like a Level Triggered interface does have the same semantics of <i><b><a href="https://linux.die.net/man/2/poll" rel="nofollow">poll</a></b>(2)</i>, an Edge Triggered
+usage requires more clarifiction to avoid stalls in the application event loop. In this example, listener is a non-blocking socket on which
+<i><b><a href="https://linux.die.net/man/2/listen">listen</a></b>(2)</i> has been called. The function do_use_fd() uses the new ready file descriptor until EAGAIN is returned by either <i><b><a href="https://linux.die.net/man/2/read" rel="nofollow">read</a></b>(2)</i>
+or <i><b><a href="https://linux.die.net/man/2/write" rel="nofollow">write</a></b>(2)</i>. An event driven state machine application should, after having received EAGAIN, record its current state so that at the next call to
+do_use_fd() it will continue to <i><b><a href="https://linux.die.net/man/2/read" rel="nofollow">read</a></b>(2)</i> or <i><b><a href="https://linux.die.net/man/2/write" rel="nofollow">write</a></b>(2)</i> from where it stopped before.
+</p><pre class="code">struct epoll_event ev, *events;
+for(;;) {
+    nfds = epoll_wait(kdpfd, events, maxevents, -1);
+    for(n = 0; n &lt; nfds; ++n) {
+        if(events[n].data.fd == listener) {
+            client = accept(listener, (struct sockaddr *) &amp;local,
+                            &amp;addrlen);
+            if(client &lt; 0){
+                perror("accept");
+                continue;
+            }
+            setnonblocking(client);
+            ev.events = EPOLLIN | EPOLLET;
+            ev.data.fd = client;
+            if (epoll_ctl(kdpfd, EPOLL_CTL_ADD, client, &amp;ev) &lt; 0) {
+                fprintf(stderr, "epoll set insertion error: fd=%d0,
+                        client);
+                return -1;
+            }
+        }
+        else
+            do_use_fd(events[n].data.fd);
+    }
+}</pre>When used as an Edge triggered interface, for performance reasons, it is possible to add the file descriptor inside the epoll interface (
+<b>EPOLL_CTL_ADD</b> ) once by specifying ( <b>EPOLLIN</b>|<b>EPOLLOUT</b> ). This allows you to avoid continuously switching between <b>EPOLLIN</b> and
+<b>EPOLLOUT</b> calling <i><b><a href="https://linux.die.net/man/2/epoll_ctl" rel="nofollow">epoll_ctl</a></b>(2)</i> with <b>EPOLL_CTL_MOD</b>.
+<h2>QUESTIONS AND ANSWERS (from linux-kernel)</h2>
+<blockquote>
+<dl compact="">
+<dt><b>Q1</b>
+</dt><dd>What happens if you add the same fd to an epoll_set twice?
+</dd><dt><b>A1</b>
+</dt><dd>You will probably get EEXIST. However, it is possible that two threads may add the same fd twice. This is a harmless condition.
+</dd><dt><b>Q2</b>
+</dt><dd>Can two <b>epoll</b> sets wait for the same fd? If so, are events reported to both <b>epoll</b> sets fds?
+</dd><dt><b>A2</b>
+</dt><dd>Yes. However, it is not recommended. Yes it would be reported to both.
+</dd><dt><b>Q3</b>
+</dt><dd>Is the <b>epoll</b> fd itself poll/epoll/selectable?
+</dd><dt><b>A3</b>
+</dt><dd>Yes.
+</dd><dt><b>Q4</b>
+</dt><dd>What happens if the <b>epoll</b> fd is put into its own fd set?
+</dd><dt><b>A4</b>
+</dt><dd>It will fail. However, you can add an <b>epoll</b> fd inside another epoll fd set.
+</dd><dt><b>Q5</b>
+</dt><dd>Can I send the <b>epoll</b> fd over a unix-socket to another process?
+</dd><dt><b>A5</b>
+</dt><dd>No.
+</dd><dt><b>Q6</b>
+</dt><dd>Will the close of an fd cause it to be removed from all <b>epoll</b> sets automatically?
+</dd><dt><b>A6</b>
+</dt><dd>Yes.
+</dd><dt><b>Q7</b>
+</dt><dd>If more than one event comes in between <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i> calls, are they combined or reported separately?
+</dd><dt><b>A7</b>
+</dt><dd>They will be combined.
+</dd><dt><b>Q8</b>
+</dt><dd>Does an operation on an fd affect the already collected but not yet reported events?
+</dd><dt><b>A8</b>
+</dt><dd>You can do two operations on an existing fd. Remove would be meaningless for this case. Modify will re-read available I/O.
+</dd><dt><b>Q9</b>
+</dt><dd>Do I need to continuously read/write an fd until EAGAIN when using the <b>EPOLLET</b> flag ( Edge Triggered behaviour ) ?
+</dd><dt><b>A9</b>
+</dt><dd>No you don't. Receiving an event from <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i> should suggest to you that such file descriptor is ready for the requested I/O operation.
+You have simply to consider it ready until you will receive the next EAGAIN. When and how you will use such file descriptor is entirely up to you. Also, the
+condition that the read/write I/O space is exhausted can be detected by checking the amount of data read/write from/to the target file descriptor. For example,
+if you call <i><b><a href="https://linux.die.net/man/2/read" rel="nofollow">read</a></b>(2)</i> by asking to read a certain amount of data and <i><b><a href="https://linux.die.net/man/2/read" rel="nofollow">read</a></b>(2)</i> returns a lower number of bytes, you can be sure to have
+exhausted the read I/O space for such file descriptor. Same is valid when writing using the <i><b><a href="https://linux.die.net/man/2/write" rel="nofollow">write</a></b>(2)</i> function.</dd></dl></blockquote>
+<h2>Possible Pitfalls and Ways to Avoid Them</h2>
+<blockquote>
+<dl compact="">
+<dt><b>o Starvation ( Edge Triggered )</b></dt></dl>
+<p>If there is a large amount of I/O space, it is possible that by trying to drain it the other files will not get processed causing starvation. This is not
+specific to <b>epoll</b>.
+</p><p>The solution is to maintain a ready list and mark the file descriptor as ready in its associated data structure, thereby allowing the application to
+remember which files need to be processed but still round robin amongst all the ready files. This also supports ignoring subsequent events you receive for fd's
+that are already ready.
+</p><dl compact="">
+<dt><b>o If using an event cache...</b></dt></dl>
+<p>If you use an event cache or store all the fd's returned from <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i>, then make sure to provide a way to mark its closure dynamically
+(ie- caused by a previous event's processing). Suppose you receive 100 events from <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i>, and in eventi #47 a condition causes event #13
+to be closed. If you remove the structure and close() the fd for event #13, then your event cache might still say there are events waiting for that fd causing
+confusion.
+</p><p>One solution for this is to call, during the processing of event 47, <b>epoll_ctl</b>(<b>EPOLL_CTL_DEL</b>) to delete fd 13 and close(), then mark its
+associated data structure as removed and link it to a cleanup list. If you find another event for fd 13 in your batch processing, you will discover the fd had
+been previously removed and there will be no confusion.</p></blockquote>
+<h2>Conforming to</h2>
+<i><b>epoll</b>(4)</i> is a new API introduced in Linux kernel 2.5.44. Its interface should
+be finalized in Linux kernel 2.5.66.
+<h2>See Also</h2>
+<i><b><a href="https://linux.die.net/man/2/epoll_ctl" rel="nofollow">epoll_ctl</a></b>(2)</i>, <i><b><a href="https://linux.die.net/man/2/epoll_create" rel="nofollow">epoll_create</a></b>(2)</i>, <i><b><a href="https://linux.die.net/man/2/epoll_wait" rel="nofollow">epoll_wait</a></b>(2)</i>
+
+<!-- google_ad_section_end -->
+<div id="adbottom">
+<script async="" src="./epoll(4)_ I_O event notification facility - Linux man page_files/f.txt"></script>
+<ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-5823754184406795" data-ad-slot="8789940313"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</div>
+<div id="menu">
+<dl>
+<dt>Site Search</dt>
+<dd>
+<form id="cse-search-box-menu" action="https://www.die.net/search/">
+<input name="q" type="text" size="10">
+<input type="hidden" name="sa" value="Search">
+<input type="hidden" name="ie" value="ISO-8859-1">
+<input type="hidden" name="cx" value="partner-pub-5823754184406795:54htp1rtx5u">
+<input type="hidden" name="cof" value="FORID:9">
+</form>
+<script type="text/javascript">
+<!--
+document.forms["cse-search-box-menu"].action = "https://www.die.net/search/";
+// -->
+</script>
+</dd></dl>
+
+
+
+<dl>
+<dt>Library</dt>
+<dd><a href="https://linux.die.net/">linux docs</a></dd>
+<dd><a href="https://linux.die.net/man/">linux man pages</a></dd>
+<dd><a href="https://www.die.net/musings/page_load_time/">page load time</a></dd>
+</dl>
+<dl>
+<dt>Toys</dt>
+<dd><a href="https://www.die.net/earth/">world sunlight</a></dd>
+<dd><a href="https://www.die.net/moon/">moon phase</a></dd>
+<dd><a href="http://trace.die.net/">trace explorer</a></dd>
+</dl>
+
+
+<dl>
+<dt><a href="https://linux.die.net/man/4/"><img src="./epoll(4)_ I_O event notification facility - Linux man page_files/back.gif" alt="Back" width="20" height="22"></a></dt><dd></dd>
+</dl>
+</div></div>
+<script type="text/javascript">
+<!--
+if (top.location != self.location) top.location = self.location;
+if (/[?&][pq]=/.test(document.referrer)) document.write(unescape("%3Cscript src='/style/highlight.js' type='text/javascript'%3E%3C/script%3E"));
+function googleTranslateElementInit() {new google.translate.TranslateElement({pageLanguage: 'en', floatPosition: google.translate.TranslateElement.FloatPosition.TOP_RIGHT, gaTrack: true, gaId: 'UA-50820-6'});}
+if (!/^en/i.test(window.navigator.userLanguage||window.navigator.language)) document.write(unescape("%3Cscript src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit' type='text/javascript'%3E%3C/script%3E"));
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+// -->
+</script>
+
+
+</body></html>

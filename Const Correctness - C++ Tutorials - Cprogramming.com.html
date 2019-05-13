@@ -1,0 +1,651 @@
+
+<!-- saved from url=(0060)https://www.cprogramming.com/tutorial/const_correctness.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="https://feeds2.feedburner.com/Cprogrammingcom/">
+<link rel="stylesheet" href="./Const Correctness - C++ Tutorials - Cprogramming.com_files/style_responsive.css" type="text/css">
+<link rel="canonical" href="https://www.cprogramming.com/tutorial/const_correctness.html">
+
+<link href="./Const Correctness - C++ Tutorials - Cprogramming.com_files/shCore.css" rel="stylesheet" type="text/css">
+<link href="./Const Correctness - C++ Tutorials - Cprogramming.com_files/shThemeDefault.css" rel="stylesheet" type="text/css">
+
+
+<meta name="Description" content="Const correctness helps you prevent bugs in C++ programs by preventing accidental modification of variables.">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Const Correctness - C++ Tutorials - Cprogramming.com</title>
+
+<!-- ADDED DFP -->
+<script type="text/javascript" async="" src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/ga.js"></script><script async="async" src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/gpt.js"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+<script>
+  googletag.cmd.push(function() {
+    var leaderboard_mapping = googletag.sizeMapping(). addSize([0, 0], []).addSize([768, 0], [728, 90]). build();
+    var skyscraper_mapping = googletag.sizeMapping(). addSize([0, 0], []).addSize([768, 0], [160, 600]). build();
+    googletag.defineSlot('/1038815/RunOfSite_ATF_leaderboard_728x90', [728, 90], 'div-gpt-ad-1526966597352-0').defineSizeMapping(leaderboard_mapping).addService(googletag.pubads());
+    googletag.defineSlot('/1038815/RunOfSite_ATF_skyscraper_160x600', [160, 600], 'div-gpt-ad-1526966597352-1').defineSizeMapping(skyscraper_mapping).addService(googletag.pubads());
+    googletag.defineSlot('/1038815/RunOfSite_LargeRectangle_ATF_336x280', [300, 250], 'div-gpt-ad-1526966597352-2').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+<!-- END ADDED DFP -->
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-7820175-1']);
+  _gaq.push(['_setVisitorCookieTimeout', 2592000]);
+  _gaq.push(['_setDomainName', '.cprogramming.com']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push (['_gat._anonymizeIp']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+<script> 
+function toggleclassforclass(targetclass, toggleclass) {
+    cx = document.getElementsByClassName(targetclass)[0].className;
+    if (cx.includes(toggleclass)) {
+        cx = cx.replace(toggleclass, "");
+    } else {
+        cx += " "+toggleclass;
+    }
+    document.getElementsByClassName(targetclass)[0].className = cx;
+}
+
+function togglemenu() {
+    toggleclassforclass('maincontent', 'mobile-menu-shown');
+    toggleclassforclass('leftcolumn', 'mobile-menu');
+}
+</script>
+<link rel="preload" href="./Const Correctness - C++ Tutorials - Cprogramming.com_files/f.txt" as="script"><script type="text/javascript" src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/f.txt"></script><script src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/pubads_impl_2019041801.js" async=""></script></head>
+
+<body>
+<div class="header">
+<button class="hamburger" onclick="togglemenu(); return false;"><img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/hamburger.svg" class="responsive-nav"></button>
+<a class="logo" href="https://www.cprogramming.com/"><img class="noprint logoimg" src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/cprog.png" width="324" height="83" border="0"></a> 
+
+    	<div class="leaderboard">
+
+<!-- ADDED DFP -->
+<!-- /1038815/RunOfSite_ATF_leaderboard_728x90 -->
+<div id="div-gpt-ad-1526966597352-0" style="height:90px; width:728px;">
+<script>
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1526966597352-0'); });
+</script>
+</div>
+<!-- END ADDED DFP -->
+
+</div>
+        
+</div>
+  <table class="main">
+
+  <tbody><tr>
+
+     <td class="noprint leftcolumn" width="130" valign="top"> 
+     <div class="menu" valign="top">
+     <p class="navcategory" align="left">
+              Starting out
+     </p>
+
+     <p class="navlist" align="left">
+             <a href="https://www.cprogramming.com/begin.html">Get started programming</a><br>
+             <a href="https://www.cprogramming.com/c++book/">Get the book</a><br>
+     </p>
+
+     <p class="navcategory" align="left">
+          <br>
+           Tutorials
+     </p>
+
+     <p class="navlist" align="left">
+            <a href="https://www.cprogramming.com/tutorial/c-tutorial.html">C tutorial</a><br>
+            <a href="https://www.cprogramming.com/tutorial/c++-tutorial.html">C++ tutorial</a><br>
+            <a href="https://www.cprogramming.com/game-programming.html">Game programming</a><br>
+            <a href="https://www.cprogramming.com/graphics-programming.html">Graphics programming</a><br>
+            <a href="https://www.cprogramming.com/algorithms-and-data-structures.html">Algorithms</a><br>
+            <a href="https://www.cprogramming.com/tutorial.html">More tutorials</a><br>
+     </p>
+
+     <p class="navcategory" align="left">
+          <br>
+           Practice
+     </p>
+
+     <p class="navlist" align="left">
+            <a href="https://www.cprogramming.com/challenge.html">Practice problems</a><br>
+            <a href="https://www.cprogramming.com/quiz/">Quizzes</a><br>
+     </p>
+     <p class="navcategory" align="left">
+          <br>
+           Resources
+     </p>
+
+     <p class="navlist" align="left">
+            <a href="https://www.cprogramming.com/snippets/">Source code</a><br>
+            <a href="https://www.cprogramming.com/tips/">C and C++ tips</a><br>
+            <a href="https://www.cprogramming.com/compilers.html">Getting a compiler</a><br>
+            <a href="https://www.cprogramming.com/books.html">Book recommendations</a><br>
+            <a href="https://cboard.cprogramming.com/">Forum</a><br>
+     </p>
+
+     <p class="navcategory" align="left">
+          <br>
+           References
+     </p>
+
+     <p class="navlist" align="left">
+            <a href="https://www.cprogramming.com/function.html">Function reference</a><br>
+            <a href="https://www.cprogramming.com/reference/">Syntax reference</a><br>
+            <a href="https://faq.cprogramming.com/cgi-bin/smartfaq.cgi">Programming FAQ</a><br>
+     </p>
+
+             
+     </div>
+
+<center>
+      <br><br>
+<script async="" src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/f(1).txt"></script>
+<!-- link_ads_responsive -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2560316224908115" data-ad-slot="4156953158" data-ad-format="link" data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</center>
+
+
+
+    </td>
+	<td class="content" valign="top">
+
+    			<div class="content2 maincontent">
+
+<h1>Const Correctness</h1>
+
+<div style="margin-right: 1em; float:left; padding: .4em; border-right: 1px solid #bbb"><img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/alex-50-50.jpg" border="0" style="padding: 0.25em;"><br><a href="https://plus.google.com/113987539774523532573?rel=author"> By Alex Allain</a></div>
+
+The const keyword allows you to specify whether or not a variable is
+modifiable.  You can use const to prevent modifications to variables and const
+pointers and const references prevent changing the data pointed to (or
+referenced).  
+
+<br><br>
+But why do you care?
+<br><br><center>
+<div class="noprint">
+<!-- /1038815/RunOfSite_LargeRectangle_ATF_336x280 -->
+<div id="div-gpt-ad-1526966597352-2" style="height:250px; width:300px;">
+<script>
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1526966597352-2'); });
+</script>
+</div>
+</div>
+
+
+</center>
+<br><br><br><br>
+Const gives you the ability to document your program more clearly and actually
+enforce that documentation.  By enforcing your documentation, the const keyword
+provides guarantees to your users that allow you to make performance
+optimizations without the threat of damaging their data.  For instance, const
+references allow you to specify that the data referred to won't be changed;
+this means that you can use const references as a simple and immediate way of
+improving performance for any function that currently takes objects by value
+without having to worry that your function might modify the data.  Even if it
+does, the compiler will prevent the code from compiling and alert you to the
+problem.  On the other hand, if you didn't use const references, you'd have 
+no easy way to ensure that your data wasn't modified.
+
+
+<h2>Documentation and Safety</h2>
+
+The primary purpose of constness is to provide documentation and prevent
+programming mistakes.  Const allows you to make it clear to yourself and others
+that something should not be changed.  Moreover, it has the added benefit that
+anything that you declare const will in fact remain const short of the use of
+forceful methods (which we'll talk about later).
+
+It's particularly useful to declare reference parameters to functions as const
+references:
+
+<div><div id="highlighter_461363" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp color1 bold">bool</code> <code class="cpp plain">verifyObjectCorrectness (</code><code class="cpp keyword bold">const</code> <code class="cpp plain">myObj&amp; obj);</code></div></div></td></tr></tbody></table></div></div>
+
+Here, a myObj object is passed by reference into verifyObjectCorrectness.  For
+safety's sake, const is used to ensure that verifyObjectCorrectness cannot change
+the object--after all, it's just supposed to make sure that the object is in a
+valid state.  This can prevent silly programming mistakes that might otherwise
+result in damaging the object (for instance, by setting a field of
+the class for testing purposes, which might result in the field's never being
+reset).  Moreover, by declaring the argument const, users of the function can
+be sure that their object will not be changed and not need to worry about the
+possible side effects of making the function call.  
+
+<h3>Syntax Note</h3>
+When declaring a const variable, it is possible to put const either before or after the type: that is, both
+
+<div><div id="highlighter_267358" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp color1 bold">int</code> <code class="cpp keyword bold">const</code> <code class="cpp plain">x = 5;</code></div></div></td></tr></tbody></table></div></div>
+
+and
+<div><div id="highlighter_345042" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp keyword bold">const</code> <code class="cpp color1 bold">int</code> <code class="cpp plain">x = 4;</code></div></div></td></tr></tbody></table></div></div>
+
+result in x's being a constant integer.  Note that in both cases, the value of
+the variable is specified in the declaration; there's no way to set it later!
+
+<h2>Const Pointers</h2>
+
+We've already seen const references demonstrated, and they're pretty natural:
+when you declare a const reference, you're only making the data referred to
+const.  References, by their very nature, cannot change what they refer to.
+Pointers, on the other hand, have two ways that you can use them: you can
+change the data pointed to, or change the pointer itself.  Consequently, there are two ways of declaring a const pointer: one that prevents you from changing what is pointed to, and one that prevents you from changing the data pointed to.
+
+<br><br>
+The syntax for declaring a pointer to constant data is natural enough:
+<div><div id="highlighter_320564" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp keyword bold">const</code> <code class="cpp color1 bold">int</code> <code class="cpp plain">*p_int;</code></div></div></td></tr></tbody></table></div></div>
+
+You can think of this as reading that *p_int is a "const int".  So the pointer may be changeable, but you definitely can't touch what p_int points to.  The key here is that the const appears before the *.
+
+<br><br> 
+On the other hand, if you just want the address stored in the pointer itself to
+be const, then you have to put const after the *:
+
+<div><div id="highlighter_519931" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp color1 bold">int</code> <code class="cpp plain">x;</code></div><div class="line number2 index1 alt1"><code class="cpp color1 bold">int</code> <code class="cpp plain">* </code><code class="cpp keyword bold">const</code> <code class="cpp plain">p_int = &amp;x;</code></div></div></td></tr></tbody></table></div></div>
+
+Personally, I find this syntax kind of ugly; but there's not any other
+obviously better way to do it.  The way to think about it is that "* const
+p_int" is a regular integer, and that the value stored in p_int itself cannot change--so you just
+can't change the address pointed to.  Notice, by the way, that this pointer had
+to be initialized when it was declared: since the pointer itself is const, we
+can't change what it points to later on!  Them's the rules. 
+
+<br><br> 
+Generally, the first type of pointer, where the data is immutable, is what I'll refer to as a "const pointer" (in part because it's the kind that comes up more often, so we should have a natural way of describing it).
+
+<h2>Const Functions</h2>
+
+The effects of declaring a variable to be const propagate throughout the
+program.  Once you have a const object, it cannot be assigned to a non-const
+reference or use functions that are known to be capable of changing the state
+of the object.  This is necessary to enforce the const-ness of the object, but
+it means you need a way to state that a function should not make changes to an
+object.  In non-object-oriented code, this is as easy as using const references
+as demonstrated above.
+
+<br><br>
+In C++, however, there's the issue of classes with methods.  If you have a
+const object, you don't want to call methods that can change the object, so you
+need a way of letting the compiler know which methods can be safely called.
+These methods are called "const functions", and are the only functions that can
+be called on a const object.  Note, by the way, that only member methods make
+sense as const methods.  Remember that in C++, every method of an object
+receives an implicit this pointer to the object; const methods effectively
+receive a const this pointer.
+
+<br><br>
+The way to declare that a function is safe for const objects is simply to mark
+it as const; the syntax for const functions is a little bit peculiar because there's only one place where you can really put the const: at the end of the function:
+
+<div><div id="highlighter_607056" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp plain">&lt;</code><code class="cpp keyword bold">return</code><code class="cpp plain">-value&gt; &lt;</code><code class="cpp keyword bold">class</code><code class="cpp plain">&gt;::&lt;member-function&gt;(&lt;args&gt;) </code><code class="cpp keyword bold">const</code></div><div class="line number2 index1 alt1"><code class="cpp plain">{</code></div><div class="line number3 index2 alt2"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp comments">// ...</code></div><div class="line number4 index3 alt1"><code class="cpp plain">}</code></div></div></td></tr></tbody></table></div></div>
+
+For instance,
+
+<div><div id="highlighter_514528" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp color1 bold">int</code> <code class="cpp plain">Loan::calcInterest() </code><code class="cpp keyword bold">const</code></div><div class="line number2 index1 alt1"><code class="cpp plain">{</code></div><div class="line number3 index2 alt2"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp keyword bold">return</code> <code class="cpp plain">loan_value * interest_rate; </code></div><div class="line number4 index3 alt1"><code class="cpp plain">}</code></div></div></td></tr></tbody></table></div></div>
+<br><br>
+Note that just because a function is declared const that doesn't prohibit non-const functions from using it; the rule is this:
+
+<ul>
+<li>Const functions can always be called
+</li>
+<li>Non-const functions can only be called by non-const objects
+</li>
+</ul>
+
+That makes sense: if you have a const function, all that means is that it
+guarantees it won't change the object.  So just because it is const doesn't
+mean that non-const objects can't use it.
+
+<br><br>
+
+As a matter of fact, const functions have a slightly stronger restriction than
+merely that they cannot modify the data.  They must make it so that they cannot
+be used in a way that would allow you to use them to modify const data.  This
+means that when const functions return references or pointers to members of the
+class, they must also be const.
+
+        <h3>Const Overloading</h3>
+
+In large part because const functions cannot return non-const references to an
+objects' data, there are many times where it might seem appropriate to have
+both const and non-const versions of a function.  For instance, if you are
+returning a reference to some member data (usually not a good thing to do, but
+there are exceptions), then you may want to have a non-const version of the
+function that returns a non-const reference:
+
+<div><div id="highlighter_525790" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp color1 bold">int</code><code class="cpp plain">&amp; myClass::getData()</code></div><div class="line number2 index1 alt1"><code class="cpp plain">{</code></div><div class="line number3 index2 alt2"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp keyword bold">return</code> <code class="cpp plain">data;</code></div><div class="line number4 index3 alt1"><code class="cpp plain">}</code></div></div></td></tr></tbody></table></div></div>
+
+On the other hand, you don't want to prevent someone using a const version of your object,
+
+<div><div id="highlighter_750187" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp plain">myClass constDataHolder;</code></div></div></td></tr></tbody></table></div></div>
+
+from getting the data.  You just want to prevent that person from changing it
+by returning a const reference.  But you probably don't want the name of the
+function to change just because you change whether the object is const or
+not--among other things, this would mean an awful lot of code might have to
+change just because you change how you declare a variable--going from a
+non-const to a const version of a variable would be a real headache.
+
+<br><br> 
+Fortunately, C++ allows you to overload based on the const-ness of a
+method.  So you can have both const and non-const methods, and the correct
+version will be chosen.  If you wish to return a non-const reference in some cases, you merely need to declare a second, const version of the method that returns a const method:
+
+<div><div id="highlighter_440066" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp comments">// called for const objects only since a non-const version also exists</code></div><div class="line number2 index1 alt1"><code class="cpp keyword bold">const</code> <code class="cpp color1 bold">int</code><code class="cpp plain">&amp; myData::getData() </code><code class="cpp keyword bold">const</code></div><div class="line number3 index2 alt2"><code class="cpp plain">{</code></div><div class="line number4 index3 alt1"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp keyword bold">return</code> <code class="cpp plain">data;</code></div><div class="line number5 index4 alt2"><code class="cpp plain">}</code></div></div></td></tr></tbody></table></div></div>
+
+
+<h2>Const iterators</h2>
+
+As we've already seen, in order to enforce const-ness, C++ requires that const
+functions return only const pointers and references.  Since iterators can also
+be used to modify the underlying collection, when an <a href="https://www.cprogramming.com/tutorial.html#stltutorial">STL</a> collection
+is declared const, then any iterators used over the collection must be const
+iterators.  They're just like normal iterators, except that they cannot be used
+to modify the underlying data.  (Since <a href="https://www.cprogramming.com/tutorial/stl/iterators.html">iterators</a> are
+a generalization of the idea of pointers, this makes sense.)
+
+<br><br> 
+Const iterators in the STL are simple enough: just append "const_" to the type of iterator you desire.  For instance, we could iterator over a vector as follows:
+
+<div><div id="highlighter_59285" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp plain">std::vector&lt;</code><code class="cpp color1 bold">int</code><code class="cpp plain">&gt; vec;</code></div><div class="line number2 index1 alt1"><code class="cpp plain">vec.push_back( 3 );</code></div><div class="line number3 index2 alt2"><code class="cpp plain">vec.push_back( 4 );</code></div><div class="line number4 index3 alt1"><code class="cpp plain">vec.push_back( 8 );</code></div><div class="line number5 index4 alt2">&nbsp;</div><div class="line number6 index5 alt1"><code class="cpp keyword bold">for</code> <code class="cpp plain">( std::vector&lt;</code><code class="cpp color1 bold">int</code><code class="cpp plain">&gt;::const_iterator itr = vec.begin(), end = vec.end(); </code></div><div class="line number7 index6 alt2"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp plain">itr != end;</code></div><div class="line number8 index7 alt1"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp plain">++itr )</code></div><div class="line number9 index8 alt2"><code class="cpp plain">{</code></div><div class="line number10 index9 alt1"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp comments">// just print out the values...</code></div><div class="line number11 index10 alt2"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp plain">std::cout&lt;&lt; *itr &lt;&lt;std::endl;</code></div><div class="line number12 index11 alt1"><code class="cpp plain">}</code></div></div></td></tr></tbody></table></div></div>
+
+Note that I used a const iterator to iterate over a non-const collection.  Why do that?  For the same reason that we normally use const: it prevents the possibility of silly programming mistakes ("oops, I meant to compare the two values, not assign them!") and it documents that we never intend to use the iterator to change the collection.
+
+<h2>Const cast</h2>
+
+Sometimes, you have a const variable and you really want to pass it into a
+function that you are certain won't modify it.  But that function doesn't
+declare its argument as const.  (This might happen, for instance, if a C
+library function like strlen were declared without using const.)  Fortunately,
+if you know that you are safe in passing a const variable into a function that
+doesn't explicitly indicate that it will not change the data, then you can use
+a const_cast in order to temporarily strip away the const-ness of the object.
+
+<br><br>
+Const casts look like regular <a href="https://www.cprogramming.com/tutorial/lesson11.html">typecasts in C++</a>,
+except that they can only be used for casting away constness (or volatile-ness)
+but not converting between types or casting down a class hierarchy.
+
+<div><div id="highlighter_726956" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp comments">// a bad version of strlen that doesn't declare its argument const</code></div><div class="line number2 index1 alt1"><code class="cpp color1 bold">int</code> <code class="cpp plain">bad_strlen (</code><code class="cpp color1 bold">char</code> <code class="cpp plain">*x)</code></div><div class="line number3 index2 alt2"><code class="cpp plain">{</code></div><div class="line number4 index3 alt1"><code class="cpp spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="cpp functions bold">strlen</code><code class="cpp plain">( x );</code></div><div class="line number5 index4 alt2"><code class="cpp plain">}</code></div><div class="line number6 index5 alt1">&nbsp;</div><div class="line number7 index6 alt2"><code class="cpp comments">// note that the extra const is actually implicit in this declaration since</code></div><div class="line number8 index7 alt1"><code class="cpp comments">// string literals are constant</code></div><div class="line number9 index8 alt2"><code class="cpp keyword bold">const</code> <code class="cpp color1 bold">char</code> <code class="cpp plain">*x = </code><code class="cpp string">"abc"</code><code class="cpp plain">;</code></div><div class="line number10 index9 alt1">&nbsp;</div><div class="line number11 index10 alt2"><code class="cpp comments">// cast away const-ness for our strlen function </code></div><div class="line number12 index11 alt1"><code class="cpp plain">bad_strlen( </code><code class="cpp keyword bold">const_cast</code><code class="cpp plain">&lt;</code><code class="cpp color1 bold">char</code> <code class="cpp plain">*&gt;(x) );</code></div></div></td></tr></tbody></table></div></div>
+
+Note that you can also use const_cast to go the other way--to add
+const-ness--if you really wanted to.
+
+
+<h2>Efficiency Gains?  A note about Conceptual vs. Bitwise Constness</h2>
+
+One common justification for const correctness is based on the misconception
+that constness can be used as the basis for optimizations.  Unfortunately, this
+is generally not the case--even if a variable is declared const, it will not
+necessarily remain unchanged.  First, it's possible to cast away constness
+using a const_cast.  It might seem like a silly thing to do when you declare a parameter to a function as const, but it's possible.  The second issue is that in classes, even const classes can be changed because of the mutable keyword.
+
+<h3>Mutable Data in Const Classes</h3>
+
+First, why would you ever want to have the ability to change data in a class
+that's declared const?  This gets at the heart of what constness means, and
+there are two ways of thinking about it.  One idea is that of "bitwise
+constness", which basically means that a const class should have exactly the
+same representation in memory at all times.  Unfortunately (or fortunately),
+this is not the paradigm used by the C++ standard; instead, C++ uses
+"conceptual constness".  Conceptual constness refers to the idea that the
+output of the const class should always be the same.  This means that the
+underlying data might change as long as the fundamental behavior remains the
+same.  (In essence, the "concept" is constant, but the representation may
+vary.)
+
+<h4>Why have conceptual constness?</h4>
+
+Why would you ever prefer conceptual constness to bitwise constness?  One
+reason is efficiency: for instance, if your class has a function that relies on
+a value that takes a long time to calculate, it might be more efficient to
+calculate the value once and then store it for later requests.  This won't
+change the behavior of the function--it will always return the same value.  It
+will, however, change the representation of the class because it must have some place to cache the value.
+
+<h4>C++ Support for Conceptual Constness</h4>
+
+C++ provides for conceptual constness by using the mutable keyword: when
+declaring a class, you may specify that some of the fields are mutable:
+
+<div><div id="highlighter_198476" class="syntaxhighlighter  cpp"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="cpp keyword bold">mutable</code> <code class="cpp color1 bold">int</code> <code class="cpp plain">my_cached_result;</code></div></div></td></tr></tbody></table></div></div>
+
+this will allow const functions to change the field regardless of whether or
+not the object itself was declared as const. 
+
+<h3>Other Ways of Achieving The Same Gains</h3>
+
+If you were planning on using const to increase efficiency, think about what
+this would really mean--it would be akin to using the original data without
+making a copy of it.  But if you wanted to do that, the simplest approach would
+just be to use references or pointers (preferably const references or
+pointers).  This gives you a real efficiency gain without relying on compiler
+optimizations that probably aren't there.
+
+<h3>Dangers of Too-much Constness</h3>
+
+Beware of exploiting const too much; for instance, just because you can return
+a const reference doesn't mean that you should return a const reference.  The
+most important example is that if you have local data in a function, you
+really ought not return a reference to it at all (unless it is <a href="https://www.cprogramming.com/tutorial/statickeyword.html">static</a>) since it will be a reference to memory that is no longer valid.
+
+<br><br>
+Another time when returning a const reference may not a good idea is when you
+are returning a reference to member data of an object.  Although returning a
+const reference prevents anyone from changing the data by using it, it means
+that you have to have persistent data to back the reference--it has to actually
+be a field of the object and not temporary data created in the function.   Once
+you make the reference part of the interface to the class, then, you fix the
+implementation details.  This can be frustrating if you later wish to change
+your class's private data so the result of the function is computed when the
+function is invoked rather than actually be stored in the class at all times.
+
+<h2>Summary</h2> 
+
+Don't look at const as a means of gaining efficiency so much as a way to
+document your code and ensure that some things cannot change.  Remember that
+const-ness propagates throughout your program, so you must use const functions,
+const references, and const iterators to ensure that it would never be possible
+to modify data that was declared const.
+
+<!-- removed chitika -->
+ 
+<br><br><i>
+Parts of this article were based on material from <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/020163371X&amp;link_code=as2&amp;camp=1789&amp;tag=lynnallain&amp;creative=9325">More
+Effective C++: 35 New Ways to Improve Your Programs and Designs</a><img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/ir" width="1" height="1" border="0" alt="" style="border:none !important;
+margin:0px !important;"> by Scott Meyers and <a href="http://www.amazon.com/exec/obidos/redirect?path=ASIN/0201760428&amp;link_code=as2&amp;camp=1789&amp;tag=lynnallain&amp;creative=9325">Exceptional
+C++ Style : 40 New Engineering Puzzles, Programming Problems, and
+Solutions</a><img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/ir(1)" width="1" height="1" border="0" alt="" style="border:none !important;
+margin:0px !important;"> by Herb Sutter.</i>
+            
+
+
+<div id="footer" class="noprint">
+
+
+
+<div style="clear: both; margin-top: 10px;"></div>
+
+
+<script>
+function abTest(element_name_sets) {
+    var element_to_show;
+    var element_count = element_name_sets.length;
+    var i;
+    for ( i = 0; i < element_count; i++ )
+    {
+        if ( Math.random() <= 1 / ( element_count - i ) ) {
+                break;
+        }
+    }
+    var element_name_set = element_name_sets[ i ];
+    for ( i = 0; i < element_name_set.length; i++ )
+    {
+        element_to_show = document.getElementById( element_name_set[ i ] );
+        element_to_show.style.display = "block";
+    }
+}
+//abTest( [["old-ad", "new-ad"]] );
+</script>
+
+
+<div class="popularpages">
+<b>Popular pages</b>
+<ul>
+ <li><a href="https://www.cprogramming.com/begin.html">How to learn C++ or C</a> 
+</li><li><a href="https://www.cprogramming.com/tutorial/c-tutorial.html">C Tutorial</a>
+</li><li><a href="https://www.cprogramming.com/tutorial/c++-tutorial.html">C++ Tutorial</a>
+</li><li><a href="https://www.cprogramming.com/how_to_learn_to_program.html">5 ways you can learn to program faster</a> 
+</li><li><a href="https://www.cprogramming.com/beginner_programming_mistakes.html">The 5 Most Common Problems New Programmers Face</a>
+</li><li><a href="https://www.cprogramming.com/code_blocks/">How to set up a compiler</a>
+</li><li><a href="https://www.cprogramming.com/tutorial/game_programming/same_game_part1.html">How to make a game in 48 hours</a>
+</li></ul>
+</div>
+
+
+</div>
+
+<center>
+ 
+
+
+<div class="footer-links" style="padding:10px">
+<a href="https://www.cprogramming.com/advertising.html">Advertising</a> | <a href="https://www.cprogramming.com/privacy.html">Privacy policy</a> |
+<a href="https://www.cprogramming.com/use.html">Copyright © 2019 Cprogramming.com</a> | <a href="mailto:webmaster@cprogramming.com">Contact</a> | <a href="https://www.cprogramming.com/about.html">About</a>
+</div>
+</center></div>
+
+</td>
+    	
+
+
+<td class="content noprint rightcolumn" valign="top" rowspan="1">
+<div class="content2"><br><div class="verticalad">
+
+
+
+<script async="" src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/f(1).txt"></script>
+<!-- skyscraper -->
+<ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-2560316224908115" data-ad-slot="9422137563"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><br>
+
+<style type="text/css">
+.sidebar-box { width: 150px; margin-bottom:5px; }
+</style>
+    <div id="side-images">
+        <div style="padding:5px;margin-top:5px">
+            <div style="margin-bottom: 5px">
+                <b>Popular pages</b>
+            </div>
+            <div>
+                
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/tutorial/c++-tutorial.html">
+                    <img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/c++-img.png" border="0" height="75" width="75" alt="C++ tutorial">
+                    <br>
+                    C++ Tutorial</a>
+                </div>
+                
+                
+                <!--http://www.flickr.com/photos/baslow/5620208/sizes/o/in/photostream/ -->
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/tutorial/c-tutorial.html">
+                    <img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/5620208_bff9c514e6_s.jpg" border="0" height="75" width="75" alt="C tutorial">
+                    <br>
+                    C Tutorial
+                    </a>
+                </div>
+                
+
+                
+                <!--http://www.flickr.com/photos/29233640@N07/2855530649/sizes/sq/in/photostream/-->
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/begin.html">
+                    <img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/2855530649_905f7862fd_s.jpg" border="0" height="75" width="75" alt="Get started">
+                    <br>
+                    Exactly how to get started with C++ (or C) today</a>
+                </div>
+                
+
+                
+                <!--http://www.flickr.com/photos/mikecogh/6505012533/sizes/sq/in/photostream/-->
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/how_to_learn_to_program.html">
+                    <img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/6505012533_55c83fdfa0_s.jpg" border="0" height="75" width="75" alt="Learn to program">
+                    <br>
+                    5 ways you can learn to program faster</a>
+                </div>
+                
+
+
+                
+                <!--http://www.flickr.com/photos/giopuo/3441263816/sizes/sq/in/photostream/-->
+                <div class="sidebar-box">
+                    <a href="https://www.cprogramming.com/beginner_programming_mistakes.html">
+                    <img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/3441263816_95f132a884_s.jpg" border="0" height="75" width="75" alt="Problems new programmers face">
+                    <br>
+                    The 5 Most Common Problems New Programmers Face</a>
+                </div>
+                
+
+                
+                <div class="sidebar-box">
+                   <a href="https://www.cprogramming.com/tutorial/game_programming/same_game_part1.html">
+                    <img src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/same_game_small.png" border="0" height="42" width="42" alt="Learn to make a game">
+                    <br>
+                   How to make a game in 48 hours</a>
+                </div>
+                
+
+            </div>
+        </div>
+        <div style="display:block">
+            <a href="https://www.cprogramming.com/image_credits.html">Image credits</a>
+        </div>
+    </div>
+</div>
+</td>  	
+
+</tr>
+</tbody></table>
+
+
+
+
+
+<script type="text/javascript" src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/shCore.js"></script>
+<script type="text/javascript" src="./Const Correctness - C++ Tutorials - Cprogramming.com_files/shBrushCpp.js"></script>
+
+<script type="text/javascript">
+         SyntaxHighlighter.all();
+</script>
+
+
+
+</body></html>

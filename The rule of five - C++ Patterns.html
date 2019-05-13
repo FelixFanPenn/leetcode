@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://cpppatterns.com/patterns/rule-of-five.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>The rule of five - C++ Patterns</title>
+    
+    <meta name="description" content="Safely and efficiently implement RAII to encapsulate the
+management of dynamically allocated resources.
+
+">
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <link rel="canonical" href="https://cpppatterns.com/patterns/rule-of-five.html">
+    <link rel="icon" sizes="16x16" type="image/vnd.microsoft.icon" href="https://cpppatterns.com/images/icon-16.ico">
+    <link rel="icon" sizes="32x32" type="image/vnd.microsoft.icon" href="https://cpppatterns.com/images/icon-32.ico">
+    <link href="./The rule of five - C++ Patterns_files/css" rel="stylesheet" type="text/css">
+    <link href="./The rule of five - C++ Patterns_files/screen.css" rel="stylesheet" type="text/css">
+
+    <script src="./The rule of five - C++ Patterns_files/sdk.js" async="" crossorigin="anonymous"></script><script src="./The rule of five - C++ Patterns_files/cb=gapi.loaded_1" async=""></script><script src="./The rule of five - C++ Patterns_files/cb=gapi(1).loaded_0" async=""></script><script id="facebook-jssdk" src="./The rule of five - C++ Patterns_files/sdk(1).js"></script><script async="" src="./The rule of five - C++ Patterns_files/analytics.js"></script><script id="twitter-wjs" src="./The rule of five - C++ Patterns_files/widgets.js"></script><script async="" src="./The rule of five - C++ Patterns_files/f.txt"></script>
+    <script async="" defer="" src="./The rule of five - C++ Patterns_files/platform.js" gapi_processed="true"></script>
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@sftrabbit">
+    <meta property="og:title" content="The rule of five - C++ Patterns">
+    <meta property="og:site_name" content="C++ Patterns">
+    <meta property="og:url" content="https://cpppatterns.com/patterns/rule-of-five.html">
+    <meta property="og:description" content="Safely and efficiently implement RAII to encapsulate the
+management of dynamically allocated resources.
+
+">
+    <meta property="fb:app_id" content="676162015844286">
+  <script type="text/javascript" async="" src="./The rule of five - C++ Patterns_files/embed.js"></script><script charset="utf-8" src="./The rule of five - C++ Patterns_files/button.dd024c345fc26f7c7a8d9938b67e5d3d.js"></script><link rel="preload" as="style" href="https://c.disquscdn.com/next/embed/styles/lounge.694ea7181ea49f1ce306dfc00c532f53.css"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/common.bundle.2b6bb3725200b8d992a8cb9c288952d3.js"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/lounge.bundle.e04d6946f2fad54035486025e9a4979a.js"><link rel="preload" as="script" href="https://disqus.com/next/config.js"><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_dialog_advanced{border-radius:8px;padding:10px}.fb_dialog_content{background:#fff;color:#373737}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{left:5px;right:auto;top:5px}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{height:100%;left:0;margin:0;overflow:visible;position:absolute;top:-10000px;transform:none;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{background:none;height:auto;min-height:initial;min-width:initial;width:auto}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{clear:both;color:#fff;display:block;font-size:18px;padding-top:20px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .4);bottom:0;left:0;min-height:100%;position:absolute;right:0;top:0;width:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:sticky;top:0}.fb_dialog_content .dialog_header{background:linear-gradient(from(#738aba), to(#2c4987));border-bottom:1px solid;border-color:#1d3c78;box-shadow:white 0 1px 1px -1px inset;color:#fff;font:bold 14px Helvetica, sans-serif;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:linear-gradient(from(#4267B2), to(#2a4887));background-clip:padding-box;border:1px solid #29487d;border-radius:3px;display:inline-block;line-height:18px;margin-top:3px;max-width:85px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{background:none;border:none;color:#fff;font:bold 12px Helvetica, sans-serif;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #4a4a4a;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f5f6f7;border:1px solid #4a4a4a;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-position:50% 50%;background-repeat:no-repeat;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}</style><script src="./The rule of five - C++ Patterns_files/alfalfa_min.d078e4f2a4721192a99e02601a767617.js" async="" charset="UTF-8"></script></head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="row">
+          <div class="column-1">
+            <h1><a href="https://cpppatterns.com/"><span>C++</span>Patterns</a></h1>
+          </div>
+
+          <div class="column-1 offset-2 social flow-hide">
+
+            <a href="https://github.com/sftrabbit/CppPatterns-Patterns" title="Contribute on GitHub">
+              <svg viewBox="0 -50 1100 1100" preserveAspectRatio="xMidYMid meet" fit=""><path d="M512 0C229.252 0 0 229.25199999999995 0 512c0 226.251 146.688 418.126 350.155 485.813 25.593 4.686 34.937-11.125 34.937-24.626 0-12.188-0.469-52.562-0.718-95.314-128.708 23.46-161.707-31.541-172.469-60.373-5.525-14.809-30.407-60.249-52.398-72.263-17.988-9.828-43.26-33.237-0.917-33.735 40.434-0.476 69.348 37.308 78.471 52.75 45.938 77.749 119.876 55.627 148.999 42.5 4.654-32.999 17.902-55.627 32.501-68.373-113.657-12.939-233.22-56.875-233.22-253.063 0-55.94 19.968-101.561 52.658-137.404-5.22-12.999-22.844-65.095 5.063-135.563 0 0 42.937-13.749 140.811 52.501 40.811-11.406 84.594-17.031 128.124-17.22 43.499 0.188 87.314 5.874 128.188 17.28 97.689-66.311 140.686-52.501 140.686-52.501 28 70.532 10.375 122.564 5.124 135.499 32.811 35.844 52.626 81.468 52.626 137.404 0 196.686-119.751 240-233.813 252.686 18.439 15.876 34.748 47.001 34.748 94.748 0 68.437-0.686 123.627-0.686 140.501 0 13.625 9.312 29.561 35.25 24.562C877.436 929.998 1024 738.126 1024 512 1024 229.25199999999995 794.748 0 512 0z"></path></svg>
+            </a>
+            <a href="https://twitter.com/cpppatterns" title="Follow @cpppatterns on Twitter">
+              <svg viewBox="0 -19 175 175" preserveAspectRatio="xMidYMid meet" fit=""><g transform="translate(-282.32053,-396.30734)"><path d="m 453.82593,412.80619 c -6.3097,2.79897 -13.09189,4.68982 -20.20852,5.54049 7.26413,-4.35454 12.84406,-11.24992 15.47067,-19.46675 -6.79934,4.03295 -14.3293,6.96055 -22.34461,8.53841 -6.41775,-6.83879 -15.56243,-11.111 -25.68298,-11.111 -19.43159,0 -35.18696,15.75365 -35.18696,35.18525 0,2.75781 0.31128,5.44359 0.91155,8.01875 -29.24344,-1.46723 -55.16995,-15.47582 -72.52461,-36.76396 -3.02879,5.19662 -4.76443,11.24048 -4.76443,17.6891 0,12.20777 6.21194,22.97747 15.65332,29.28716 -5.76773,-0.18265 -11.19331,-1.76565 -15.93716,-4.40083 -0.004,0.14663 -0.004,0.29412 -0.004,0.44248 0,17.04767 12.12889,31.26806 28.22555,34.50266 -2.95247,0.80436 -6.06101,1.23398 -9.26989,1.23398 -2.2673,0 -4.47114,-0.22124 -6.62011,-0.63114 4.47801,13.97857 17.47214,24.15143 32.86992,24.43441 -12.04227,9.43796 -27.21366,15.06335 -43.69965,15.06335 -2.84014,0 -5.64082,-0.16722 -8.39349,-0.49223 15.57186,9.98421 34.06703,15.8094 53.93768,15.8094 64.72024,0 100.11301,-53.61524 100.11301,-100.11387 0,-1.52554 -0.0343,-3.04251 -0.10204,-4.55261 6.87394,-4.95995 12.83891,-11.15646 17.55618,-18.21305 z"></path></g></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <script>
+var selected = false;
+
+function apply_to_lines(lineRefElement, callback) {
+  var lineNumStart = parseInt(lineRefElement.dataset.line);
+  var lineNumEnd = lineNumStart;
+  if (lineRefElement.dataset.lineEnd) {
+    var lineNumEnd = parseInt(lineRefElement.dataset.lineEnd);
+  }
+  for (var i = lineNumStart; i <= lineNumEnd; i++) {
+    var lineElement = document.getElementById('line'+i);
+    callback(lineElement);
+  }
+}
+
+function clear_all() {
+  var i = 1;
+  var lineElement;
+  while (lineElement = document.getElementById('line'+i)) {
+    lineElement.style.backgroundColor = "transparent";
+    i++;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.onclick = function(event) {
+    clear_all();
+  }
+
+  var lineRefElements = document.getElementsByClassName('lineref');
+  for (var i = 0; i < lineRefElements.length; i++) {
+    lineRefElements[i].onclick = function(event) {
+      clear_all();
+      apply_to_lines(event.target, function(lineElement) {
+        lineElement.style.backgroundColor = "rgb(76, 69, 41)";
+      });
+      event.stopPropagation();
+    }
+    lineRefElements[i].onmouseover = function(event) {
+      apply_to_lines(event.target, function(lineElement) {
+        if (lineElement.style.backgroundColor != "rgb(76, 69, 41)") {
+          lineElement.style.backgroundColor = "rgb(69, 69, 69)";
+        }
+      });
+      event.stopPropagation();
+    }
+    lineRefElements[i].onmouseout = function(event) {
+      apply_to_lines(event.target, function(lineElement) {
+        if (lineElement.style.backgroundColor != "rgb(76, 69, 41)") {
+          lineElement.style.backgroundColor = "transparent";
+        }
+      });
+      event.stopPropagation();
+    }
+  }
+}, false);
+      </script>
+
+      <section class="sample">
+        <div class="row">
+          <div class="column-4">
+            <a href="https://cpppatterns.com/">← Patterns</a>
+            <h1>The rule of five</h1>
+          </div>
+        </div>
+        <div class="row variation ">
+          <div class="column-2">
+            <table class="codeblock"><tbody><tr><td class="linenums"><code><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span><span>32</span><span>33</span><span>34</span><span>35</span><span>36</span><span>37</span><span>38</span><span>39</span><span>40</span><span>41</span><span>42</span><span>43</span><span>44</span><span>45</span><span>46</span><span>47</span><span>48</span><span>49</span><span>50</span><span>51</span><span>52</span><span>53</span></code></td><td class="code highlight"><code class="cpp"><span class="codeline" id="line1"><span></span><span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span></span>
+<span class="codeline" id="line2"></span>
+<span class="codeline" id="line3"><span class="k">class</span> <span class="nc">resource</span> <span class="p">{</span></span>
+<span class="codeline" id="line4">  <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span></span>
+<span class="codeline" id="line5"><span class="p">};</span></span>
+<span class="codeline" id="line6"></span>
+<span class="codeline" id="line7"><span class="k">class</span> <span class="nc">foo</span></span>
+<span class="codeline" id="line8"><span class="p">{</span></span>
+<span class="codeline" id="line9">  <span class="k">public</span><span class="o">:</span></span>
+<span class="codeline" id="line10">    <span class="n">foo</span><span class="p">()</span></span>
+<span class="codeline" id="line11">      <span class="o">:</span> <span class="n">p</span><span class="p">{</span><span class="k">new</span> <span class="n">resource</span><span class="p">{}}</span></span>
+<span class="codeline" id="line12">    <span class="p">{</span> <span class="p">}</span></span>
+<span class="codeline" id="line13"></span>
+<span class="codeline" id="line14">    <span class="n">foo</span><span class="p">(</span><span class="k">const</span> <span class="n">foo</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span></span>
+<span class="codeline" id="line15">      <span class="o">:</span> <span class="n">p</span><span class="p">{</span><span class="k">new</span> <span class="n">resource</span><span class="p">{</span><span class="o">*</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">p</span><span class="p">)}}</span></span>
+<span class="codeline" id="line16">    <span class="p">{</span> <span class="p">}</span></span>
+<span class="codeline" id="line17"></span>
+<span class="codeline" id="line18">    <span class="n">foo</span><span class="p">(</span><span class="n">foo</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span></span>
+<span class="codeline" id="line19">      <span class="o">:</span> <span class="n">p</span><span class="p">{</span><span class="n">other</span><span class="p">.</span><span class="n">p</span><span class="p">}</span></span>
+<span class="codeline" id="line20">    <span class="p">{</span></span>
+<span class="codeline" id="line21">      <span class="n">other</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span></span>
+<span class="codeline" id="line22">    <span class="p">}</span></span>
+<span class="codeline" id="line23"></span>
+<span class="codeline" id="line24">    <span class="n">foo</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">foo</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span></span>
+<span class="codeline" id="line25">    <span class="p">{</span></span>
+<span class="codeline" id="line26">      <span class="k">if</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">other</span> <span class="o">!=</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span></span>
+<span class="codeline" id="line27">        <span class="k">delete</span> <span class="n">p</span><span class="p">;</span></span>
+<span class="codeline" id="line28">        <span class="n">p</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span></span>
+<span class="codeline" id="line29">        <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="n">resource</span><span class="p">{</span><span class="o">*</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">p</span><span class="p">)};</span></span>
+<span class="codeline" id="line30">      <span class="p">}</span></span>
+<span class="codeline" id="line31"></span>
+<span class="codeline" id="line32">      <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span></span>
+<span class="codeline" id="line33">    <span class="p">}</span></span>
+<span class="codeline" id="line34"></span>
+<span class="codeline" id="line35">    <span class="n">foo</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">foo</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span></span>
+<span class="codeline" id="line36">    <span class="p">{</span></span>
+<span class="codeline" id="line37">      <span class="k">if</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">other</span> <span class="o">!=</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span></span>
+<span class="codeline" id="line38">        <span class="k">delete</span> <span class="n">p</span><span class="p">;</span></span>
+<span class="codeline" id="line39">        <span class="n">p</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">p</span><span class="p">;</span></span>
+<span class="codeline" id="line40">        <span class="n">other</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span></span>
+<span class="codeline" id="line41">      <span class="p">}</span></span>
+<span class="codeline" id="line42"></span>
+<span class="codeline" id="line43">      <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span></span>
+<span class="codeline" id="line44">    <span class="p">}</span></span>
+<span class="codeline" id="line45"></span>
+<span class="codeline" id="line46">    <span class="o">~</span><span class="n">foo</span><span class="p">()</span></span>
+<span class="codeline" id="line47">    <span class="p">{</span></span>
+<span class="codeline" id="line48">      <span class="k">delete</span> <span class="n">p</span><span class="p">;</span></span>
+<span class="codeline" id="line49">    <span class="p">}</span></span>
+<span class="codeline" id="line50"></span>
+<span class="codeline" id="line51">  <span class="k">private</span><span class="o">:</span></span>
+<span class="codeline" id="line52">    <span class="n">resource</span><span class="o">*</span> <span class="n">p</span><span class="p">;</span></span>
+<span class="codeline" id="line53"><span class="p">};</span></span></code></td></tr></tbody></table>
+            <p class="license">This pattern is licensed under the <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0 Public Domain Dedication</a>.</p>
+          </div>
+          <div class="column-2">
+            <div class="min-spec">
+              Requires
+              <span class="tag c++11"><a href="https://cpppatterns.com/#/search/c++11">c++11</a></span>
+              or newer.
+  
+            </div>
+            <h2>Intent</h2>
+            <p>Safely and efficiently implement RAII to encapsulate the
+management of dynamically allocated resources.</p>
+
+
+            <h2>Description</h2>
+            <p>The rule of five is a modern expansion of the rule of three.
+Firstly, the <em>rule of three</em> specifies that if a class implements
+any of the following functions, it should implement all of them:</p>
+
+<ul>
+  <li>copy constructor</li>
+  <li>copy assignment operator</li>
+  <li>destructor</li>
+</ul>
+
+<p>These functions are usually required only when a class is manually
+managing a dynamically allocated resource, and so all of them must
+be implemented to manage the resource safely.</p>
+
+<p>In addition, the <em>rule of five</em> identifies that it usually
+appropriate to also provide the following functions to allow for
+optimized copies from temporary objects:</p>
+
+<ul>
+  <li>move constructor</li>
+  <li>move assignment operator</li>
+</ul>
+
+<p>The class <code>foo</code>, on <a href="https://cpppatterns.com/patterns/rule-of-five.html#line7" class="lineref" data-line="7" data-line-end="53">lines 7–53</a>, dynamically allocates a <code>resource</code>
+object in its constructor. The implementations of <code>foo</code>’s
+copy constructor (<a href="https://cpppatterns.com/patterns/rule-of-five.html#line14" class="lineref" data-line="14" data-line-end="16">lines 14–16</a>), copy assignment operator (<a href="https://cpppatterns.com/patterns/rule-of-five.html#line24" class="lineref" data-line="24" data-line-end="33">lines 24–33</a>),
+and destructor (<a href="https://cpppatterns.com/patterns/rule-of-five.html#line46" class="lineref" data-line="46" data-line-end="49">lines 46–49</a>) ensure that the lifetime of this
+resource is safely managed by <code>foo</code> object that contains it,
+even in the event of an exception.</p>
+
+<p>We have also implemented a move constructor (<a href="https://cpppatterns.com/patterns/rule-of-five.html#line18" class="lineref" data-line="18" data-line-end="22">lines 18–22</a>) and
+move assignment operator (<a href="https://cpppatterns.com/patterns/rule-of-five.html#line35" class="lineref" data-line="35" data-line-end="44">lines 35–44</a>) that provide optimized copies
+from temporary objects. Rather than copy the resource, they
+take the resource from the original <code>foo</code> and set its
+internal pointer to <code>nullptr</code>, effectively stealing the resource.</p>
+
+<p>Notice that the assignment operators (<a href="https://cpppatterns.com/patterns/rule-of-five.html#line24" class="lineref" data-line="24" data-line-end="44">lines 24–44</a>) check for
+self-assignment to ensure safe management of the resource.</p>
+
+<p><strong>Note</strong>: The copy and move assignment operators in the example code
+provide only basic exception safety. They may alternatively be
+implemented with <a href="https://cpppatterns.com/common-tasks/copy-and-swap.html">the copy-and-swap
+idiom</a>, which provides strong
+exception safety at an optimisation cost.</p>
+
+<p><strong>Note</strong>: We can typically avoid manual memory management and
+having to write the copy constructor, assignment operator, and
+destructor entirely by using the
+<a href="https://cpppatterns.com/common-tasks/rule-of-zero.html">rule of zero</a></p>
+
+            <div class="subrow">
+              <div class="column-1">
+                <h2>Contributors</h2>
+                <ul class="contributors">
+  
+                  <li><a title="Joseph Mansfield" href="https://github.com/sftrabbit"><img src="./The rule of five - C++ Patterns_files/32490" alt="Joseph Mansfield"></a></li>
+  
+                </ul>
+                <h2>Last Updated</h2>
+                <p>10 December 2017</p>
+                <h2>Source</h2>
+                <p><a href="https://github.com/sftrabbit/CppPatterns-Patterns/tree/master/common-tasks/classes/rule-of-five.cpp">Fork this pattern on GitHub</a></p>
+              </div>
+              <div class="column-1">
+                <h2>Share</h2>
+                <p></p><div class="fb-like fb_iframe_widget" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=676162015844286&amp;container_width=250&amp;href=https%3A%2F%2Fcpppatterns.com%2Fpatterns%2Frule-of-five.html&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;share=true&amp;show_faces=false"><span style="vertical-align: bottom; width: 106px; height: 20px;"><iframe name="f3388f0007ad7e8" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like Facebook Social Plugin" src="./The rule of five - C++ Patterns_files/like.html" style="border: none; visibility: visible; width: 106px; height: 20px;" class=""></iframe></span></div><p></p>
+                <p><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 61px; height: 20px;" title="Twitter Tweet Button" src="./The rule of five - C++ Patterns_files/tweet_button.2e9f365dae390394eb8d923cba8c5b11.en.html"></iframe></p>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                <div id="___plusone_0" style="position: absolute; width: 450px; left: -10000px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position:absolute;top:-10000px;width:450px;margin:0px;border-style:none" tabindex="0" vspace="0" width="100%" id="I0_1556044287774" name="I0_1556044287774" src="./The rule of five - C++ Patterns_files/fastbutton.html" data-gapiattached="true"></iframe></div><div class="g-plusone" data-size="medium" data-gapiscan="true" data-onload="true" data-gapistub="true"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="column-4">
+            <div id="disqus_thread"><iframe id="dsq-app1257" name="dsq-app1257" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" sandbox="allow-forms allow-popups allow-same-origin allow-scripts" width="100%" src="./The rule of five - C++ Patterns_files/saved_resource.html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 0px !important;"></iframe><iframe id="dsq-app1254" name="dsq-app1254" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./The rule of five - C++ Patterns_files/saved_resource(1).html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 1861px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe></div>
+            <script type="text/javascript">
+var disqus_shortname = 'cppsamples';
+
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+            </script>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6789411983750873" data-ad-slot="5581833133" data-ad-format="auto"></ins>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+    <footer class="container">
+      <div class="row">
+        <div class="column-2">
+          <p>Feel like <b>contributing</b>? This website is generated from a git repository. If you have something to add or have noticed a mistake, please <a href="https://github.com/sftrabbit/CppPatterns-Patterns">fork the project on GitHub</a>.</p>
+          <p></p><div class="fb-like fb_iframe_widget" data-href="https://cpppatterns.com/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=676162015844286&amp;container_width=545&amp;href=https%3A%2F%2Fcpppatterns.com%2F&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;share=true&amp;show_faces=false"><span style="vertical-align: bottom; width: 112px; height: 20px;"><iframe name="f3de101d16122c4" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like Facebook Social Plugin" src="./The rule of five - C++ Patterns_files/like(1).html" style="border: none; visibility: visible; width: 112px; height: 20px;" class=""></iframe></span></div><p></p>
+          <p><iframe id="twitter-widget-1" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" style="position: static; visibility: visible; width: 61px; height: 20px;" title="Twitter Tweet Button" src="./The rule of five - C++ Patterns_files/tweet_button.2e9f365dae390394eb8d923cba8c5b11.en(1).html" data-url="https://cpppatterns.com/"></iframe></p>
+          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+          <div id="___plus_0" style="position: absolute; width: 450px; left: -10000px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position:absolute;top:-10000px;width:450px;margin:0px;border-style:none" tabindex="0" vspace="0" width="100%" id="I1_1556044287781" name="I1_1556044287781" src="./The rule of five - C++ Patterns_files/sharebutton.html" data-gapiattached="true"></iframe></div><div class="g-plus" data-action="share" data-annotation="bubble" data-href="https://cpppatterns.com/" data-gapiscan="true" data-onload="true" data-gapistub="true"></div>
+        </div>
+        <div class="column-1 offset-1 about">
+          <img src="./The rule of five - C++ Patterns_files/logo.svg">
+          <p>C++ Patterns created by <a href="http://josephmansfield.uk/">Joseph Mansfield</a></p>
+        </div>
+      </div>
+    </footer>
+    <script>
+adsbygoogle = window.adsbygoogle || [];
+adsbygoogle.push({});
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-17335804-5', 'auto');
+ga('send', 'pageview');
+
+window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '676162015844286',
+    xfbml      : true,
+    version    : 'v2.3'
+  });
+};
+
+(function(d, s, id){
+   var js, fjs = d.getElementsByTagName(s)[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement(s); js.id = id;
+   js.src = "//connect.facebook.net/en_US/sdk.js";
+   fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+    </script>
+  
+
+<iframe scrolling="no" frameborder="0" allowtransparency="true" src="./The rule of five - C++ Patterns_files/widget_iframe.2e9f365dae390394eb8d923cba8c5b11.html" title="Twitter settings iframe" style="display: none;"></iframe><iframe name="oauth2relay419956178" id="oauth2relay419956178" src="./The rule of five - C++ Patterns_files/postmessageRelay.html" tabindex="-1" aria-hidden="true" style="width: 1px; height: 1px; position: absolute; top: -100px;"></iframe><iframe style="display: none;" src="./The rule of five - C++ Patterns_files/saved_resource(2).html"></iframe><div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; width: 0px; height: 0px;"><div><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./The rule of five - C++ Patterns_files/d_vbiawPdxB.html" style="border: none;"></iframe></div><div></div></div></div><iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" style="position: absolute; visibility: hidden; display: none; width: 0px; height: 0px; padding: 0px; border: none;" title="Twitter analytics iframe" src="./The rule of five - C++ Patterns_files/saved_resource(3).html"></iframe></body></html>

@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://arne-mertz.de/2016/07/const-correctness/ -->
+<html lang="en-US" prefix="og: http://ogp.me/ns#"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Const Correctness - Simplify C++!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<meta name="description" content="Writing const correct code is about more than using `const` in a few places and letting the compiler figure out if it makes sense.">
+<link rel="canonical" href="https://arne-mertz.de/2016/07/const-correctness/">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Const Correctness - Simplify C++!">
+<meta property="og:description" content="Writing const correct code is about more than using `const` in a few places and letting the compiler figure out if it makes sense.">
+<meta property="og:url" content="https://arne-mertz.de/2016/07/const-correctness/">
+<meta property="og:site_name" content="Simplify C++!">
+<meta property="article:section" content="C++">
+<meta property="article:published_time" content="2016-07-27T15:00:29+00:00">
+<meta property="article:modified_time" content="2016-12-27T09:30:31+00:00">
+<meta property="og:updated_time" content="2016-12-27T09:30:31+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:description" content="Writing const correct code is about more than using `const` in a few places and letting the compiler figure out if it makes sense.">
+<meta name="twitter:title" content="Const Correctness - Simplify C++!">
+<meta name="twitter:site" content="@arne_mertz">
+<meta name="twitter:creator" content="@arne_mertz">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","url":"https://arne-mertz.de/","sameAs":["https://de.linkedin.com/in/arne-mertz-b87311b0","https://twitter.com/arne_mertz"],"@id":"#person","name":"Arne Mertz"}</script>
+
+
+<link rel="dns-prefetch" href="https://s0.wp.com/">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="https://s.w.org/">
+<link rel="alternate" type="application/rss+xml" title="Simplify C++! » Feed" href="https://arne-mertz.de/feed/">
+<link rel="alternate" type="application/rss+xml" title="Simplify C++! » Comments Feed" href="https://arne-mertz.de/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Simplify C++! » Const Correctness Comments Feed" href="https://arne-mertz.de/2016/07/const-correctness/feed/">
+<link rel="pingback" href="https://arne-mertz.de/blog/xmlrpc.php">
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11.2.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11.2.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/arne-mertz.de\/blog\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.1.1"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56760,9792,65039],[55358,56760,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./Const Correctness - Simplify C++!_files/wp-emoji-release.min.js" type="text/javascript" defer=""></script>
+		<link rel="stylesheet" id="wp-block-library-css" href="./Const Correctness - Simplify C++!_files/style.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="cookie-notice-front-css" href="./Const Correctness - Simplify C++!_files/front.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="toc-screen-css" href="./Const Correctness - Simplify C++!_files/screen.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-post-navigation-style-css" href="./Const Correctness - Simplify C++!_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="stargazer-fonts-css" href="./Const Correctness - Simplify C++!_files/css" type="text/css" media="all">
+<link rel="stylesheet" id="hybrid-one-five-css" href="./Const Correctness - Simplify C++!_files/one-five.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="hybrid-gallery-css" href="./Const Correctness - Simplify C++!_files/gallery.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="stargazer-mediaelement-css" href="./Const Correctness - Simplify C++!_files/mediaelement.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="stargazer-media-css" href="./Const Correctness - Simplify C++!_files/media.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="hybrid-style-css" href="./Const Correctness - Simplify C++!_files/style.min(1).css" type="text/css" media="all">
+<link rel="stylesheet" id="easy_table_style-css" href="./Const Correctness - Simplify C++!_files/style(1).css" type="text/css" media="all">
+<link rel="stylesheet" id="jetpack_css-css" href="./Const Correctness - Simplify C++!_files/jetpack.css" type="text/css" media="all">
+<script>if (document.location.protocol != "https:") {document.location = document.URL.replace(/^http:/i, "https:");}</script><script type="text/javascript" src="./Const Correctness - Simplify C++!_files/jquery.js"></script>
+<script type="text/javascript" src="./Const Correctness - Simplify C++!_files/jquery-migrate.min.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var cnArgs = {"ajaxurl":"https:\/\/arne-mertz.de\/blog\/wp-admin\/admin-ajax.php","hideEffect":"fade","onScroll":"no","onScrollOffset":"100","cookieName":"cookie_notice_accepted","cookieValue":"true","cookieTime":"2592000","cookiePath":"\/","cookieDomain":"","redirection":"","cache":"","refuse":"no","revoke_cookies":"0","revoke_cookies_opt":"automatic","secure":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Const Correctness - Simplify C++!_files/front.min.js"></script>
+<link rel="https://api.w.org/" href="https://arne-mertz.de/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://arne-mertz.de/blog/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://arne-mertz.de/blog/wp-includes/wlwmanifest.xml"> 
+<link rel="shortlink" href="https://arne-mertz.de/?p=962">
+<link rel="alternate" type="application/json+oembed" href="https://arne-mertz.de/wp-json/oembed/1.0/embed?url=https%3A%2F%2Farne-mertz.de%2F2016%2F07%2Fconst-correctness%2F">
+<link rel="alternate" type="text/xml+oembed" href="https://arne-mertz.de/wp-json/oembed/1.0/embed?url=https%3A%2F%2Farne-mertz.de%2F2016%2F07%2Fconst-correctness%2F&amp;format=xml">
+
+<link rel="stylesheet" href="./Const Correctness - Simplify C++!_files/counter.css" type="text/css">
+<style type="text/css">div#toc_container {background: #eef0ee;border: 1px solid #007a0e;}</style><style type="text/css">
+					.wp-post-navigation a{
+					text-decoration: none;
+font:bold 16px sans-serif, arial;
+color: #666;
+					}
+				 </style>
+<style type="text/css" id="custom-colors-css">a, .wp-playlist-light .wp-playlist-playing, .wp-embed-comments a,.wp-embed-share-dialog-open, .wp-embed a { color: rgba( 0, 122, 14, 0.75 ); } a:hover, a:focus, legend, mark, .comment-respond .required, pre,.form-allowed-tags code, pre code,.wp-playlist-light .wp-playlist-item:hover,.wp-playlist-light .wp-playlist-item:focus,.mejs-button button:hover::after, .mejs-button button:focus::after,.mejs-overlay-button:hover::after, .mejs-overlay-button:focus::after,.wp-embed-comments a:hover, .wp-embed-comments a:focus,.wp-embed-share-dialog-open:hover, .wp-embed-share-dialog-open:focus,.wp-embed a:hover, .wp-embed a:focus{ color: #007a0e; } input[type='submit'], input[type='reset'], input[type='button'], button, .page-links a,.comment-reply-link, .comment-reply-login, .wp-calendar td.has-posts a, #menu-sub-terms li a{ background-color: rgba( 0, 122, 14, 0.8 ); } legend, mark, pre, .form-allowed-tags code { background-color: rgba( 0, 122, 14, 0.1 ); } input[type='submit']:hover, input[type='submit']:focus,input[type='reset']:hover, input[type='reset']:focus,input[type='button']:hover, input[type='button']:focus,button:hover, button:focus,.page-links a:hover, .page-links a:focus,.wp-calendar td.has-posts a:hover, .wp-calendar td.has-posts a:focus,.widget-title > .wrap,#comments-number > .wrap, #reply-title > .wrap, .attachment-meta-title > .wrap,.widget_search > .search-form,#menu-sub-terms li a:hover, #menu-sub-terms li a:focus,.comment-reply-link:hover, .comment-reply-link:focus,.comment-reply-login:hover, .comment-reply-login:focus,.mejs-time-rail .mejs-time-loaded, .skip-link .screen-reader-text{ background-color: #007a0e; } ::selection { background-color: #007a0e; } legend { border-color: rgba( 0, 122, 14, 0.15 ); } body { border-top-color: #007a0e; } .entry-content a, .entry-summary a, .comment-content a { border-bottom-color: rgba( 0, 122, 14, 0.15 ); } .entry-content a:hover, .entry-content a:focus,           .entry-summary a:hover, .entry-summary a:focus,           .comment-content a:hover, .comment-content a:focus           { border-bottom-color: rgba( 0, 122, 14, 0.75 ); } body, .widget-title, #comments-number, #reply-title,.attachment-meta-title { border-bottom-color: #007a0e; } blockquote { background-color: rgba( 0, 122, 14, 0.85 ); } blockquote blockquote { background-color: rgba( 0, 122, 14, 0.9 ); } blockquote { outline-color: rgba( 0, 122, 14, 0.85); }</style>
+		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		
+<style type="text/css" id="custom-header-css">body.custom-header #site-title a { color: #252525; }</style>
+<style type="text/css" id="custom-background-css">body.custom-background { background: #85aa85; }</style>
+<link rel="icon" href="https://arne-mertz.de/blog/wp-content/uploads/2015/11/SCpp-150x150.png" sizes="32x32">
+<link rel="icon" href="https://arne-mertz.de/blog/wp-content/uploads/2015/11/SCpp-200x200.png" sizes="192x192">
+<link rel="apple-touch-icon-precomposed" href="https://arne-mertz.de/blog/wp-content/uploads/2015/11/SCpp-200x200.png">
+<meta name="msapplication-TileImage" content="https://arne-mertz.de/blog/wp-content/uploads/2015/11/SCpp.png">
+</head>
+
+<body data-rsssl="1" class="wordpress ltr en en-us parent-theme y2019 m04 d23 h22 tuesday logged-out custom-background custom-header wp-custom-logo display-header-text singular singular-post singular-post-962 post-format-standard layout-2c-l custom-colors cookies-not-set font-primary" dir="ltr" itemscope="itemscope" itemtype="http://schema.org/Blog">
+
+	<div id="container">
+
+		<div class="skip-link">
+			<a href="https://arne-mertz.de/2016/07/const-correctness/#content" class="screen-reader-text">Skip to content</a>
+		</div>
+
+		
+		<div class="wrap">
+
+			<header id="header" class="site-header" role="banner" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+
+				
+					<div id="branding">
+						<a href="https://arne-mertz.de/" class="img-hyperlink"><img src="./Const Correctness - Simplify C++!_files/SimplifyCpp2.png" scale="0"></a>
+
+													
+							<h2 id="site-description" class="site-description font-primary" itemprop="description">Write clean and maintainable C++</h2>											</div>
+
+				
+				
+	<nav class="menu menu-secondary font-secondary" role="navigation" id="menu-secondary" aria-label="Secondary Menu" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+
+		<h3 id="menu-primary-title" class="menu-toggle font-headlines">
+			<button class="screen-reader-text font-secondary">Menu</button>
+		</h3>
+
+		<div class="wrap"><ul id="menu-secondary-items" class="menu-items"><li id="menu-item-266" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-266"><a href="https://arne-mertz.de/why-simplify-cpp/">Why “simplify C++”?</a></li>
+<li id="menu-item-1453" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1453"><a href="https://arne-mertz.de/guest-post-guidelines/">Contributions!</a></li>
+<li id="menu-item-265" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-265"><a href="https://arne-mertz.de/about-me/">About me</a></li>
+<li id="menu-item-717" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-717"><a href="https://arne-mertz.de/contact-me/">Privacy/Contact</a></li>
+</ul></div>
+	</nav>
+
+
+			</header>
+
+			
+				<img class="header-image" src="./Const Correctness - Simplify C++!_files/cropped-cropped-129923859623630306666111.jpg" width="1000" height="340" alt="" scale="0">
+
+			
+			<div id="main" class="main">
+
+				
+	<nav role="navigation" aria-label="Breadcrumbs" class="breadcrumb-trail breadcrumbs font-secondary" itemprop="breadcrumb"><ul class="trail-items" itemscope="" itemtype="http://schema.org/BreadcrumbList"><meta name="numberOfItems" content="4"><meta name="itemListOrder" content="Ascending"><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="trail-item trail-begin"><a href="https://arne-mertz.de/" rel="home"><span class="screen-reader-text"><span itemprop="name">Home</span></span></a><meta itemprop="position" content="1"></li><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="trail-item"><a href="https://arne-mertz.de/2016/"><span itemprop="name">2016</span></a><meta itemprop="position" content="2"></li><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="trail-item"><a href="https://arne-mertz.de/2016/07/"><span itemprop="name">July</span></a><meta itemprop="position" content="3"></li><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="trail-item trail-end"><span itemprop="name">Const Correctness</span><meta itemprop="position" content="4"></li></ul></nav>
+
+<main id="content" class="content" role="main" tabindex="-1">
+
+	
+	
+		
+			
+			<article id="post-962" class="entry author-amertz post-962 post type-post status-publish format-standard category-cpp category-clean-code" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+	
+		<header class="entry-header">
+
+			<h1 class="entry-title font-headlines" itemprop="headline">Const Correctness</h1>
+
+			<div class="entry-byline font-secondary">
+				<span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a href="https://arne-mertz.de/author/amertz/" title="Posts by Arne Mertz" rel="author" class="url fn n" itemprop="url"><span itemprop="name">Arne Mertz</span></a></span>
+				<time class="entry-published updated" datetime="2016-07-27T17:00:29+02:00" itemprop="datePublished" title="Wednesday, July 27, 2016, 5:00 pm">July 27, 2016</time>
+				<a href="https://arne-mertz.de/2016/07/const-correctness/#comments" class="comments-link" itemprop="discussionURL">19</a>											</div>
+
+		</header>
+
+		<div class="entry-content" itemprop="articleBody">
+			<div id="toc_container" class="no_bullets contracted" style="width: auto; display: table;"><p class="toc_title">Contents <span class="toc_toggle">[<a href="https://arne-mertz.de/2016/07/const-correctness/#">show</a>]</span></p><ul class="toc_list" style="display: none;"><li><a href="https://arne-mertz.de/2016/07/const-correctness/#Syntactic_const"><span class="toc_number toc_depth_1">1</span> Syntactic const</a><ul><li><a href="https://arne-mertz.de/2016/07/const-correctness/#Methods"><span class="toc_number toc_depth_2">1.1</span> Methods</a></li><li><a href="https://arne-mertz.de/2016/07/const-correctness/#Limits_of_syntactic_const"><span class="toc_number toc_depth_2">1.2</span> Limits of syntactic const</a></li></ul></li><li><a href="https://arne-mertz.de/2016/07/const-correctness/#Semantic_const"><span class="toc_number toc_depth_1">2</span> Semantic const</a><ul><li><a href="https://arne-mertz.de/2016/07/const-correctness/#Not_const_enough"><span class="toc_number toc_depth_2">2.1</span> Not const enough</a></li><li><a href="https://arne-mertz.de/2016/07/const-correctness/#A_bit_too_const"><span class="toc_number toc_depth_2">2.2</span> A bit too const</a></li></ul></li><li><a href="https://arne-mertz.de/2016/07/const-correctness/#Conclusion"><span class="toc_number toc_depth_1">3</span> Conclusion</a></li></ul></div>
+<p>Writing const correct code is about more than using <code>const</code> in a few places and letting the compiler figure out if it makes sense.<span id="more-962"></span></p>
+<p>There are two components about using the keyword <code>const</code> in C++ code:&nbsp;A&nbsp;syntactic component and a semantic component.</p>
+<h1 class="font-headlines"><span id="Syntactic_const">Syntactic const</span></h1>
+<p>The syntactic component is what the compiler figures out at compile time. It does a pretty good job at this: If we declare a variable of a builtin type, e.g. <code>int</code>, as <code>const</code>, then the compiler won’t let us modify it:</p>
+<pre class="lang:c++ decode:true ">int const cantModify = 42;
+cantModify = 33; //ERROR</pre>
+<p>The error message will tell us that we try to assign to a “read-only variable” (GCC) or to a variable “with const-qualified type” (Clang). The same will happen if we have a <code>const</code> instance of a struct&nbsp;or class and directly try to alter a data member:</p>
+<pre class="lang:c++ decode:true ">struct SomeData {
+  int i;
+  double d;
+};
+
+SomeData const data {42, 1.61};
+data.i = 55; //ERROR</pre>
+<h2 class="font-headlines"><span id="Methods">Methods</span></h2>
+<p>Of course, the compiler doesn’t stop here. If we have a method on a class, the compiler by default assumes that it may&nbsp;alter the object on which we call it. We can not call those methods on <code>const</code> objects. Instead, we have to explicitly declare methods <code>const</code> to be able to call them on <code>const</code> objects.</p>
+<pre class="lang:c++ decode:true">class SomeClass {
+public:
+  void maybeModify();
+  void dontModify() const;
+};
+
+SomeClass const someObject{};
+someObject.dontModify(); //OK
+someObject.maybeModify(); //ERROR</pre>
+<p>We may get slightly different error messages here, e.g. “passing ‘const SomeClass’ as ‘this’ argument discards qualifiers” for GCC and “member function ‘maybeModify’ not viable: ‘this’ argument has type ‘const SomeClass’, but function is not marked const” for Clang.</p>
+<p>The compiler goes even further. When we implement a <code>const</code> method,&nbsp;it&nbsp;checks that we really don’t modify the object. Modifying member data in a <code>const</code> method will cause an error:</p>
+<pre class="lang:c++ decode:true ">class SomeClass {
+  int i;
+public:
+  void dontModify() const {
+    i = 47; //ERROR
+  }
+};</pre>
+<p>This of course only&nbsp;is done for non-static data members, as static members are not part of the object and therefore can be altered without altering the object.</p>
+<h2 class="font-headlines"><span id="Limits_of_syntactic_const">Limits of syntactic const</span></h2>
+<p>Syntactic <code>const</code> is limited in some ways. For example, if we have a <code>const</code> pointer, the pointer itself may not be altered, i.e. where it points to. However, the pointee, i.e. the object it points to, may be altered.</p>
+<pre class="lang:c++ decode:true  ">int i = 0; 
+int j = 1;
+int *const pi = &amp;i;
+*pi = 33; //OK - i is now 33
+pi = &amp;j; //ERROR - pi is const</pre>
+<p>This limit of course&nbsp;is also applies&nbsp;for smart pointers and other similar classes.</p>
+<h1 class="font-headlines"><span id="Semantic_const">Semantic const</span></h1>
+<p>We can take this example further. Imagine a pointer which is member of a class. In a&nbsp;<code>const</code> method we can not alter the pointer, but we can alter the pointee, as explained above. Now what if the pointee is semantically part of our object?</p>
+<pre class="lang:c++ decode:true ">class Car {
+  unique_ptr&lt;Engine&gt; engine;
+public:
+  void lock() const {
+    engine-&gt;modify(); //whoops
+  }
+}</pre>
+<p>We have to be careful not to accidentally modify objects should be&nbsp;semantically constant but are not syntactically <code>const</code>. This becomes even more apparent if we give back handles to parts.</p>
+<pre class="lang:c++ decode:true">Engine const&amp; Car::getEngine() const {
+  return *engine;
+}</pre>
+<p>The first <code>const</code> here is important, otherwise we would allow user of our class to modify parts of constant objects, which is not a good idea. You can observe this behavior in standard container classes, e.g.&nbsp;for a &nbsp;<code>vector&amp;lt;T&amp;gt; const tVec</code>, the access operator&nbsp;<code>tVec[0]</code> returns a <code>T const&amp;amp;</code>, although internally the <code>vector</code> only has a pointer to its data.</p>
+<h2 class="font-headlines"><span id="Not_const_enough">Not const enough</span></h2>
+<p>These examples are rather straight forward. But what if the pointer does not refer to a semantic part of out object but rather to another part of a common larger structure? Consider a binary tree, where each node has a <code>parent</code> pointer and two child pointers <code>left</code> and <code>right</code>.</p>
+<p>We could now write&nbsp;getters for those other nodes. Should they return references or pointers to <code>const</code> or non-<code>const</code> Nodes? Should the getters themselves be marked <code>const</code>? Let’s try:</p>
+<pre class="lang:c++ decode:true">class Node {
+  Node* parent;
+  Node* left;
+  Node* right;
+public:
+  Node* getParent() const;
+  Node* getLeft() const;
+  Node* getRight() const;
+};
+
+Node const* node = getTree();
+Node* leftChild = node-&gt;getLeft();
+Node* trickedYou = leftChild()-&gt;getParent();</pre>
+<p>Here <code>trickedYou</code> is a non-<code>const</code> pointer to the same <code>const</code> object as <code>node</code>, and we got there by only using <code>const</code> methods. That means the <code>const</code> was in fact a lie. We have to be careful designing our interfaces, by adding const consciously.</p>
+<h2 class="font-headlines"><span id="A_bit_too_const">A bit too const</span></h2>
+<p>There is another case where syntactic <code>const</code> doesn’t do what we liked to. In the last example, we had to <em>add</em> some <code>const</code> to get&nbsp;the semantics right. There are cases where the exact opposite is the case, i.e. where syntactic const is just too much.</p>
+<p>Imagine a mesh class in a 3D program. Calculating the volume of such objects might&nbsp;be costly. Depending on the uses we might not want to calculate the volume for every mesh when we construct or alter it, but we might want to store the result once we had to calculate it.</p>
+<pre class="lang:c++ decode:true">class Mesh {
+  vector&lt;Vertex&gt; vertices;
+  double volume;
+  bool volumeCalculated;
+public:
+  Mesh( /* ... */ ) 
+    : /* ... */ volume{0}, volumeCalculated{false}
+  {}
+
+  void change(/* ... */) { volumeCalculated = false; }
+
+  double getVolume() const {
+    if (volumeCalculated) {
+      return volume;
+    }
+      
+    volume = // calculate...   !!!
+    volumeCalculated = true; //!!!
+    return volume;
+  }
+};</pre>
+<p>This won’t compile, because we are modifying the members <code>volume</code> and <code>volumeCalculated</code> inside a <code>const</code> method. The wrong solution which sadly can be seen very often in the wild is to make <code>getVolume()</code> non-<code>const</code>. As a result, you can’t call <code>getVolume()</code> on <code>const</code> meshes, which in turn results in less meshes being declared <code>const</code>.</p>
+<p>The right solution in many&nbsp;cases like this is to declare <code>volume</code> and <code>volumeCalculated</code> as <code>mutable</code>. This keyword basically states that a member may be modified by <code>const</code> member methods, which is exactly what we are doing.</p>
+<h1 class="font-headlines"><span id="Conclusion">Conclusion</span></h1>
+<p>Const correctness is more than just using <code>const</code> everywhere. It’s a part of class design, and in some cases an extra thought or two are needed to get it right.</p>
+<div class="wp-post-navigation">
+									   <div class="wp-post-navigation-pre">
+									   <a href="https://arne-mertz.de/2016/07/refactoring-dont-get-carried-away/">Previous Post</a>
+									   </div>
+									   <div class="wp-post-navigation-next">
+									   <a href="https://arne-mertz.de/2016/08/new-project/">Next Post</a>
+									   </div>
+									</div>					</div>
+
+		<footer class="entry-footer font-secondary">
+			<span class="entry-terms category" itemprop="articleSection">Posted in <a href="https://arne-mertz.de/category/cpp/" rel="tag">C++</a>, <a href="https://arne-mertz.de/category/clean-code/" rel="tag">Clean Code</a></span>					</footer>
+
+	
+</article>
+			
+				
+<section id="comments-template">
+
+	
+		<div id="comments">
+
+			<h3 id="comments-number" class="font-headlines"><span class="wrap">19 Comments</span></h3>
+
+			<ol class="comment-list">
+				<li id="comment-14278" class="pingback even thread-even depth-1 ping">
+
+	<header class="comment-meta font-secondary">
+		<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a href="https://arne-mertz.de/2017/10/mutable/" rel="external nofollow" class="url fn n" itemprop="url"><span itemprop="name">Mutable for const-correctness -</span></a></cite><br>
+		<time class="comment-published" datetime="2017-10-18T17:00:44+02:00" title="Wednesday, October 18, 2017, 5:00 pm" itemprop="datePublished">2 years ago</time>
+		<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-14278" itemprop="url">Permalink</a>
+			</header>
+
+</li><li id="comment-14172" class="comment odd alt thread-odd thread-alt depth-1" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/46bbef049c3e1accb859b92323fed73a" srcset="https://secure.gravatar.com/avatar/46bbef049c3e1accb859b92323fed73a?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/46bbef049c3e1accb859b92323fed73a?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a href="https://www.facebook.com/app_scoped_user_id/995996440469104/" rel="external nofollow" class="url fn n" itemprop="url"><span itemprop="name">Istvan Fenesi</span></a></cite><br>
+			<time class="comment-published" datetime="2017-04-26T12:51:03+02:00" title="Wednesday, April 26, 2017, 12:51 pm" itemprop="datePublished">2 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-14172" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>After all these const related tricks I can really understand the people who are using C++ just as C with classes. Don’t use const at all (and other “advanced “tricks”) and it might result in a more elegant and easy to understood code.</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-14172" data-commentid="14172" data-postid="962" data-belowelement="comment-14172" data-respondelement="respond" aria-label="Reply to Istvan Fenesi">Reply</a>	</article>
+
+<ol class="children">
+<li id="comment-14173" class="comment byuser comment-author-amertz bypostauthor even depth-2 role-administrator" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/d80dbf092c5d663a1a619483587ee4c5.jpeg" srcset="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">Arne Mertz</cite><br>
+			<time class="comment-published" datetime="2017-04-26T13:02:49+02:00" title="Wednesday, April 26, 2017, 1:02 pm" itemprop="datePublished">2 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-14173" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>There are also lots of class related tricks. So, some find C more elegant and easier to understand.<br>
+My point is,  that,  while you have to pay a bit of effort in learning those features add the tricks associated with them, you then benefit from the positive effects, e.g. the possibility of encapsulation or the compiler detecting things changing where they should not.<br>
+If you don’t need the benefits, you don’t need to use the feature of course. (But be honest and don’t decide you won’t need it only because you don’t <em>want</em> tho use it).</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-14173" data-commentid="14173" data-postid="962" data-belowelement="comment-14173" data-respondelement="respond" aria-label="Reply to Arne Mertz">Reply</a>	</article>
+
+</li></ol>
+</li><li id="comment-10411" class="pingback odd alt thread-even depth-1 ping">
+
+	<header class="comment-meta font-secondary">
+		<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a href="https://arne-mertz.de/2016/09/planned-refactoring-large-applications/" rel="external nofollow" class="url fn n" itemprop="url"><span itemprop="name">Large C++ Legacy Applications: Planned Refactoring - Simplify C++!</span></a></cite><br>
+		<time class="comment-published" datetime="2016-09-28T08:21:29+02:00" title="Wednesday, September 28, 2016, 8:21 am" itemprop="datePublished">3 years ago</time>
+		<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-10411" itemprop="url">Permalink</a>
+			</header>
+
+</li><li id="comment-10352" class="pingback even thread-odd thread-alt depth-1 ping">
+
+	<header class="comment-meta font-secondary">
+		<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a href="https://utahcpp.wordpress.com/2016/09/22/the-week-in-c-2016-30-july-24-30/" rel="external nofollow" class="url fn n" itemprop="url"><span itemprop="name">The Week in C++ 2016.30: July 24-30 | Utah C++&nbsp;&nbsp;Users Group</span></a></cite><br>
+		<time class="comment-published" datetime="2016-09-22T19:40:09+02:00" title="Thursday, September 22, 2016, 7:40 pm" itemprop="datePublished">3 years ago</time>
+		<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-10352" itemprop="url">Permalink</a>
+			</header>
+
+</li><li id="comment-9917" class="pingback odd alt thread-even depth-1 ping">
+
+	<header class="comment-meta font-secondary">
+		<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><a href="https://arne-mertz.de/2016/08/const-thread-safety/" rel="external nofollow" class="url fn n" itemprop="url"><span itemprop="name">Does Const Imply Thread Safety? - Simplify C++!</span></a></cite><br>
+		<time class="comment-published" datetime="2016-08-24T17:01:26+02:00" title="Wednesday, August 24, 2016, 5:01 pm" itemprop="datePublished">3 years ago</time>
+		<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9917" itemprop="url">Permalink</a>
+			</header>
+
+</li><li id="comment-9362" class="comment even thread-odd thread-alt depth-1" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/8ab0fcb3b8fe24257beb178e3613b8ef" srcset="https://secure.gravatar.com/avatar/8ab0fcb3b8fe24257beb178e3613b8ef?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/8ab0fcb3b8fe24257beb178e3613b8ef?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">Dalibor Frivaldsky</cite><br>
+			<time class="comment-published" datetime="2016-08-01T22:18:58+02:00" title="Monday, August 1, 2016, 10:18 pm" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9362" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>I’m not sure I like the idea of “mutable” members. It is fairly hidden in the implementation of the class and is thus not apparent when reading through the public API. Looking at “double getVolume() const”, I would really expect the method to not perform any modifications. An alternative approach would be to remove the “volume” field, “volumentCalculated” field and “getVolume() const” method from the Mesh interface and introduce method “MeshWithVolume calculateVolume() const”. The “MeshWithVolume” would represent the same mesh, but it would be responsible for storing the “volume” field and would provide “double getVolume() const” method to retrieve it. Also, there would be no need for “volumeCalculated” field, as you would know the volume was calculated when you have an instance of the “MeshWithVolume” class.</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9362" data-commentid="9362" data-postid="962" data-belowelement="comment-9362" data-respondelement="respond" aria-label="Reply to Dalibor Frivaldsky">Reply</a>	</article>
+
+<ol class="children">
+<li id="comment-9370" class="comment byuser comment-author-amertz bypostauthor odd alt depth-2 role-administrator" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/d80dbf092c5d663a1a619483587ee4c5.jpeg" srcset="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">Arne Mertz</cite><br>
+			<time class="comment-published" datetime="2016-08-02T08:09:54+02:00" title="Tuesday, August 2, 2016, 8:09 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9370" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>mutable members are (or should be) an implementation detail. In the example, the <code>volume</code> and <code>volumeClaculated</code> fields are not part of the class’ state and therefore not of its visible behavior. You don’t need to care about them, because whether they change or not, <code>getVolume</code> leaves the class in the same state and therefore is <em>semantically</em> a const operation.</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9370" data-commentid="9370" data-postid="962" data-belowelement="comment-9370" data-respondelement="respond" aria-label="Reply to Arne Mertz">Reply</a>	</article>
+
+<ol class="children">
+<li id="comment-9378" class="comment even depth-3" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/8ab0fcb3b8fe24257beb178e3613b8ef" srcset="https://secure.gravatar.com/avatar/8ab0fcb3b8fe24257beb178e3613b8ef?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/8ab0fcb3b8fe24257beb178e3613b8ef?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">Dalibor Frívaldský</cite><br>
+			<time class="comment-published" datetime="2016-08-02T14:09:35+02:00" title="Tuesday, August 2, 2016, 2:09 pm" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9378" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>I see, thank you for clearing that up. If I understand it correctly, modifying the “mutable” member in the “getVolume() const” method will make it not thread-safe, as TX points out. Would you please consider pointing this out in the article? I think without mentioning it, it looks like you get the solution “for free”.</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9378" data-commentid="9378" data-postid="962" data-belowelement="comment-9378" data-respondelement="respond" aria-label="Reply to Dalibor Frívaldský">Reply</a>	</article>
+
+</li></ol>
+</li></ol>
+</li><li id="comment-9357" class="comment odd alt thread-even depth-1" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/d05bac27a873039b4a7a68f6e8845b70.jpeg" srcset="https://secure.gravatar.com/avatar/d05bac27a873039b4a7a68f6e8845b70?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/d05bac27a873039b4a7a68f6e8845b70?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">Alexandre Bourlon</cite><br>
+			<time class="comment-published" datetime="2016-08-01T15:08:41+02:00" title="Monday, August 1, 2016, 3:08 pm" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9357" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>Interesting, as I run into the later case on a daily basis. The workaround for years was for me to declare the member mutable, as you said, but recently I started to wonder.</p>
+<p>Since the member is modified in a const context in a limited number of cases (declared dirty or something in a non-const method then computed in only ONE const method – some kind of getter), I’ve used const_cast on it instead of declaring it mutable. This way it can only be modified in a const method with some very explicit warnings around it, and nowhere else. What do you think are the pro and cons of such approach?</p>
+<p>Also, encapsulating the whole thing into a template, some kind of LazyType helper with appropriate semantic.</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9357" data-commentid="9357" data-postid="962" data-belowelement="comment-9357" data-respondelement="respond" aria-label="Reply to Alexandre Bourlon">Reply</a>	</article>
+
+</li><li id="comment-9318" class="comment even thread-odd thread-alt depth-1" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/6bcbddbd9c7b31aaff8cf25a356bc96c.jpeg" srcset="https://secure.gravatar.com/avatar/6bcbddbd9c7b31aaff8cf25a356bc96c?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/6bcbddbd9c7b31aaff8cf25a356bc96c?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">Gonzalo BG</cite><br>
+			<time class="comment-published" datetime="2016-07-29T09:27:18+02:00" title="Friday, July 29, 2016, 9:27 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9318" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>The limits of syntactic const are incomplete. You can have a pointer to a const type:</p>
+<p>int a = 2;<br>
+int const * ptr = &amp;a;<br>
+*ptr = 3; // ERROR<br>
+ptr = &amp;a; // OK</p>
+<p>and a const pointer to a const type:</p>
+<p>int const*const ptr = &amp;a;<br>
+ *ptr = 3; // ERROR<br>
+ptr = &amp;a; // ERROR</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9318" data-commentid="9318" data-postid="962" data-belowelement="comment-9318" data-respondelement="respond" aria-label="Reply to Gonzalo BG">Reply</a>	</article>
+
+</li><li id="comment-9312" class="comment odd alt thread-even depth-1" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/d2a49aee940fb262c02e64e54fe287d0" srcset="https://secure.gravatar.com/avatar/d2a49aee940fb262c02e64e54fe287d0?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/d2a49aee940fb262c02e64e54fe287d0?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">eraz</cite><br>
+			<time class="comment-published" datetime="2016-07-29T02:40:11+02:00" title="Friday, July 29, 2016, 2:40 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9312" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>Using the mutable keyword to designate variables that can be modified in const member functions was something I had not known before! There is always something new to learn from reading blogs and articles such as these, even (especially!) if they concern the basics. Thank you, Arne!</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9312" data-commentid="9312" data-postid="962" data-belowelement="comment-9312" data-respondelement="respond" aria-label="Reply to eraz">Reply</a>	</article>
+
+</li><li id="comment-9309" class="comment even thread-odd thread-alt depth-1" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/c4988ecddb6824545cdae396cd6baa00" srcset="https://secure.gravatar.com/avatar/c4988ecddb6824545cdae396cd6baa00?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/c4988ecddb6824545cdae396cd6baa00?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">TX</cite><br>
+			<time class="comment-published" datetime="2016-07-29T00:57:01+02:00" title="Friday, July 29, 2016, 12:57 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9309" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>You forgot to mention that proper const correctness guarantees thread safety. Mutable members must be atomic or protected with a mutex.</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9309" data-commentid="9309" data-postid="962" data-belowelement="comment-9309" data-respondelement="respond" aria-label="Reply to TX">Reply</a>	</article>
+
+<ol class="children">
+<li id="comment-9313" class="comment byuser comment-author-amertz bypostauthor odd alt depth-2 role-administrator" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/d80dbf092c5d663a1a619483587ee4c5.jpeg" srcset="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">Arne Mertz</cite><br>
+			<time class="comment-published" datetime="2016-07-29T06:32:04+02:00" title="Friday, July 29, 2016, 6:32 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9313" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>I did not forget it, I left it for another post <img draggable="false" class="emoji" alt="😉" src="./Const Correctness - Simplify C++!_files/1f609.svg" scale="0"> Except for trivial cases I would not go as far as to say that it <em>guarantees</em> thread safety, unless you define “proper” that way. But I definitely agree const correct class design goes a long way towards that goal.</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9313" data-commentid="9313" data-postid="962" data-belowelement="comment-9313" data-respondelement="respond" aria-label="Reply to Arne Mertz">Reply</a>	</article>
+
+<ol class="children">
+<li id="comment-9315" class="comment even depth-3" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/c4988ecddb6824545cdae396cd6baa00" srcset="https://secure.gravatar.com/avatar/c4988ecddb6824545cdae396cd6baa00?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/c4988ecddb6824545cdae396cd6baa00?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">TX</cite><br>
+			<time class="comment-published" datetime="2016-07-29T08:14:23+02:00" title="Friday, July 29, 2016, 8:14 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9315" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>No, not only for trivial cases. The meaning of const changed with C++11. It’s guaranteed by the standard.</p>
+<p>For a deeper explanation:<br>
+<a href="https://herbsutter.com/2013/05/24/gotw-6a-const-correctness-part-1-3/" rel="nofollow">https://herbsutter.com/2013/05/24/gotw-6a-const-correctness-part-1-3/</a><br>
+<a href="https://herbsutter.com/2013/01/01/video-you-dont-know-const-and-mutable/" rel="nofollow">https://herbsutter.com/2013/01/01/video-you-dont-know-const-and-mutable/</a></p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9315" data-commentid="9315" data-postid="962" data-belowelement="comment-9315" data-respondelement="respond" aria-label="Reply to TX">Reply</a>	</article>
+
+<ol class="children">
+<li id="comment-9316" class="comment byuser comment-author-amertz bypostauthor odd alt depth-4 role-administrator" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/d80dbf092c5d663a1a619483587ee4c5.jpeg" srcset="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">Arne Mertz</cite><br>
+			<time class="comment-published" datetime="2016-07-29T08:20:22+02:00" title="Friday, July 29, 2016, 8:20 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9316" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>With nontrivial I mean e.g. the case of accessing objects through const pointers described in the post. Here the thread safety is not guaranteed by the standard any more, you have to carefully design your classes in a way that makes those cases thread safe again.</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9316" data-commentid="9316" data-postid="962" data-belowelement="comment-9316" data-respondelement="respond" aria-label="Reply to Arne Mertz">Reply</a>	</article>
+
+<ol class="children">
+<li id="comment-9317" class="comment even depth-5" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/c4988ecddb6824545cdae396cd6baa00" srcset="https://secure.gravatar.com/avatar/c4988ecddb6824545cdae396cd6baa00?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/c4988ecddb6824545cdae396cd6baa00?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">TX</cite><br>
+			<time class="comment-published" datetime="2016-07-29T09:01:56+02:00" title="Friday, July 29, 2016, 9:01 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9317" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>One should always be careful with the design. I do appreciate that you bring up some traps that one can fall into.</p>
+<p>But if you do it correctly you’ll be safe. Otherwise, if you by mistake let const functions violate thread safety, it can be considered a bug.</p>
+		</div>
+
+			</article>
+
+</li></ol>
+</li></ol>
+</li></ol>
+</li></ol>
+</li><li id="comment-9303" class="comment odd alt thread-even depth-1" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/dbc60362bf2df08202ff198e00085a5c" srcset="https://secure.gravatar.com/avatar/dbc60362bf2df08202ff198e00085a5c?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/dbc60362bf2df08202ff198e00085a5c?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">alfC</cite><br>
+			<time class="comment-published" datetime="2016-07-28T07:27:54+02:00" title="Thursday, July 28, 2016, 7:27 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9303" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>Maybe it is a good point to mention <code>std::experimental::propagrate_const</code> which is a way of propagating the constness into internal smart and raw pointers. I guess this helps solving the “Not const enough” problem. <a href="http://en.cppreference.com/w/cpp/experimental/propagate_const" rel="nofollow">http://en.cppreference.com/w/cpp/experimental/propagate_const</a></p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9303" data-commentid="9303" data-postid="962" data-belowelement="comment-9303" data-respondelement="respond" aria-label="Reply to alfC">Reply</a>	</article>
+
+<ol class="children">
+<li id="comment-9304" class="comment byuser comment-author-amertz bypostauthor even depth-2 role-administrator" itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment">
+
+	<article>
+		<header class="comment-meta font-secondary">
+			<img alt="" src="./Const Correctness - Simplify C++!_files/d80dbf092c5d663a1a619483587ee4c5.jpeg" srcset="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=192&amp;d=identicon&amp;r=g 2x" class="avatar avatar-96 photo" height="96" width="96" itemprop="image" originals="96" src-orig="https://secure.gravatar.com/avatar/d80dbf092c5d663a1a619483587ee4c5?s=96&amp;d=identicon&amp;r=g" scale="2">			<cite class="comment-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">Arne Mertz</cite><br>
+			<time class="comment-published" datetime="2016-07-28T07:47:01+02:00" title="Thursday, July 28, 2016, 7:47 am" itemprop="datePublished">3 years ago</time>
+			<a class="comment-permalink" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9304" itemprop="url">Permalink</a>
+					</header>
+
+		<div class="comment-content" itemprop="text">
+
+			
+			<p>Hi Alfredo, thanks for the link! I didn’t know that one before, will look into it.</p>
+		</div>
+
+		<a itemprop="replyToUrl" rel="nofollow" class="comment-reply-link font-secondary" href="https://arne-mertz.de/2016/07/const-correctness/#comment-9304" data-commentid="9304" data-postid="962" data-belowelement="comment-9304" data-respondelement="respond" aria-label="Reply to Arne Mertz">Reply</a>	</article>
+
+</li></ol>
+</li>			</ol>
+
+			
+		</div>
+
+	
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title font-headlines"><span class="wrap">Leave a Reply <small class="font-primary"><a rel="nofollow" id="cancel-comment-reply-link" href="https://arne-mertz.de/2016/07/const-correctness/#respond" style="display:none;">Cancel reply</a></small></span></h3>			<form action="https://arne-mertz.de/blog/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate="">
+				<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required font-primary">*</span></p><p class="comment-form-comment"><label for="comment" class="font-secondary label-textarea">Comment</label> <textarea autocomplete="nope" id="comment" name="je95267526" cols="45" rows="8" maxlength="65525" required="required" class="font-primary"></textarea><textarea id="a5666651a079407ad435b9ed19e86e20" aria-hidden="true" name="comment" autocomplete="nope" style="padding:0;clip:rect(1px, 1px, 1px, 1px);position:absolute !important;white-space:nowrap;height:1px;width:1px;overflow:hidden;" tabindex="-1" class="font-primary"></textarea><script type="text/javascript">document.getElementById("comment").setAttribute( "id", "a5666651a079407ad435b9ed19e86e20" );document.getElementById("je95267526").setAttribute( "id", "comment" );</script></p><p class="comment-form-author"><label for="author" class="font-secondary label-text">Name <span class="required font-primary">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" required="required" class="font-primary"></p>
+<p class="comment-form-email"><label for="email" class="font-secondary label-email">Email <span class="required font-primary">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" required="required" class="font-primary"></p>
+<p class="comment-form-url"><label for="url" class="font-secondary label-url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" class="font-primary"></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit font-primary font-secondary" value="Post Comment"> <input type="hidden" name="comment_post_ID" value="962" id="comment_post_ID" class="font-primary">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0" class="font-primary">
+</p>			</form>
+			</div>
+	
+</section>
+			
+		
+		
+	<div class="loop-nav">
+		<div class="prev">Previous Post: <a href="https://arne-mertz.de/2016/07/refactoring-dont-get-carried-away/" rel="prev">Refactoring – Don’t get Carried Away</a></div>		<div class="next">Next Post: <a href="https://arne-mertz.de/2016/08/new-project/" rel="next">New Project: Fix – Why, What and How</a></div>	</div>
+
+
+	
+</main>
+
+				
+	<aside class="sidebar sidebar-primary" role="complementary" id="sidebar-primary" aria-label="Primary Sidebar" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+
+		<h3 id="sidebar-primary-title" class="screen-reader-text font-headlines">Primary Sidebar</h3>
+
+		
+			<section id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="https://arne-mertz.de/">
+				<label class="font-secondary label-search">
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field font-primary" placeholder="Search …" value="" name="s">
+				</label>
+				<input type="submit" class="search-submit font-primary font-secondary" value="Search">
+			</form></section>		<section id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title font-headlines"><span class="wrap">Recent Posts</span></h3>		<ul>
+											<li>
+					<a href="https://arne-mertz.de/2019/03/macro-evil/">Macro Evil in C++ Code</a>
+											<span class="post-date">March 20, 2019</span>
+									</li>
+											<li>
+					<a href="https://arne-mertz.de/2019/02/cpp-on-sea-2019-trip-report/">Cpp On Sea 2019 Trip Report</a>
+											<span class="post-date">February 20, 2019</span>
+									</li>
+											<li>
+					<a href="https://arne-mertz.de/2019/02/extern-template-reduce-compile-times/">Reduce Compilation Times With extern template</a>
+											<span class="post-date">February 12, 2019</span>
+									</li>
+					</ul>
+		</section><section id="countperday_popular_posts_widget-2" class="widget widget_countperday_popular_posts_widget"><h3 class="widget-title font-headlines"><span class="wrap">Popular Posts</span></h3><ul class="cpd_front_list"><li><a href="https://arne-mertz.de/?p=1335">C++ Online Compilers</a> </li>
+<li><a href="https://arne-mertz.de/?p=1783">Modern C++ Features - std::variant and std::visit</a> </li>
+<li><a href="https://arne-mertz.de/?p=2060">Macro Evil in C++ Code</a> </li>
+</ul></section><section id="archives-2" class="widget widget_archive"><h3 class="widget-title font-headlines"><span class="wrap">Archives</span></h3>		<label class="screen-reader-text font-secondary label-select" for="archives-dropdown-2">Archives</label>
+		<select id="archives-dropdown-2" name="archive-dropdown" onchange="document.location.href=this.options[this.selectedIndex].value;" class="font-secondary">
+			
+			<option value="" class="font-secondary">Select Month</option>
+				<option value="https://arne-mertz.de/2019/03/" class="font-secondary"> March 2019 &nbsp;(1)</option>
+	<option value="https://arne-mertz.de/2019/02/" class="font-secondary"> February 2019 &nbsp;(2)</option>
+	<option value="https://arne-mertz.de/2019/01/" class="font-secondary"> January 2019 &nbsp;(1)</option>
+	<option value="https://arne-mertz.de/2018/12/" class="font-secondary"> December 2018 &nbsp;(1)</option>
+	<option value="https://arne-mertz.de/2018/11/" class="font-secondary"> November 2018 &nbsp;(2)</option>
+	<option value="https://arne-mertz.de/2018/10/" class="font-secondary"> October 2018 &nbsp;(1)</option>
+	<option value="https://arne-mertz.de/2018/09/" class="font-secondary"> September 2018 &nbsp;(3)</option>
+	<option value="https://arne-mertz.de/2018/08/" class="font-secondary"> August 2018 &nbsp;(1)</option>
+	<option value="https://arne-mertz.de/2018/07/" class="font-secondary"> July 2018 &nbsp;(3)</option>
+	<option value="https://arne-mertz.de/2018/06/" class="font-secondary"> June 2018 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2018/05/" class="font-secondary"> May 2018 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2018/04/" class="font-secondary"> April 2018 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2018/03/" class="font-secondary"> March 2018 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2018/02/" class="font-secondary"> February 2018 &nbsp;(3)</option>
+	<option value="https://arne-mertz.de/2018/01/" class="font-secondary"> January 2018 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2017/12/" class="font-secondary"> December 2017 &nbsp;(2)</option>
+	<option value="https://arne-mertz.de/2017/11/" class="font-secondary"> November 2017 &nbsp;(1)</option>
+	<option value="https://arne-mertz.de/2017/10/" class="font-secondary"> October 2017 &nbsp;(1)</option>
+	<option value="https://arne-mertz.de/2017/09/" class="font-secondary"> September 2017 &nbsp;(1)</option>
+	<option value="https://arne-mertz.de/2017/08/" class="font-secondary"> August 2017 &nbsp;(3)</option>
+	<option value="https://arne-mertz.de/2017/07/" class="font-secondary"> July 2017 &nbsp;(3)</option>
+	<option value="https://arne-mertz.de/2017/06/" class="font-secondary"> June 2017 &nbsp;(3)</option>
+	<option value="https://arne-mertz.de/2017/05/" class="font-secondary"> May 2017 &nbsp;(1)</option>
+	<option value="https://arne-mertz.de/2017/04/" class="font-secondary"> April 2017 &nbsp;(2)</option>
+	<option value="https://arne-mertz.de/2017/03/" class="font-secondary"> March 2017 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2017/02/" class="font-secondary"> February 2017 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2017/01/" class="font-secondary"> January 2017 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2016/12/" class="font-secondary"> December 2016 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2016/11/" class="font-secondary"> November 2016 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2016/10/" class="font-secondary"> October 2016 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2016/09/" class="font-secondary"> September 2016 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2016/08/" class="font-secondary"> August 2016 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2016/07/" class="font-secondary"> July 2016 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2016/06/" class="font-secondary"> June 2016 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2016/05/" class="font-secondary"> May 2016 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2016/04/" class="font-secondary"> April 2016 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2016/03/" class="font-secondary"> March 2016 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2016/02/" class="font-secondary"> February 2016 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2016/01/" class="font-secondary"> January 2016 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2015/12/" class="font-secondary"> December 2015 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2015/11/" class="font-secondary"> November 2015 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2015/10/" class="font-secondary"> October 2015 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2015/09/" class="font-secondary"> September 2015 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2015/08/" class="font-secondary"> August 2015 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2015/07/" class="font-secondary"> July 2015 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2015/06/" class="font-secondary"> June 2015 &nbsp;(5)</option>
+	<option value="https://arne-mertz.de/2015/05/" class="font-secondary"> May 2015 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2015/04/" class="font-secondary"> April 2015 &nbsp;(4)</option>
+	<option value="https://arne-mertz.de/2015/03/" class="font-secondary"> March 2015 &nbsp;(7)</option>
+	<option value="https://arne-mertz.de/2015/02/" class="font-secondary"> February 2015 &nbsp;(8)</option>
+	<option value="https://arne-mertz.de/2015/01/" class="font-secondary"> January 2015 &nbsp;(9)</option>
+
+		</select>
+		</section><section id="categories-2" class="widget widget_categories"><h3 class="widget-title font-headlines"><span class="wrap">Categories</span></h3>		<ul>
+				<li class="cat-item cat-item-2"><a href="https://arne-mertz.de/category/cpp/" title="Language and library features">C++</a> (112)
+<ul class="children">
+	<li class="cat-item cat-item-17"><a href="https://arne-mertz.de/category/cpp/modern-cpp/" title="Features added in C++11 and later">Modern C++ Features</a> (41)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-3"><a href="https://arne-mertz.de/category/clean-code/" title="Writing maintainable, easy-to-read code">Clean Code</a> (63)
+<ul class="children">
+	<li class="cat-item cat-item-22"><a href="https://arne-mertz.de/category/clean-code/design-patterns/">Design Patterns</a> (10)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-23"><a href="https://arne-mertz.de/category/development/">Development</a> (41)
+<ul class="children">
+	<li class="cat-item cat-item-38"><a href="https://arne-mertz.de/category/development/tooling/">Tooling</a> (16)
+	<ul class="children">
+	<li class="cat-item cat-item-42"><a href="https://arne-mertz.de/category/development/tooling/cmake/">CMake</a> (4)
+</li>
+	</ul>
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-6"><a href="https://arne-mertz.de/category/dsl/" title="Domain Specific Languages - embedded and external">DSL</a> (4)
+</li>
+	<li class="cat-item cat-item-24"><a href="https://arne-mertz.de/category/fix/">Fix</a> (9)
+</li>
+	<li class="cat-item cat-item-19"><a href="https://arne-mertz.de/category/general/">General</a> (11)
+</li>
+	<li class="cat-item cat-item-31"><a href="https://arne-mertz.de/category/guest-post/" title="Posts by other authors">Guest Post</a> (13)
+</li>
+	<li class="cat-item cat-item-4"><a href="https://arne-mertz.de/category/refactoring/" title="Changing the code without changing its functionality">Refactoring</a> (27)
+<ul class="children">
+	<li class="cat-item cat-item-21"><a href="https://arne-mertz.de/category/refactoring/refactoring-session/">Refactoring-Session</a> (5)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-15"><a href="https://arne-mertz.de/category/testing/">Testing</a> (14)
+</li>
+		</ul>
+			</section><section id="meta-9" class="widget widget_meta"><h3 class="widget-title font-headlines"><span class="wrap">Meta</span></h3>			<ul>
+						<li><a rel="nofollow" href="https://arne-mertz.de/blog/wp-login.php">Log in</a></li>
+			<li><a href="https://arne-mertz.de/feed/">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://arne-mertz.de/comments/feed/">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://wordpress.org/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.org</a></li>			</ul>
+			</section><section id="countperday_widget-3" class="widget widget_countperday_widget"><h3 class="widget-title font-headlines"><span class="wrap">Visitors</span></h3><ul class="cpd"><li class="cpd-l"><span id="cpd_number_getuserall" class="cpd-r">1577911</span>Total visitors:</li><li class="cpd-l"><span id="cpd_number_getusertoday" class="cpd-r">1559</span>Visitors today:</li><li class="cpd-l"><span id="cpd_number_getuseronline" class="cpd-r">29</span>Visitors currently online:</li></ul></section><section id="recent-comments-2" class="widget widget_recent_comments"><h3 class="widget-title font-headlines"><span class="wrap">Recent Comments</span></h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">Daniele Pallastrelli</span> on <a href="https://arne-mertz.de/2019/02/extern-template-reduce-compile-times/#comment-29076">Reduce Compilation Times With extern template</a></li><li class="recentcomments"><span class="comment-author-link">Jiashu Zou</span> on <a href="https://arne-mertz.de/2018/09/make_shared-vs-the-normal-shared_ptr-constructor/#comment-29056">std::make_shared vs. the Normal std::shared_ptr Constructor</a></li><li class="recentcomments"><span class="comment-author-link"><a href="https://www.fluentcpp.com/" rel="external nofollow" class="url fn n" itemprop="url"><span itemprop="name">Jonathan Boccara</span></a></span> on <a href="https://arne-mertz.de/2019/02/extern-template-reduce-compile-times/#comment-28989">Reduce Compilation Times With extern template</a></li><li class="recentcomments"><span class="comment-author-link">Jack Langsdorf</span> on <a href="https://arne-mertz.de/2016/04/enum-vs-class-hierarchies/#comment-28893">Enum vs. Class Hierarchies</a></li><li class="recentcomments"><span class="comment-author-link">Andrey Karpov</span> on <a href="https://arne-mertz.de/2019/03/macro-evil/#comment-28416">Macro Evil in C++ Code</a></li></ul></section>
+		
+	</aside>
+
+
+			</div>
+
+			
+		</div>
+
+		<footer id="footer" class="site-footer" role="contentinfo" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
+			<div class="wrap">
+
+				
+	<div id="menu-social" class="menu font-secondary"><ul id="menu-social-items" class="menu-items"><li id="menu-item-712" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-712"><a href="https://arne-mertz.de/contact-me/"><span class="screen-reader-text">Privacy – Contact – Imprint</span></a></li>
+<li id="menu-item-713" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-713"><a href="https://twitter.com/arne_mertz"><span class="screen-reader-text">Twitter</span></a></li>
+<li id="menu-item-714" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-714"><a href="https://de.linkedin.com/in/arne-mertz-b87311b0"><span class="screen-reader-text">LinkedIn</span></a></li>
+<li id="menu-item-715" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-715"><a href="https://plus.google.com/104936731191634184672"><span class="screen-reader-text">Google+</span></a></li>
+<li id="menu-item-716" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-716"><a href="https://xing.com/profile/Arne_Mertz"><span class="screen-reader-text">XING</span></a></li>
+<li id="menu-item-770" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-770"><a href="http://zuehlke.com/de/en"><span class="screen-reader-text">Zülhke Engineering</span></a></li>
+</ul></div>
+
+				<p class="credit">
+					Copyright © 2019 <a class="site-link" href="https://arne-mertz.de/" rel="home">Simplify C++!</a>. Powered by <a class="wp-link" href="http://wordpress.org/">WordPress</a> and <a class="theme-link" href="http://themehybrid.com/themes/stargazer">Stargazer</a>.				</p>
+
+			</div>
+
+		</footer>
+
+	</div>
+
+	<script type="text/javascript" src="./Const Correctness - Simplify C++!_files/comment-reply.min.js"></script>
+<script type="text/javascript" src="./Const Correctness - Simplify C++!_files/devicepx-jetpack.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var tocplus = {"smooth_scroll":"1","visibility_show":"show","visibility_hide":"hide","visibility_hide_by_default":"1","width":"Auto"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Const Correctness - Simplify C++!_files/front.min(1).js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var stargazer_i18n = {"search_toggle":"Expand Search Form"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Const Correctness - Simplify C++!_files/stargazer.min.js"></script>
+<script type="text/javascript" src="./Const Correctness - Simplify C++!_files/wp-embed.min.js"></script>
+<script type="text/javascript" src="./Const Correctness - Simplify C++!_files/e-201917.js" async="async" defer="defer"></script>
+<script type="text/javascript">
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:7.2.1',blog:'115629165',post:'962',tz:'2',srv:'arne-mertz.de'} ]);
+	_stq.push([ 'clickTrackerInit', '115629165', '962' ]);
+</script>
+
+			<div id="cookie-notice" role="banner" class="cn-top wp-default" style="color: rgb(255, 255, 255); background-color: rgb(0, 0, 0); visibility: visible;"><div class="cookie-notice-container"><span id="cn-notice-text">According to data protection laws, I have to inform you that my blog uses cookies. If you stay, I assume that you are happy with it.</span><a href="https://arne-mertz.de/2016/07/const-correctness/#" id="cn-accept-cookie" data-cookie-set="accept" class="cn-set-cookie cn-button wp-default button">OK</a>
+				</div>
+				
+			</div>
+
+<img src="./Const Correctness - Simplify C++!_files/g.gif" alt=":)" width="6" height="5" id="wpstats" scale="0"></body></html>

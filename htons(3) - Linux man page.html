@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- saved from url=(0033)https://linux.die.net/man/3/htons -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>htons(3) - Linux man page</title>
+<!--<base href="https://linux.die.net/man/3/htons">--><base href=".">
+<link rel="canonical" href="https://linux.die.net/man/3/htons">
+<link rel="stylesheet" type="text/css" href="./htons(3) - Linux man page_files/white.css">
+<link rel="shortcut icon" href="https://linux.die.net/favicon.ico" type="image/x-icon">
+<link href="https://linux.die.net/style/search.xml" rel="search" title="Search the die.net site" type="application/opensearchdescription+xml">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="The htons() function converts the unsigned short integer hostshort from host byte order to network byte order.">
+<script type="text/javascript" async="" src="./htons(3) - Linux man page_files/ga.js"></script><script type="text/javascript">
+<!--
+var _gaq = _gaq || [];_gaq.push(['_setAccount', 'UA-50820-6']);_gaq.push(['_trackPageview']);
+window.google_analytics_uacct = 'UA-50820-6';
+// -->
+</script>
+</head>
+
+<body>
+<div id="bg">
+<div id="logo">
+<a href="https://www.die.net/"><img src="./htons(3) - Linux man page_files/logo.svg" alt="die.net" width="120" height="120" onerror="this.onerror=null; this.src=&#39;/style/logo.png&#39;"></a>
+</div>
+<div id="content">
+
+<!-- google_ad_section_start -->
+<h1>htons(3) - Linux man page</h1>
+
+<h2>Name</h2>
+htonl, htons, ntohl, ntohs - convert values between host and network byte order
+<h2>Synopsis</h2>
+<pre class="code">#include &lt;<a href="https://linux.die.net/include/arpa/inet.h" rel="nofollow">arpa/inet.h</a>&gt;
+uint32_t htonl(uint32_t hostlong);
+uint16_t htons(uint16_t hostshort);
+uint32_t ntohl(uint32_t netlong);
+uint16_t ntohs(uint16_t netshort);</pre>
+<h2>Description</h2>
+<div id="adright">
+<script async="" src="./htons(3) - Linux man page_files/f.txt"></script>
+<ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-5823754184406795" data-ad-slot="7130739364"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+The <b>htonl</b>() function converts the unsigned integer <i>hostlong</i> from host byte order to network
+byte order.
+<p>The <b>htons</b>() function converts the unsigned short integer <i>hostshort</i> from host byte order to network byte order.
+</p><p>The <b>ntohl</b>() function converts the unsigned integer <i>netlong</i> from network byte order to host byte order.
+</p><p>The <b>ntohs</b>() function converts the unsigned short integer <i>netshort</i> from network byte order to host byte order.
+</p><p>On the i386 the host byte order is Least Significant Byte first, whereas the network byte order, as used on the Internet, is Most Significant Byte first.
+</p><h2>Conforming to</h2>
+POSIX.1-2001.
+<p>Some systems require the inclusion of <i>&lt;<a href="https://linux.die.net/include/netinet/in.h" rel="nofollow">netinet/in.h</a>&gt;</i> instead of <i>&lt;<a href="https://linux.die.net/include/arpa/inet.h" rel="nofollow">arpa/inet.h</a>&gt;</i>.
+</p><h2>See Also</h2>
+<i><b><a href="https://linux.die.net/man/3/endian">endian</a></b>(3)</i>, <i><b><a href="https://linux.die.net/man/3/gethostbyname">gethostbyname</a></b>(3)</i>, <i><b><a href="https://linux.die.net/man/3/getservent">getservent</a></b>(3)</i>
+
+<!-- google_ad_section_end -->
+<h2>Referenced By</h2>
+<b><a href="https://linux.die.net/man/7/ip" rel="nofollow">ip</a></b>(7)
+</div>
+<div id="menu">
+<dl>
+<dt>Site Search</dt>
+<dd>
+<form id="cse-search-box-menu" action="https://www.die.net/search/">
+<input name="q" type="text" size="10">
+<input type="hidden" name="sa" value="Search">
+<input type="hidden" name="ie" value="ISO-8859-1">
+<input type="hidden" name="cx" value="partner-pub-5823754184406795:54htp1rtx5u">
+<input type="hidden" name="cof" value="FORID:9">
+</form>
+<script type="text/javascript">
+<!--
+document.forms["cse-search-box-menu"].action = "https://www.die.net/search/";
+// -->
+</script>
+</dd></dl>
+
+
+
+<dl>
+<dt>Library</dt>
+<dd><a href="https://linux.die.net/">linux docs</a></dd>
+<dd><a href="https://linux.die.net/man/">linux man pages</a></dd>
+<dd><a href="https://www.die.net/musings/page_load_time/">page load time</a></dd>
+</dl>
+<dl>
+<dt>Toys</dt>
+<dd><a href="https://www.die.net/earth/">world sunlight</a></dd>
+<dd><a href="https://www.die.net/moon/">moon phase</a></dd>
+<dd><a href="http://trace.die.net/">trace explorer</a></dd>
+</dl>
+
+
+<dl>
+<dt><a href="https://linux.die.net/man/3/"><img src="./htons(3) - Linux man page_files/back.gif" alt="Back" width="20" height="22"></a></dt><dd></dd>
+</dl>
+</div></div>
+<script type="text/javascript">
+<!--
+if (top.location != self.location) top.location = self.location;
+if (/[?&][pq]=/.test(document.referrer)) document.write(unescape("%3Cscript src='/style/highlight.js' type='text/javascript'%3E%3C/script%3E"));
+function googleTranslateElementInit() {new google.translate.TranslateElement({pageLanguage: 'en', floatPosition: google.translate.TranslateElement.FloatPosition.TOP_RIGHT, gaTrack: true, gaId: 'UA-50820-6'});}
+if (!/^en/i.test(window.navigator.userLanguage||window.navigator.language)) document.write(unescape("%3Cscript src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit' type='text/javascript'%3E%3C/script%3E"));
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+// -->
+</script>
+
+
+</body></html>

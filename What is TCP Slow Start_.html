@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/ -->
+<html class="no-js dj_webkit dj_chrome dj_contentbox dj_webkit dj_chrome dj_contentbox" lang="en"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width">
+  
+		<script type="text/javascript" async="" src="./What is TCP Slow Start__files/BizibleAcct.js"></script><script type="text/javascript" async="" src="./What is TCP Slow Start__files/9wf.js"></script><script id="hs-analytics" src="./What is TCP Slow Start__files/177409.js"></script><script type="text/javascript" async="" src="./What is TCP Slow Start__files/ga.js"></script><script type="text/javascript" async="" src="./What is TCP Slow Start__files/recaptcha__en.js"></script><script type="text/javascript" async="" src="./What is TCP Slow Start__files/mixpanel-2.2.min.js"></script><script async="" src="./What is TCP Slow Start__files/prum.min.js"></script><script src="./What is TCP Slow Start__files/jquery.min.js"></script>
+		<script>
+		$(document).ready(function(){
+			$("#hide").click(function(){
+				$(".fixed-sidebar").hide();
+			});
+			
+			$("#show").click(function(){
+				$(".fixed-sidebar").show();
+			});
+			$("#show").click(function(){
+				$(".buttonh").show();
+				$(".buttonshow").hide();
+			});
+			$("#hide").click(function(){
+				$(".buttonshow").show();
+				$(".buttonh").show();
+				
+			});
+		});
+		</script>
+  <title>What is TCP Slow Start?</title>
+
+  <!--<link rel="icon" type="image/png" href="https://www.maxcdn.com/blog/wp-content/themes/maxcdnv5/img/png/favicon.png">-->
+
+	
+	<link rel="icon" type="image/png" href="http://maxcdn4support.wpengine.com/media/favicon-96x96.png">
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="http://maxcdn4support.wpengine.com/media/apple-touch-icon-57x57.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://maxcdn4support.wpengine.com/media/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://maxcdn4support.wpengine.com/media/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://maxcdn4support.wpengine.com/media/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="http://maxcdn4support.wpengine.com/media/apple-touch-icon-60x60.png">
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="http://apple-touch-icon-120x120.png/">
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="http://maxcdn4support.wpengine.com/media/apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://maxcdn4support.wpengine.com/media/apple-touch-icon-152x152.png">
+<link rel="icon" type="image/png" href="http://maxcdn4support.wpengine.com/media/favicon-196x196.png" sizes="196x196">
+<link rel="icon" type="image/png" href="http://maxcdn4support.wpengine.com/media/favicon-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="http://maxcdn4support.wpengine.com/media/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="http://maxcdn4support.wpengine.com/media/favicon-16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="http://maxcdn4support.wpengine.com/media/favicon-128.png" sizes="128x128">
+																												 
+<meta name="application-name" content="STACKPATH">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileImage" content="http://maxcdn4support.wpengine.com/media/mstile-144x144.png">
+<meta name="msapplication-square70x70logo" content="http://maxcdn4support.staging.wpengine.com/media/mstile-70x70.png">
+<meta name="msapplication-square150x150logo" content="http://maxcdn4support.staging.wpengine.com/media/mstile-150x150.png">
+<meta name="msapplication-wide310x150logo" content="http://maxcdn4support.staging.wpengine.com/media/mstile-310x150.png">
+<meta name="msapplication-square310x310logo" content="http://maxcdn4support.staging.wpengine.com/media/mstile-310x310.png">
+
+  
+<!-- This site is optimized with the Yoast SEO plugin v9.6 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="TCP slow start regulates the speed of a connection to provide a fast and stable experience. Learn more with this visual and text-based explanation.">
+<link rel="canonical" href="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/">
+<!-- / Yoast SEO plugin. -->
+
+<link rel="dns-prefetch" href="https://www.maxcdn.com/one//s.w.org">
+<link rel="stylesheet" href="./What is TCP Slow Start__files/style.min.css">
+<link rel="https://api.w.org/" href="https://www.maxcdn.com/one/wp-json/">
+<link rel="alternate" type="application/json+oembed" href="https://www.maxcdn.com/one/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.maxcdn.com%2Fone%2Fvisual-glossary%2Ftcp-slow-start%2F">
+<link rel="alternate" type="text/xml+oembed" href="https://www.maxcdn.com/one/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.maxcdn.com%2Fone%2Fvisual-glossary%2Ftcp-slow-start%2F&amp;format=xml">
+		<style type="text/css" id="wp-custom-css">
+			/*
+You can add your own CSS here.
+
+Click the help icon above to learn more.
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700');
+nav {
+	background-color: rgba(0,0,0,0.8) !important;
+}
+nav a {
+   
+	font-size: 12px !important;
+	color: #fff; 
+	font-family: "Roboto", sans-serif !important;
+	font-weight: 400 !important;
+	line-height: 16px !important;
+	text-transform: uppercase;
+	align-items: center !important;
+	
+}
+
+.fa-search:before{
+	font-size:18px !important;
+}
+nav a:hover{
+	color: #ce4800 !important;
+}
+
+nav .main-menu{
+	float:right !important;
+}
+
+nav .main-menu li a{
+	margin-left: 0px !important;
+	padding: 0px 0px !important;	
+
+}
+.modified-one{
+	margin-top: 30px;
+	text-align: center !important;
+    font-family: "Source Sans Pro" !important;
+	padding-bottom: 15px;
+  font-weight: regular;
+  font-size: 1.5em;
+  line-height: 1.4em
+}
+
+nav .main-menu li.dropdown i.fa-angle-down{
+	display: inline !important;
+	font-weight: 700;
+}
+
+nav .main-menu li:hover {
+	background-color: rgba(0,0,0,0.0) !important;
+}
+
+nav ul .dropdown-menu li{
+	padding: 10px !important;
+}
+
+nav ul .dropdown-menu li:hover {
+	background-color: #ededed !important;
+}
+
+nav a.dropdown-toggle { 
+	color: #fff !important;
+	font-family: Roboto;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: 400;
+} 
+
+nav a.gray {
+	color: #fff !important;
+	font-family: Roboto;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: 400;
+}
+
+nav a.gray:hover { 
+	color: #fff !important;
+} 
+
+nav a.dropdown-toggle a:hover{
+color: #fff !important;
+}
+
+@media screen and (min-width: 1200px){
+nav .main-menu li {
+    margin-left: 30px !important;
+	padding: 2px 10px !important;
+
+}
+}
+.inside-field-labels .fa {
+	line-height: 40px !important;
+}
+
+.max-one-logo {
+  background-image: url("https://www.maxcdn.com/one/media/stackpath-logo-standard-screen.png") !important;
+background-size: contain;
+background-repeat: no-repeat;
+  height: 133px !important;
+  width: 163px !important; 
+	
+}
+
+nav .max-one-logo{margin-top: 12px !important;}
+
+footer{ 
+background: #000 !important;
+
+}
+nav ul .dropdown-menu { 
+	background-color: #000 !important;
+	box-shadow: none !important; 
+ }
+
+nav ul .dropdown-menu li a:hover, nav ul .dropdown-menu li a:focus, nav ul .dropdown-menu li a:active, nav ul .dropdown-menu li a { color: #ccc !important; }
+
+nav ul .dropdown-menu li:hover { background: none !important; }		</style>
+		
+  <!-- Social Media Tags -->
+
+  <!-- OpenGraph -->
+
+  <meta property="og:locale" content="en_US">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="What is TCP Slow Start?">
+  <meta property="og:description" content="">
+  <meta property="og:url" content="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/?">
+
+  <!-- Twitter Cards (Summary Type) -->
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@maxcdn">
+  <meta name="twitter:title" content="What is TCP Slow Start?">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="https://www.maxcdn.com/assets/logos/maxcdn-logo-circle-small.png">
+  <meta name="twitter:url" content="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/?">
+
+  <!-- Swiftype Content Tag -->
+
+  <meta class="swiftype" name="contentType" data-type="string" content="one">
+<meta class="swiftype" name="pageDescription" data-type="string" content="TCP slow start regulates the speed of a connection to provide a fast and stable experience. Learn more with this visual and text-based explanation.">
+  <!-- Stylesheet -->
+
+  <link href="./What is TCP Slow Start__files/font-awesome.min.css" rel="stylesheet">
+  <!--<link rel="stylesheet" href="https://www.maxcdn.com/one/wp-content/themes/maxcdn_one/assets/css/style.css"> -->
+  <link rel="stylesheet" href="./What is TCP Slow Start__files/style.css">
+
+  <script src="./What is TCP Slow Start__files/jquery-1.11.2.min.js"></script>
+
+
+<script>
+var _prum = [['id', '53b1a760abe53d9c14b25c9e'],
+             ['mark', 'firstbyte', (new Date()).getTime()]];
+(function() {
+    var s = document.getElementsByTagName('script')[0]
+      , p = document.createElement('script');
+    p.async = 'async';
+    p.src = 'https://rum-static.pingdom.net/prum.min.js';
+    s.parentNode.insertBefore(p, s);
+})();
+</script>
+
+<!-- MixPanel -->
+<script>(function(f,b){if(!b.__SV){var a,e,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=f.createElement("script");a.type="text/javascript";a.async=!0;a.src="https://cdn.mxpnl.com/libs/mixpanel-2.2.min.js";e=f.getElementsByTagName("script")[0];e.parentNode.insertBefore(a,e)}})(document,window.mixpanel||[]);mixpanel.init("65fc1437db75fc33208c1b7bb753f65e");</script>
+
+<!-- Captcha Recaptcha -->
+<script src="./What is TCP Slow Start__files/api(1).js"></script>
+
+  <link rel="alternate" type="application/rss+xml" title="MaxCDN Support Site Feed" href="https://www.maxcdn.com/one/feed/">
+<link rel="stylesheet" href="./What is TCP Slow Start__files/css" type="text/css"><link rel="stylesheet" href="./What is TCP Slow Start__files/e1864eb090923581141211db205f17ee.css" type="text/css"><script type="text/javascript">
+(function (w, d, u) {
+    if(w.njQuery === u){
+        w.bindNextendQ = [];
+    
+        function pushToReady(x) {
+            w.bindNextendQ.push([alias.handler,"ready", x]);
+        }
+        
+        function pushToLoad(x) {
+            w.bindNextendQ.push([alias.handler,"load", x]);
+        }
+
+        var alias = {
+            handler: w,
+            ready: pushToReady,
+            load: pushToLoad
+        }
+
+        w.njQuery = function (handler) {
+            alias.handler = handler;
+            return alias;
+        }
+    }
+})(window, document);
+              </script><script type="text/javascript" src="./What is TCP Slow Start__files/asset_composer.65d6996a8775923299b3.js" charset="utf-8" async=""></script><script async="" type="text/javascript" src="./What is TCP Slow Start__files/count.js"></script><script type="text/javascript" async="" src="./What is TCP Slow Start__files/embed.js"></script><link rel="preload" as="style" href="https://c.disquscdn.com/next/embed/styles/lounge.694ea7181ea49f1ce306dfc00c532f53.css"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/common.bundle.2b6bb3725200b8d992a8cb9c288952d3.js"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/lounge.bundle.e04d6946f2fad54035486025e9a4979a.js"><link rel="preload" as="script" href="https://disqus.com/next/config.js"><script async="true" type="text/javascript" src="./What is TCP Slow Start__files/roundtrip.js"></script><script src="./What is TCP Slow Start__files/alfalfa_min.d078e4f2a4721192a99e02601a767617.js" async="" charset="UTF-8"></script></head>
+<body class="post-template-default single single-post postid-3182 single-format-standard tcp-slow-start">
+
+  <!--[if lt IE 7]><div class="alert">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+  <div id="mobile-menu-holder">
+	<form class="inside-field-labels" __bizdiag="0" __biza="WJ__">
+		    <label class="input">
+				<span>Search ...</span>
+			    <input id="mobile-nav-search" type="text" autocomplete="off" autocorrect="off" autocapitalize="off">
+			</label>
+		    <input type="submit" value="" class="fa-input">
+		</form>
+  <ul class="mobile-menu">
+    <li class="dropdown">
+            <a href="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/" class="dropdown-toggle" data-toggle="dropdown">
+              + Support&nbsp;<i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="https://www.maxcdn.com/one/getting-started/" title="Getting Started with MaxCDN">Getting Started</a>
+                </li>
+                <li>
+                    <a href="https://www.maxcdn.com/one/tutorial/" title="MaxCDN One Tutorials">Tutorials</a>
+                </li>
+                <li>
+                    <a href="https://www.maxcdn.com/one/faq/" title="MaxCDN Frequently Asked Questions">FAQs</a>
+                </li>
+                <li>
+                    <a href="https://www.maxcdn.com/support/" title="Contact MaxCDN Support">Contact Support</a>
+               </li>
+                <li>
+                  <a href="http://maxcdn.uservoice.com/" title="Request a MaxCDN Product Feature or Improvement">Feature Request</a>
+                </li>
+                <li>
+                  <a href="http://status.maxcdn.com/" title="MaxCDN Network Status">Network Status</a>
+                </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/" class="dropdown-toggle" data-toggle="dropdown">
+              + Development&nbsp;<i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="https://www.maxcdn.com/one/developer/" alt="MaxCDN Developer Resources">Resources</a>
+              </li>
+              <li>
+                <a href="https://www.maxcdn.com/one/developer/submit-a-demo/" alt="Submit a MaxCDN Demo Project">Submit a Demo</a>
+              </li>
+              <li>
+                <a href="http://docs.maxcdn.com/" alt="MaxCDN API Docs">API Docs</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="http://cp.maxcdn.com/" alt="MaxCDN Control Panel Login">Log In</a>
+          </li>
+          <li>
+            <a href="https://www.stackpath.com/pricing?ref=maxcdn&amp;utm_source=maxcdn_one&amp;utm_campaign=max_redirect&amp;utm_medium=test_account" alt="Try StackPath">Try StackPath</a>
+          </li>
+  </ul>
+</div>
+<div id="menu-slide-right">
+    <nav>
+      <div class="row position-relative main-menu-holder">
+        <a href="https://www.maxcdn.com/one/" title="Go to MaxCDN One Homepage"><div class="max-one-logo"></div></a>
+        <ul class="inline-list main-menu no-mobile">
+          <li class="dropdown">
+            <a href="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/" class="dropdown-toggle" data-toggle="dropdown">
+              Support&nbsp;<i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="https://www.maxcdn.com/one/getting-started/" title="Getting Started with MaxCDN">Getting Started</a>
+                </li>
+                <li>
+                    <a href="https://www.maxcdn.com/one/tutorial/" title="MaxCDN One Tutorials">Tutorials</a>
+                </li>
+                <li>
+                    <a href="https://www.maxcdn.com/one/faq/" title="MaxCDN Frequently Asked Questions">FAQs</a>
+                </li>
+                <li>
+                    <a href="https://www.maxcdn.com/support/" title="Contact MaxCDN Support">Contact Support</a>
+                </li>
+                <li>
+                  <a href="http://maxcdn.uservoice.com/" title="Request a MaxCDN Product Feature or Improvement">Feature Request</a>
+                </li>
+                <li>
+                  <a href="http://status.maxcdn.com/" title="MaxCDN Network Status">Network Status</a>
+                </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/" class="dropdown-toggle" data-toggle="dropdown">
+              Development&nbsp;<i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="https://www.maxcdn.com/one/developer/" alt="MaxCDN Developer Resources">Resources</a>
+              </li>
+              <li>
+                <a href="https://www.maxcdn.com/one/developer/submit-a-demo/" alt="Submit a MaxCDN Demo Project">Submit a Demo</a>
+              </li>
+              <li>
+                <a href="http://docs.maxcdn.com/" alt="MaxCDN API Docs">API Docs</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a class="gray" href="http://cp.maxcdn.com/" alt="MaxCDN Control Panel Login">Log In</a>
+          </li>
+           <li>
+            <a class="gray" href="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/#" id="open-search-trigger" alt="Reveal Search Form"><i style="font-size: 18px" class="fa fa-search"></i></a>
+          </li>
+        </ul>
+        <form class="hidden nav-search-form inside-field-labels" __bizdiag="0" __biza="WJ__">
+          <label class="input" for="">
+                <span>Search ...</span>
+                <input type="text" id="top-nav-search" autocomplete="off">
+          </label>
+          <p class="text-center small-copy margin-top-tiny"><a href="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/#" id="close-search-form">Cancel</a></p>
+        </form>
+        <p id="mobile-menu-trigger" class="no-large no-medium">Menu</p>
+      <div class="swiftype-widget"><div class="autocomplete" style="position: absolute; z-index: 9999; top: 900px; left: 0px; width: 98px; display: none;"><ul></ul></div></div></div>
+    </nav>
+<div class="clear"></div>
+
+<!--Sidebar widget area-->
+<section class="widget text-6 widget_text"><div class="widget-inner">			<div class="textwidget"><div class="plus-show">
+		<button id="show" class="buttonshow right-menu-show">Browse Articles</button>
+	</div>
+	
+<div class="fixed-sidebar zindex9999">
+	<button id="hide" class="buttonh right-menu-hide">Browse Articles</button>
+	<div class="acmenuw"><div id="nextend-accordion-menu-uniquec565869" class="">
+  <div class="nextend-accordion-menu-inner ">
+        <div class="nextend-accordion-menu-inner-container">
+    <dl class="level1 ">
+  <dt class="level1 nextend-nav-3236 parent   first" data-menuid="3236">
+    <span class="outer">
+      <span class="inner">
+        <a><span>Pull</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level1 nextend-nav-3236 parent   first">
+  <dl class="level2 ">
+  <dt class="level2 nextend-nav-3244 notparent   first" data-menuid="3244">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/how-to-create-a-pull-zone/"><span>How to Create a Pull Zone</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3244 notparent   first">
+  </dd>  <dt class="level2 nextend-nav-3245 notparent  " data-menuid="3245">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tag/wordpress-integration/"><span>Wordpress Integration</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3245 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3275 notparent  " data-menuid="3275">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/filter/?action=sort&amp;tag=drupal&amp;tag=joomla&amp;tag=invision-power-board&amp;tag=magento&amp;tag=opencart&amp;tag=prestashop&amp;tag=social-engine&amp;tag=vbulletin&amp;tag=xcart"><span>Other CMS</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3275 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3246 notparent  " data-menuid="3246">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/custom-cdn-integration/"><span>Custom CDN Integration</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3246 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3243 notparent  " data-menuid="3243">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/pull-zone-settings/"><span>Pull Zone Settings</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3243 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3242 notparent  " data-menuid="3242">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/pull-zone-security/"><span>Pull Zone Security</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3242 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3281 notparent  " data-menuid="3281">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/cache-busting/"><span>Cache-Busting</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3281 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3302 notparent   last" data-menuid="3302">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/how-to-use-cdn-with-webfonts/"><span>How to use CDN with Webfonts</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3302 notparent   last">
+  </dd></dl></dd>  <dt class="level1 nextend-nav-3237 parent  " data-menuid="3237">
+    <span class="outer">
+      <span class="inner">
+        <a><span>Push</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level1 nextend-nav-3237 parent  ">
+  <dl class="level2 ">
+  <dt class="level2 nextend-nav-3249 notparent   first" data-menuid="3249">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/create-a-push-zone/"><span>Create a Push Zone</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3249 notparent   first">
+  </dd>  <dt class="level2 nextend-nav-3268 notparent  " data-menuid="3268">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/connect-to-push-zone/"><span>Connect to Push Zone</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3268 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3248 notparent  " data-menuid="3248">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/push-zone-settings/"><span>Push Zone Settings</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3248 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3254 notparent  " data-menuid="3254">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/reset-push-ftp-password/"><span>Reset Push FTP Password</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3254 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3247 notparent   last" data-menuid="3247">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/push-zone-security/"><span>Push Zone Security</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3247 notparent   last">
+  </dd></dl></dd>  <dt class="level1 nextend-nav-3238 parent  " data-menuid="3238">
+    <span class="outer">
+      <span class="inner">
+        <a><span>VOD</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level1 nextend-nav-3238 parent  ">
+  <dl class="level2 ">
+  <dt class="level2 nextend-nav-3253 notparent   first" data-menuid="3253">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/create-a-vod-zone/"><span>Create a VOD Zone</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3253 notparent   first">
+  </dd>  <dt class="level2 nextend-nav-3252 notparent  " data-menuid="3252">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/connect-to-vod-zone/"><span>Connect to VOD Zone</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3252 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3250 notparent  " data-menuid="3250">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/get-vod-zone-embed-code/"><span>Get VOD Zone Embed Code</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3250 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3251 notparent   last" data-menuid="3251">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/reset-vod-ftp-password/"><span>Reset VOD FTP Password</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3251 notparent   last">
+  </dd></dl></dd>  <dt class="level1 nextend-nav-3267 parent  " data-menuid="3267">
+    <span class="outer">
+      <span class="inner">
+        <a><span>EdgeRules</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level1 nextend-nav-3267 parent  ">
+  <dl class="level2 ">
+  <dt class="level2 nextend-nav-3257 notparent   first" data-menuid="3257">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/edge-rules-recipes/"><span>Edge Rules Recipes</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3257 notparent   first">
+  </dd>  <dt class="level2 nextend-nav-3259 notparent  " data-menuid="3259">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/edgerules-conditionals/"><span>EdgeRules Conditionals</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3259 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3260 notparent  " data-menuid="3260">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/edgerules-purge-cache/"><span>EdgeRules Purge Cache</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3260 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3261 notparent  " data-menuid="3261">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/edgerules-priority/"><span>EdgeRules Priority</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3261 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3262 notparent  " data-menuid="3262">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/edgerules-status/"><span>EdgeRules Status</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3262 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3263 notparent  " data-menuid="3263">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/edgerules-features/"><span>EdgeRules Features</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3263 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3264 notparent  " data-menuid="3264">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/edgerules-location/"><span>EdgeRules Location</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3264 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3265 notparent  " data-menuid="3265">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/edgerules-match-type/"><span>EdgeRules Match Type</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3265 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3266 notparent   last" data-menuid="3266">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/delete-edge-rule/"><span>Delete an Edge Rule</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3266 notparent   last">
+  </dd></dl></dd>  <dt class="level1 nextend-nav-3272 parent  " data-menuid="3272">
+    <span class="outer">
+      <span class="inner">
+        <a><span>Debugging</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level1 nextend-nav-3272 parent  ">
+  <dl class="level2 ">
+  <dt class="level2 nextend-nav-3301 notparent   first" data-menuid="3301">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/502-bad-gateway/"><span>Troubleshooting the 502 Bad Gateway</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3301 notparent   first">
+  </dd>  <dt class="level2 nextend-nav-3276 notparent  " data-menuid="3276">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/403-forbidden/"><span>403 Forbidden</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3276 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3278 notparent   last" data-menuid="3278">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/cdn-slowness-bad-performance/"><span>CDN Slowness/Bad Performance</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3278 notparent   last">
+  </dd></dl></dd>  <dt class="level1 nextend-nav-3279 parent  " data-menuid="3279">
+    <span class="outer">
+      <span class="inner">
+        <a><span>Guides</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level1 nextend-nav-3279 parent  ">
+  <dl class="level2 ">
+  <dt class="level2 nextend-nav-3280 notparent   first" data-menuid="3280">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/visual-glossary/anycast/"><span>What is Anycast?</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3280 notparent   first">
+  </dd>  <dt class="level2 nextend-nav-3282 notparent  " data-menuid="3282">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/visual-glossary/cdn/"><span>What is a CDN?</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3282 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3283 notparent  " data-menuid="3283">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/change-credit-card-details/"><span>Change Credit Card details</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3283 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3288 notparent  " data-menuid="3288">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/custom-expiry-headers/"><span>Custom Expiry Headers</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3288 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3287 notparent  " data-menuid="3287">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/custom-error-page/"><span>Custom Error Page</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3287 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3292 notparent  " data-menuid="3292">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/enable-gzip-compression/"><span>Enable GZip Compression</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3292 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3293 notparent  " data-menuid="3293">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/enable-spdy/"><span>Enable SPDY</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3293 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3294 notparent  " data-menuid="3294">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/two-factor-authentication/"><span>Enabling Two-Factor Authentication</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3294 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3295 notparent  " data-menuid="3295">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/enabling-more-cdn-locations/"><span>Enabling More Locations</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3295 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3296 notparent  " data-menuid="3296">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/fix-broken-ca-chain/"><span>Fix broken CA chain</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3296 notparent  ">
+  </dd>  <dt class="level2 nextend-nav-3300 notparent   last" data-menuid="3300">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/tutorial/use-seo-with-cdn/"><span>Use SEO with CDN</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level2 nextend-nav-3300 notparent   last">
+  </dd></dl></dd>  <dt class="level1 nextend-nav-3239 notparent  " data-menuid="3239">
+    <span class="outer">
+      <span class="inner">
+        <a target="_blank" href="https://docs.maxcdn.com/"><span>API</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level1 nextend-nav-3239 notparent  ">
+  </dd>  <dt class="level1 nextend-nav-3256 notparent  " data-menuid="3256">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/developer/"><span>Developer</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level1 nextend-nav-3256 notparent  ">
+  </dd>  <dt class="level1 nextend-nav-3255 notparent opened active last" data-menuid="3255">
+    <span class="outer">
+      <span class="inner">
+        <a href="https://www.maxcdn.com/one/visual-glossary/"><span>Visual Glossary</span></a>      </span>
+    </span>
+  </dt>
+  <dd class="level1 nextend-nav-3255 notparent opened active last">
+  </dd>    </dl>
+    </div>
+  </div>
+</div>
+
+	
+</div>
+</div></div>
+		</div></section><div class="padded-page-content">
+
+    <div class="row margin-top-large">
+                <p class="h2 margin-bottom-small"><a class="plain-text-link black" href="https://www.maxcdn.com/one/visual-glossary/" alt="MaxCDN ONE Visual Glossary Articles">Visual Glossary</a></p>
+    </div>
+
+    <div class="article-box tutorial">
+                <div class="row no-margin-bottom">
+            <div class="l-grid-2 m-grid-3 s-grid-12">&nbsp;</div>
+            <div class="l-grid-10 m-grid-9 s-grid12 content-column"><h1 class="">What is TCP Slow Start?</h1></div>
+        </div>
+        <div class="no-overflow row">
+            <div class="l-grid-2 m-grid-3 s-grid-12">
+                <div class="article-info">
+                    <p class="author-name">Robert Gibb</p>
+                    <p class="timestamp">March 27, 2015</p>
+                </div>
+                <div class="edited-date">
+                    <p class="no-bottom-margin">Updated</p>
+                    <p>June 9, 2016</p>
+                </div>
+            </div>
+            <div class="l-grid-10 m-grid-9 s-grid-12 content-column post-content">
+                <div class="vg-header">
+<p>Definition</p>
+</div>
+<p>TCP slow start is an algorithm which balances the speed of a network connection. Slow start gradually increases the amount of data transmitted until it finds the network’s maximum carrying capacity.</p>
+<p><img src="./What is TCP Slow Start__files/tcp-slow-start.png" alt="Graphic for TCP slow start by MaxCDN."></p>
+<div class="vg-header">
+<h2>Overview</h2>
+</div>
+<p>One of the most common ways to optimize the speed of a connection is to increase the speed of the link (i.e. increase the amount of bandwidth). However, any link can become overloaded if a device tries to send out too much data. Oversaturating a link is known as congestion, and it can result in slow communications or even data loss.</p>
+<p>Slow start prevents a network from becoming congested by regulating the amount of data that’s sent over it. It negotiates the connection between a sender and receiver by defining the amount of data that can be transmitted with each packet, and slowly increases the amount of data until the network’s capacity is reached. This ensures that as much data is transmitted as possible without clogging the network.</p>
+<div class="vg-header">
+<h2>How TCP Slow Start Works</h2>
+</div>
+<p>TCP slow start is one of the first steps in the congestion control process. It balances the amount of data a sender can transmit (known as the <a href="https://www.maxcdn.com/one/visual-glossary/cwnd-and-rwnd/">congestion window</a>) with the amount of data the receiver can accept (known as the <a href="https://www.maxcdn.com/one/visual-glossary/cwnd-and-rwnd/">receiver window</a>). The lower of the two values becomes the maximum amount of data that the sender is allowed to transmit before receiving an acknowledgment from the receiver.</p>
+<p><strong>Step-by-step, here’s how slow start works:</strong></p>
+<ol>
+<li>A sender attempts to communicate to a receiver. The sender’s initial packet contains a small congestion window, which is determined based on the sender’s maximum window.</li>
+<li>The receiver acknowledges the packet and responds with its own window size. If the receiver fails to respond, the sender knows not to continue sending data.</li>
+<li>After receiving the acknowledgement, the sender increases the next packet’s window size. The window size gradually increases until the receiver can no longer acknowledge each packet, or until either the sender or the receiver’s window limit is reached.</li>
+<p>Once a limit has been determined, slow start’s job is done. Other congestion control algorithms take over to maintain the speed of the connection.</p>
+<div class="vg-header">
+<h2>Example of TCP Slow Start</h2>
+</div>
+<p>Content providers often adjust their slow start window to maximize performance. The initial congestion window parameter (initcwnd) can have a significant impact on the speed of a network. When the receiver has to send fewer acknowledgments to the sender, more data can be transmitted faster.</p>
+<p><a href="http://www.cdnplanet.com/blog/initcwnd-settings-major-cdn-providers/" title="View the different initcwnd values used by major content delivery networks." target="blank" rel="nofollow">Most large CDN providers default to an initcwnd of 10</a>, meaning the CDN will transmit 10 packets before requesting an acknowledgment. Cachefly has an initcwnd of 70, compared to Microsoft’s initcwnd of 2. For comparison, MaxCDN has an initcwnd of about 30. A good balance will be determined by the type of data transmitted and the general speed of the network.</p>
+<div class="vg-header">
+<h2>Benefits of TCP Slow Start</h2>
+</div>
+<p>Slow start ensures the speed and integrity of a network while protecting content providers and consumers.</p>
+<ul>
+<li><strong>Users experience uninterrupted connections</strong> since packets are no longer dropped due to congestion.</li>
+<li><strong>Users also experience faster downloads</strong> since slow start finds and uses the maximum connection speed.</li>
+<li><strong>Enterprises see less network congestion</strong> since slow start regulates bandwidth and prevents the sender from having to continuously retransmit data.</li>
+</ul>
+<div class="vg-header">
+<h2>Conclusion</h2>
+</div>
+<p>The speed of an Internet connection doesn’t rely solely on bandwidth. In general, an increase from a 5Mbps connection to a 10Mbps connection only results in a <a href="https://www.igvita.com/2011/10/20/faster-web-vs-tcp-slow-start/" title="Learn more about bandwidth and performance on Ilya Grigorik&#39;s blog." target="blank">5% improvement in page load time</a>. The key lies in the time it takes for a sender to transmit a message to a receiver, which is where slow start shines.</p>
+<p>By optimizing bandwidth usage, slow start makes it easy for users to connect to web services without sacrificing their experience.</p>
+                <div class="sharing-popup-holder">
+                    <div class="sharing-popup">
+                        <div class="section twitter"><a href="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/" target="_blank"><i class="fa fa-twitter"></i></a></div>
+                    </div>
+                </div>
+                <div class="find-more-content">
+                    
+                                        </div>
+                <div class="comments">
+                     <!-- Comments section -->
+                    <div class="post-comments margin-bottom-medium margin-top-medium">
+                    <style>.nocomments{display: none;}</style>
+                        
+<div id="disqus_thread"><iframe id="dsq-app704" name="dsq-app704" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./What is TCP Slow Start__files/saved_resource.html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 1097px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe></div>
+                    </div><!-- .post-comments -->
+
+                </div>
+            </ol></div>
+        </div>
+    </div>
+
+<div class="margin-bottom-large"></div>
+</div>
+  <div class="scroll-button-holder" style="display: block;">
+    <button class="margin-right-small width105" id="go-to-top-link">Scroll to Top</button>
+    <!-- <button id="go-to-feedback-link">Feedback</button> -->
+</div>
+        <footer>
+            <div class="row">
+                <ul class="inline-list footer-list">
+                    <li><a href="https://www.maxcdn.com/">MaxCDN.com</a></li>
+                    <li>
+                        <a href="https://www.maxcdn.com/one/visual-glossary/tcp-slow-start/#">+ Company</a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="https://www.maxcdn.com/customers/">Customers</a>
+                            </li>
+                            <li>
+                                <a href="https://www.maxcdn.com/legal/">Legal</a>
+                            </li>
+                            <li>
+                                <a href="https://www.maxcdn.com/security/">Security</a>
+                            </li>
+                            <li>
+                                <a href="https://www.maxcdn.com/affiliates/">Affiliates</a>
+                            </li>
+                            <li>
+                                <a href="https://www.maxcdn.com/team/">Team</a>
+                            </li>
+                            <li>
+                                <a href="https://www.maxcdn.com/open-source/">Open Source</a>
+                            </li>
+                            <li>
+                                <a href="https://www.maxcdn.com/careers/">Careers</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="https://www.maxcdn.com/blog/">Blog</a></li>
+                </ul>
+            </div>
+        </footer>
+
+<div id="search-result-holder" class="popup hidden">
+  <div class="modal">
+    <section class="row full-width no-bottom-margin">
+      <div class="close-button"><span>×</span></div>
+    </section>
+    <section class="row full-width">
+      <h2 class="text-center">Search Results</h2>
+      <form class="error-search-form margin-top-small" __bizdiag="0" __biza="WJ__">
+        <input id="swiftype-search-input" type="text"><i id="search-input-icon" class="fa fa-search"></i>
+      </form>
+    </section>
+    <div id="segmented-container"></div>
+    <div id="st-results-container"></div>
+  </div>
+</div>
+
+<!-- <script type="text/javascript" src="https://www.maxcdn.com/one/wp-content/themes/maxcdn_one/assets/js/frontend.js"></script> -->
+<script type="text/javascript" src="./What is TCP Slow Start__files/frontend.js"></script>
+<!-- <script type="text/javascript" src="https://www.maxcdn.com/one/wp-content/themes/maxcdn_one/assets/js/chat.js"></script> -->
+
+<script> window.zESettings={webWidget:{chat:{visitor:{departments:{department:"1. Support T1"}}}}} </script>
+<script id="ze-snippet" src="./What is TCP Slow Start__files/snippet.js"> </script>
+
+
+<!-- Bizible -->
+<script async="" type="text/javascript" src="./What is TCP Slow Start__files/_biz-a.js"></script>
+
+<!-- Qualaroo for maxcdn.com -->
+<script type="text/javascript">
+  var _kiq = _kiq || [];
+  (function(){
+    setTimeout(function(){
+    var d = document, f = d.getElementsByTagName('script')[0], s = d.createElement('script'); s.type = 'text/javascript';
+    s.async = true; s.src = '//s3.amazonaws.com/ki.js/47156/9wf.js'; f.parentNode.insertBefore(s, f);
+    }, 1);
+  })();
+</script>
+
+<!-- Adroll Code -->
+<script>adroll_adv_id="47MCAJXXORCV7FEWTHKTP2";adroll_pix_id="YJWIKEGC5VHUNETP435HGO";(function(){var e=window.onload;window.onload=function(){__adroll_loaded=true;var t=document.createElement("script");var n="https:"==document.location.protocol?"https://s.adroll.com":"http://a.adroll.com";t.setAttribute("async","true");t.type="text/javascript";t.src=n+"/j/roundtrip.js";((document.getElementsByTagName("head")||[null])[0]||document.getElementsByTagName("script")[0].parentNode).appendChild(t);if(e){e()}}})()</script>
+
+<!-- Google Analytics -->
+<script>var _gaq=_gaq||[];_gaq.push(["_setAccount","UA-11020602-1"]);_gaq.push(["_setDomainName","maxcdn.com"]);_gaq.push(["_setAllowLinker",true]);_gaq.push(["_trackPageview"]);(function(){var e=document.createElement("script");e.type="text/javascript";e.async=true;e.src=("https:"==document.location.protocol?"https://ssl":"http://www")+".google-analytics.com/ga.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})()</script>
+
+<!-- HubSpot Analytics Code -->
+<script type="text/javascript">
+	(function(d,s,i,r) {
+	if (d.getElementById(i)){return;}
+	var n=d.createElement(s),e=d.getElementsByTagName(s)[0];
+	n.id=i;n.src='https://www.maxcdn.com/one//js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/177409.js';
+	e.parentNode.insertBefore(n, e);
+	})(document,"script","hs-analytics",300000);
+</script>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+var countVars = {"disqusShortname":"maxcdnone"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./What is TCP Slow Start__files/comment_count.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var embedVars = {"disqusConfig":{"integration":"wordpress 3.0.16"},"disqusIdentifier":"3182 http:\/\/maxcdn4support.wpengine.com\/?p=3182","disqusShortname":"maxcdnone","disqusTitle":"What is TCP Slow Start?","disqusUrl":"https:\/\/maxcdn4support.wpengine.com\/visual-glossary\/tcp-slow-start\/","postId":"3182"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./What is TCP Slow Start__files/comment_embed.js"></script>
+<script type="text/javascript" src="./What is TCP Slow Start__files/wp-embed.min.js"></script>
+<script type="text/javascript" src="./What is TCP Slow Start__files/a19fe1afe36cb58c28b8949d4082bf7b.js"></script>
+
+
+<script type="text/javascript" src="./What is TCP Slow Start__files/a19fe1afe36cb58c28b8949d4082bf7b.js"></script>
+</div><img src="./What is TCP Slow Start__files/ipv" style="display: none;"><iframe style="display: none;" src="./What is TCP Slow Start__files/saved_resource(1).html"></iframe><iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./What is TCP Slow Start__files/saved_resource(2).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><div><iframe title="Opens a widget where you can chat to one of our agents" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition: opacity 250ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s, top, bottom; opacity: 1; width: 114px; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; right: 0px; bottom: 0px;" src="./What is TCP Slow Start__files/saved_resource(3).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition: opacity 250ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px;" src="./What is TCP Slow Start__files/saved_resource(4).html"></iframe></div></body></html>

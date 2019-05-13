@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)https://www.tutorialspoint.com/unix_sockets/network_byte_orders.htm -->
+<html style="" class=" js no-touch csstransforms3d csstransitions"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Basic -->
+
+<title>Unix Socket Network Byte Orders</title>
+<meta name="Description" content="Unix Socket Network Byte Orders - Learning Unix Sockets in simple steps with C programming language. Build Client and Server Networking Applications using Unix Sockets. Network Addresses, Host Names, Structures, Ports and Services, IP Address Functions, Core and Helper Functions, Summary.">
+<meta name="Keywords" content="Learning, Unix, Sockets, Programming, C, Language, Networking. Network Addresses, Host Names, Structures, Ports and Services, IP Address Functions, Core and Helper Functions, Summary.">
+<!--<base href="https://www.tutorialspoint.com/">--><base href=".">
+<link rel="shortcut icon" href="https://www.tutorialspoint.com/favicon.ico" type="image/x-icon">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="fb:app_id" content="471319149685276">
+<meta property="og:site_name" content="www.tutorialspoint.com">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="author" content="tutorialspoint.com">
+<script type="text/javascript" src="./Unix Socket Network Byte Orders_files/script-min-v4.js"></script>
+<link rel="stylesheet" href="./Unix Socket Network Byte Orders_files/style-min.css">
+<script>
+function openNav() {	
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("right_obs").style.display = "block";
+}
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("right_obs").style.display = "none";
+}
+function close_obs_sidenav(){
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("right_obs").style.display = "none";
+}
+</script>
+<!-- Head Libs -->
+<!--[if IE 8]>
+<link rel="stylesheet" type="text/css" href="/theme/css/ie8.css">
+<![endif]-->
+<style>
+#privacy-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem .5rem;
+    background: #fff;
+    z-index: 1030;
+    color: #000;
+    font-size: 14px;
+    margin: 0;
+    display: none;
+    border-top: 2px solid rgb(130, 130, 130);
+  }
+  #privacy-banner p {
+    margin: 0;
+    color: #000;
+    text-align: center;
+  }
+  #privacy-banner a {
+    text-decoration: none;
+    margin: 20px auto 0 auto;
+    display: block;
+    max-width: 150px;
+  }
+  #privacy-banner a:hover {
+    text-decoration: underline;
+  }
+  #banner-learn {
+    color: #000;
+  }
+  #banner-accept {
+    padding: 7px 15px;
+    color: #fff;
+    border-radius: 5px;
+    background:#737373 !important;
+  }
+  @media (min-width: 768px) {
+    #privacy-banner {
+      padding: 1.5rem .5rem;
+    }
+    #privacy-banner a {
+      display: inline-block;
+      margin: 0 10px;
+    }
+}
+pre.prettyprint.tryit {min-height:37px; background: #eee url(/unix_sockets/images/try-it.jpg) top right no-repeat !important}select{ border:0 !important; outline: 1px inset black !important; outline-offset: -1px !important; }
+.btnsbmt{ background: #28aa8a !important;}
+ul.nav-list.primary>li a.videolink{    background: none; margin: 0px; padding: 0px; border: 1px solid #d6d6d6;}
+div.feature-box div.feature-box-icon, .col-md-3 .course-box, li.heading, div.footer-copyright { background: #28aa8a url(/images/pattern.png) repeat center center !important;}
+.sub-main-menu .sub-menuu div:hover, .sub-main-menu .viewall, header nav ul.nav-main li a:hover, button.btn-responsive-nav, header div.search button.btn-default { background: #28aa8a !important;}
+.submenu-item{ border-bottom: 2px solid #28aa8a !important; border-top: 2px solid #28aa8a !important }
+.ace_scroller{overflow: auto!important;}
+a.demo{font-family: "Open Sans",Arial,sans-serif; background:#28aa8a; color:#fff; font-size:13px; padding:3px 10px; border:1px solid #d6d6d6; position:absolute; right:5px; margin:-6px 17px 0px 0px;}
+a.demo:hover{opacity:.8}
+</style>
+<script>
+$(document).ready(function() {
+  $('input[name="q"]').keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
+</script>
+</head>
+<body onload="prettyPrint()" style="">
+<div class="wrapLoader">
+   <div class="imgLoader">
+      <img src="./Unix Socket Network Byte Orders_files/loading-cg.gif" alt="" width="70" height="70">
+   </div>
+</div>
+<div id="right_obs" class="display-none" onclick="close_obs_sidenav()"></div>
+<header>
+   <div class="container">			
+      <h1 class="logo">
+      <a href="https://www.tutorialspoint.com/index.htm" title="tutorialspoint">
+      <img alt="tutorialspoint" src="./Unix Socket Network Byte Orders_files/logo.png">
+      </a>
+      </h1>			
+      <ul class="tp-inline-block pull-right" id="tp-head-icons">
+        <li>
+           <div class="tp-second-nav tp-display-none tp-pointer" onclick="openNav()">
+              <i class="fa fa-th-large fa-lg"></i>
+           </div>
+        </li>
+     </ul>
+     <button class="btn btn-responsive-nav btn-inverse" data-toggle="collapse" data-target=".nav-main-collapse" id="pull" style="top: 24px!important"> <i class="icon icon-bars"></i> </button>
+      <nav>
+         <ul class="nav nav-pills nav-top">
+            <li><a href="https://www.tutorialspoint.com/about/about_careers.htm" style="background: #fffb09; font-weight: bold;"><i class="icon icon-suitcase"></i> Jobs</a></li>
+            <li> <a target="_blank" href="https://www.tutorialspoint.com/programming_examples/"><i class="fa fa-cubes"></i> &nbsp;Examples</a> </li>
+            <li> <a href="https://www.tutorialspoint.com/whiteboard.htm"><img src="./Unix Socket Network Byte Orders_files/image-editor.png" alt="Whiteboard" title="Whiteboard"> &nbsp;Whiteboard</a> </li>
+            <li> <a href="https://www.tutorialspoint.com/netmeeting.php"><i class="fa-camera"></i> &nbsp;Net Meeting</a> </li>
+            <li> <a href="https://www.tutorialspoint.com/online_dev_tools.htm"> <i class="dev-tools-menu" style="opacity:.5"></i> Tools </a> </li>
+            <li> <a href="https://www.tutorialspoint.com/articles/index.php"><i class="icon icon-file-text-o"></i> &nbsp;Articles</a> </li>            
+            <li class="top-icons">
+              <ul class="social-icons">
+              <li class="facebook"><a href="https://www.facebook.com/tutorialspointindia" target="_blank" rel="nofollow" data-placement="bottom" title="tutorialspoint @ Facebook">Facebook</a></li>
+              <li class="googleplus"><a href="https://plus.google.com/u/0/116678774017490391259/posts" target="_blank" rel="nofollow" data-placement="bottom" title="tutorialspoint @ Google+">Google+</a></li>
+              <li class="twitter"><a href="https://www.twitter.com/tutorialspoint" target="_blank" rel="nofollow" data-placement="bottom" title="tutorialspoint @ Twitter">Twitter</a></li>
+              <li class="linkedin"><a href="https://www.linkedin.com/company/tutorialspoint" target="_blank" rel="nofollow" data-placement="bottom" title="tutorialspoint @ Linkedin">Linkedin</a></li>
+              <li class="youtube"><a href="https://www.youtube.com/channel/UCVLbzhxVTiTLiVKeGV7WEBg" target="_blank" rel="nofollow" data-placement="bottom" title="tutorialspoint YouTube">YouTube</a></li>
+              </ul>
+           </li>
+         </ul>
+      </nav>
+    </div>
+     <div class="sidenav" id="mySidenav">
+     <div class="navbar nav-main">
+      <div class="container">
+         <nav class="nav-main mega-menu">
+            <ul class="nav nav-pills nav-main" id="mainMenu">
+               <li class="dropdown no-sub-menu"> <a class="dropdown" href="https://www.tutorialspoint.com/index.htm"><i class="icon icon-home"></i> Home</a> </li>   
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="https://www.tutorialspoint.com/questions/index.php"><i class="fa fa-send"></i> Q/A </a> </li>
+               <li class="dropdown"><a class="dropdown" href="https://www.tutorialspoint.com/tutorialslibrary.htm"><span class="tut-lib"> Library </span></a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="https://www.tutorialspoint.com/videotutorials/index.htm"><i class="fa-toggle-right"></i> Videos </a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="https://www.tutorialspoint.com/tutor_connect/index.php"><i class="fa-user"> </i> Tutors</a></li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="https://www.tutorialspoint.com/codingground.htm"><i class="fa-code"></i> Coding Ground </a> </li>
+               <li class="dropdown no-sub-menu"><a class="dropdown" href="https://store.tutorialspoint.com/"><i class="fa-usd"></i> Store </a> </li>
+               <li class="dropdown no-sub-menu">
+                  <div class="searchform-popup">
+                     <input class="header-search-box" type="text" id="search-string" name="q" placeholder="Search your favorite tutorials..." onfocus="if (this.value == &#39;Search your favorite tutorials...&#39;) {this.value = &#39;&#39;;}" onblur="if (this.value == &#39;&#39;) {this.value = &#39;Search your favorite tutorials...&#39;;}" autocomplete="off">
+                     <div class="magnifying-glass"><i class="icon-search"></i> Search </div>
+                 </div>
+               </li>
+            </ul>
+         </nav>
+        </div>
+      </div>	
+     </div>	
+   	
+</header>
+<div style="clear:both;"></div>
+<div role="main" class="main">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<aside class="sidebar">
+<div class="mini-logo">
+<img src="./Unix Socket Network Byte Orders_files/unix-socket-mini-logo.jpg" alt="Unix Sockets Tutorial">
+</div>
+<ul class="nav nav-list primary left-menu">
+<li class="heading">Unix Socket Tutorial</li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/index.htm">Unix Socket - Home</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/what_is_socket.htm">Unix Socket - What is a Socket?</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/network_addresses.htm">Unix Socket - Network Addresses</a></li> 
+<li><a href="https://www.tutorialspoint.com/unix_sockets/network_host_names.htm">Unix Socket - Network Host Names</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/client_server_model.htm">Unix Socket - Client Server Model</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/socket_structures.htm">Unix Socket - Structures</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/ports_and_services.htm">Unix Socket - Ports and Services</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/network_byte_orders.htm" style="background-color: rgb(214, 214, 214);">Unix Socket - Network Byte Orders</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/ip_address_functions.htm">Unix Socket - IP Address Functions</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/socket_core_functions.htm">Unix Socket - Core Functions</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/socket_helper_functions.htm">Unix Socket - Helper Functions</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/socket_server_example.htm">Unix Socket - Server Example</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/socket_client_example.htm">Unix Socket - Client Example</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/socket_summary.htm">Unix Socket - Summary</a></li>
+</ul>
+<ul class="nav nav-list primary left-menu">
+<li class="heading">Unix Socket Useful Resources</li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/socket_quick_guide.htm">Unix Socket - Quick Guide</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/socket_useful_resources.htm">Unix Socket - Useful Resources</a></li>
+<li><a href="https://www.tutorialspoint.com/unix_sockets/unix_sockets_discussion.htm">Unix Socket - Discussion</a></li>
+</ul>
+<ul class="nav nav-list primary push-bottom left-menu special">
+<li class="sreading">Selected Reading</li>
+<li><a target="_top" href="https://www.tutorialspoint.com/upsc_ias_exams.htm">UPSC IAS Exams Notes</a></li>
+<li><a target="_top" href="https://www.tutorialspoint.com/developers_best_practices/index.htm">Developer's Best Practices</a></li>
+<li><a target="_top" href="https://www.tutorialspoint.com/questions_and_answers.htm">Questions and Answers</a></li>
+<li><a target="_top" href="https://www.tutorialspoint.com/effective_resume_writing.htm">Effective Resume Writing</a></li>
+<li><a target="_top" href="https://www.tutorialspoint.com/hr_interview_questions/index.htm">HR Interview Questions</a></li>
+<li><a target="_top" href="https://www.tutorialspoint.com/computer_glossary.htm">Computer Glossary</a></li>
+<li><a target="_top" href="https://www.tutorialspoint.com/computer_whoiswho.htm">Who is Who</a></li>
+</ul>
+</aside>
+</div>
+<!-- PRINTING STARTS HERE -->
+<div class="row">
+<div class="content">
+<div class="col-md-7 middle-col">
+<h1>Unix Socket - Network Byte Orders</h1>
+<hr>
+<div style="padding-bottom:5px;padding-left:10px;text-align: center;">Advertisements</div>
+<div style="text-align: center;">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_type = "image";
+google_ad_channel = "";
+//--></script>
+<script type="text/javascript" src="./Unix Socket Network Byte Orders_files/f.txt"> 
+</script>
+</div>
+<hr>
+<div class="pre-btn">
+<a href="https://www.tutorialspoint.com/unix_sockets/ports_and_services.htm"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="nxt-btn">
+<a href="https://www.tutorialspoint.com/unix_sockets/ip_address_functions.htm">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<div class="clearer"></div>
+<hr>
+<p>Unfortunately, not all computers store the bytes that comprise a multibyte value in the same order. Consider a 16-bit internet that is made up of 2 bytes. There are two ways to store this value.</p>
+<ul class="list">
+<li><p><b>Little Endian</b> − In this scheme, low-order byte is stored on the starting address (A) and high-order byte is stored on the next address (A + 1).</p></li>
+<li><p><b>Big Endian</b> − In this scheme, high-order byte is stored on the starting address (A) and low-order byte is stored on the next address (A + 1).</p></li>
+</ul>
+<p>To allow machines with different byte order conventions communicate with each other, the Internet protocols specify a canonical byte order convention for data transmitted over the network. This is known as Network Byte Order.</p>
+<p>While establishing an Internet socket connection, you must make sure that the data in the sin_port and sin_addr members of the sockaddr_in structure are represented in Network Byte Order.</p>
+<h2>Byte Ordering Functions</h2>
+<p>Routines for converting data between a host's internal representation and Network Byte Order are as follows −</p>
+<table class="table table-bordered">
+<tbody><tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>htons()</td>
+<td>Host to Network Short</td>
+</tr>
+<tr>
+<td>htonl()</td>
+<td>Host to Network Long</td>
+</tr>
+<tr>
+<td>ntohl()</td>
+<td>Network to Host Long</td>
+</tr>
+<tr>
+<td>ntohs()</td>
+<td>Network to Host Short</td>
+</tr>
+</tbody></table>
+<p>Listed below are some more detail about these functions −</p>
+<ul class="list">
+<li><p><b>unsigned short htons(unsigned short hostshort)</b> − This function converts 16-bit (2-byte) quantities from host byte order to network byte order.</p></li>
+<li><p><b>unsigned long htonl(unsigned long hostlong)</b> − This function converts 32-bit (4-byte) quantities from host byte order to network byte order.</p></li>
+<li><p><b>unsigned short ntohs(unsigned short netshort)</b> − This function converts 16-bit (2-byte) quantities from network byte order to host byte order.</p></li>
+<li><p><b>unsigned long ntohl(unsigned long netlong)</b> − This function converts 32-bit quantities from network byte order to host byte order.</p></li>
+</ul>
+<p>These functions are macros and result in the insertion of conversion source code into the calling program. On little-endian machines, the code will change the values around to network byte order. On big-endian machines, no code is inserted since none is needed; the functions are defined as null.</p>
+<h2>Program to Determine Host Byte Order</h2>
+<p>Keep the following code in a file <i>byteorder.c</i> and then compile it and run it over your machine.</p>
+<p>In this example, we store the two-byte value 0x0102 in the short integer and then look at the two consecutive bytes, c[0] (the address A) and c[1] (the address A + 1) to determine the byte order.</p>
+<pre class="prettyprint notranslate tryit prettyprinted" style=""><span class="com">#include</span><span class="pln"> </span><span class="str">&lt;stdio.h&gt;</span><span class="pln">
+
+</span><span class="kwd">int</span><span class="pln"> main</span><span class="pun">(</span><span class="kwd">int</span><span class="pln"> argc</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">char</span><span class="pln"> </span><span class="pun">**</span><span class="pln">argv</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+
+   </span><span class="kwd">union</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      </span><span class="kwd">short</span><span class="pln"> s</span><span class="pun">;</span><span class="pln">
+      </span><span class="kwd">char</span><span class="pln"> c</span><span class="pun">[</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="kwd">short</span><span class="pun">)];</span><span class="pln">
+   </span><span class="pun">}</span><span class="pln">un</span><span class="pun">;</span><span class="pln">
+	
+   un</span><span class="pun">.</span><span class="pln">s </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0x0102</span><span class="pun">;</span><span class="pln">
+   
+   </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="kwd">sizeof</span><span class="pun">(</span><span class="kwd">short</span><span class="pun">)</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">2</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">un</span><span class="pun">.</span><span class="pln">c</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">1</span><span class="pln"> </span><span class="pun">&amp;&amp;</span><span class="pln"> un</span><span class="pun">.</span><span class="pln">c</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">2</span><span class="pun">)</span><span class="pln">
+         printf</span><span class="pun">(</span><span class="str">"big-endian\n"</span><span class="pun">);</span><span class="pln">
+      
+      </span><span class="kwd">else</span><span class="pln"> </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">un</span><span class="pun">.</span><span class="pln">c</span><span class="pun">[</span><span class="lit">0</span><span class="pun">]</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">2</span><span class="pln"> </span><span class="pun">&amp;&amp;</span><span class="pln"> un</span><span class="pun">.</span><span class="pln">c</span><span class="pun">[</span><span class="lit">1</span><span class="pun">]</span><span class="pln"> </span><span class="pun">==</span><span class="pln"> </span><span class="lit">1</span><span class="pun">)</span><span class="pln">
+         printf</span><span class="pun">(</span><span class="str">"little-endian\n"</span><span class="pun">);</span><span class="pln">
+      
+      </span><span class="kwd">else</span><span class="pln">
+         printf</span><span class="pun">(</span><span class="str">"unknown\n"</span><span class="pun">);</span><span class="pln">
+   </span><span class="pun">}</span><span class="pln">
+   </span><span class="kwd">else</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      printf</span><span class="pun">(</span><span class="str">"sizeof(short) = %d\n"</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">sizeof</span><span class="pun">(</span><span class="kwd">short</span><span class="pun">));</span><span class="pln">
+   </span><span class="pun">}</span><span class="pln">
+	
+   </span><span class="kwd">exit</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></pre> 
+<p>An output generated by this program on a Pentium machine is as follows −</p>
+<pre class="result notranslate">$&gt; gcc byteorder.c
+$&gt; ./a.out
+little-endian
+$&gt;
+</pre>
+<hr>
+<div class="pre-btn">
+<a href="https://www.tutorialspoint.com/unix_sockets/ports_and_services.htm"><i class="icon icon-arrow-circle-o-left big-font"></i> Previous Page</a>
+</div>
+<div class="print-btn center">
+<a href="https://www.tutorialspoint.com/cgi-bin/printpage.cgi" target="_blank"><i class="icon icon-print big-font"></i> Print</a>
+</div>
+<div class="nxt-btn">
+<a href="https://www.tutorialspoint.com/unix_sockets/ip_address_functions.htm">Next Page <i class="icon icon-arrow-circle-o-right big-font"></i>&nbsp;</a>
+</div>
+<hr>
+<!-- PRINTING ENDS HERE -->
+<div class="bottomgooglead">
+<div class="bottomadtag">Advertisements</div>
+<script><!--
+var width = 580;
+var height = 400;
+var format = "580x400_as";
+if( window.innerWidth < 468 ){
+   width = 300;
+   height = 250;
+   format = "300x250_as";
+}
+google_ad_client = "pub-7133395778201029";
+google_ad_width = width;
+google_ad_height = height;
+google_ad_format = format;
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script src="./Unix Socket Network Byte Orders_files/f.txt">
+</script>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-3" id="rightbar">
+<div class="simple-ad">
+<a href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open(&#39;https://www.facebook.com/sharer.php?u=&#39; + &#39;https://www.tutorialspoint.com/unix_sockets/network_byte_orders.htm&#39;,&#39;sharer&#39;,&#39;toolbar=0,status=0,width=626,height=456,top=&#39;+sTop+&#39;,left=&#39;+sLeft);return false;">
+<img src="./Unix Socket Network Byte Orders_files/facebookIcon.jpg" alt="img">
+</a>
+<a href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open(&#39;https://twitter.com/share?url=&#39; + &#39;https://www.tutorialspoint.com/unix_sockets/network_byte_orders.htm&#39;,&#39;sharer&#39;,&#39;toolbar=0,status=0,width=626,height=456,top=&#39;+sTop+&#39;,left=&#39;+sLeft);return false;">
+<img src="./Unix Socket Network Byte Orders_files/twitterIcon.jpg" alt="img">
+</a>
+<a href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open(&#39;https://www.linkedin.com/cws/share?url=&#39; + &#39;https://www.tutorialspoint.com/unix_sockets/network_byte_orders.htm&amp;title=&#39;+ document.title,&#39;sharer&#39;,&#39;toolbar=0,status=0,width=626,height=456,top=&#39;+sTop+&#39;,left=&#39;+sLeft);return false;">
+<img src="./Unix Socket Network Byte Orders_files/linkedinIcon.jpg" alt="img">
+</a>
+<a href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open(&#39;https://plus.google.com/share?url=https://www.tutorialspoint.com/unix_sockets/network_byte_orders.htm&#39;,&#39;sharer&#39;,&#39;toolbar=0,status=0,width=626,height=456,top=&#39;+sTop+&#39;,left=&#39;+sLeft);return false;">
+<img src="./Unix Socket Network Byte Orders_files/googlePlusIcon.jpg" alt="img">
+</a>
+<a href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open(&#39;https://www.stumbleupon.com/submit?url=https://www.tutorialspoint.com/unix_sockets/network_byte_orders.htm&amp;title=&#39;+ document.title,&#39;sharer&#39;,&#39;toolbar=0,status=0,width=626,height=456,top=&#39;+sTop+&#39;,left=&#39;+sLeft);return false;">
+<img src="./Unix Socket Network Byte Orders_files/StumbleUponIcon.jpg" alt="img">
+</a>
+<a href="javascript:void(0)" onclick="var sTop = window.screen.height/2-(218); var sLeft = window.screen.width/2-(313);window.open(&#39;https://reddit.com/submit?url=https://www.tutorialspoint.com/unix_sockets/network_byte_orders.htm&amp;title=&#39;+ document.title,&#39;sharer&#39;,&#39;toolbar=0,status=0,width=626,height=656,top=&#39;+sTop+&#39;,left=&#39;+sLeft);return false;">
+<img src="./Unix Socket Network Byte Orders_files/reddit.jpg" alt="img">
+</a>
+</div>
+<div class="rightgooglead">
+<script><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 250;
+google_ad_format = "300x250_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script src="./Unix Socket Network Byte Orders_files/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script><!--
+google_ad_client = "pub-7133395778201029";
+google_ad_width = 300;
+google_ad_height = 600;
+google_ad_format = "300x600_as";
+google_ad_type = "image";
+google_ad_channel ="";
+//--></script>
+<script src="./Unix Socket Network Byte Orders_files/f.txt">
+</script>
+</div>
+<div class="rightgooglead">
+<script><!--
+google_ad_client = "ca-pub-2537027957187252";
+/* Right Side Ad */
+google_ad_slot = "right_side_ad";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script src="./Unix Socket Network Byte Orders_files/f.txt">
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="footer-copyright">
+<div class="container">
+<div class="row">
+<div class="col-md-1">
+<a href="https://www.tutorialspoint.com/index.htm" class="logo"> <img alt="Tutorials Point" class="img-responsive" src="./Unix Socket Network Byte Orders_files/logo-footer.png"> </a>
+</div>
+<div class="col-md-4 col-sm-12 col-xs-12">
+   <nav id="sub-menu">
+      <ul>
+         <li><a href="https://www.tutorialspoint.com/about/about_privacy.htm">Privacy Policy</a></li>
+         <li><a href="https://www.tutorialspoint.com/about/about_cookies.htm">Cookies Policy</a></li>
+         <li><a href="https://www.tutorialspoint.com/about/contact_us.htm">Contact</a></li>
+      </ul>
+   </nav>
+</div>
+<div class="col-md-3 col-sm-12 col-xs-12">
+<p>© Copyright 2019. All Rights Reserved.</p>
+</div>
+<div class="col-md-4 col-sm-12 col-xs-12">
+   <div class="news-group">
+      <input type="text" class="form-control-foot search" name="textemail" id="textemail" autocomplete="off" placeholder="Enter email for newsletter" onfocus="if (this.value == &#39;Enter email for newsletter...&#39;) {this.value = &#39;&#39;;}" onblur="if (this.value == &#39;&#39;) {this.value = &#39;Enter email for newsletter...&#39;;}">
+      <span class="input-group-btn"> <button class="btn btn-default btn-footer" id="btnemail" type="submit" onclick="javascript:void(0);">go</button> </span>
+      <div id="newsresponse"></div>
+   </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="privacy-banner" style="display: inherit;">
+  <div>
+    <p>
+      We use cookies to provide and improve our services. By using our site, you consent to our Cookies Policy.
+      <a id="banner-accept" href="javascript:void(0)">Accept</a>
+      <a id="banner-learn" href="https://www.tutorialspoint.com/about/about_cookies.htm" target="_blank">Learn more</a>
+    </p>
+  </div>
+</div>
+<script>
+// Banner Trigger if Not Closed
+if (!localStorage.bannerClosed) {
+  document.getElementById('privacy-banner').style.display = "inherit";
+} else {
+  document.getElementById('privacy-banner').style.display = "none";
+}
+document.getElementById('banner-accept').addEventListener('click', function() {
+  document.getElementById('privacy-banner').style.display = "none";
+  localStorage.bannerClosed = 'true';
+});
+if (navigator.userAgent.match(/Opera|OPR\//)) {
+  document.getElementById('privacy-banner').style.display = "inherit";
+}
+</script>
+<!-- Libs -->
+<script src="./Unix Socket Network Byte Orders_files/custom-min.js"></script><a class="scroll-to-top" href="https://www.tutorialspoint.com/#" id="scrollToTop"><i class="icon icon-chevron-up icon-white"></i></a>
+<script src="./Unix Socket Network Byte Orders_files/urchin.js">
+</script>
+<script>
+_uacct = "UA-232293-6";
+urchinTracker();
+$('.pg-icon').click(function(){
+   $('.wrapLoader').show();
+});
+</script>
+<script src="./Unix Socket Network Byte Orders_files/jquery.colorbox-min.js"></script>
+<script>
+   var tryit = new $.TryIt('/unix_sockets/try_unix_sockets.php');
+   tryit.compile();
+</script><div id="source" style="display:none;"></div><div id="supportsource" style="display:none;"></div><div id="utilsource" style="display:none;"></div><div id="extrasource" style="display:none;"></div><div id="inputs" style="display:none;"></div><div id="filename" style="display:none;"></div>
+
+
+<div class="autocomplete-suggestions "></div><div id="cboxOverlay" style="display: none;"></div><div id="colorbox" class="" role="dialog" tabindex="-1" style="display: none;"><div id="cboxWrapper"><div><div id="cboxTopLeft" style="float: left;"></div><div id="cboxTopCenter" style="float: left;"></div><div id="cboxTopRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxMiddleLeft" style="float: left;"></div><div id="cboxContent" style="float: left;"><div id="cboxTitle" style="float: left;"></div><div id="cboxCurrent" style="float: left;"></div><button type="button" id="cboxPrevious"></button><button type="button" id="cboxNext"></button><button id="cboxSlideshow"></button><div id="cboxLoadingOverlay" style="float: left;"></div><div id="cboxLoadingGraphic" style="float: left;"></div></div><div id="cboxMiddleRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxBottomLeft" style="float: left;"></div><div id="cboxBottomCenter" style="float: left;"></div><div id="cboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none; max-width: none;"></div></div></body></html>
