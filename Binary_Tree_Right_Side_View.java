@@ -1,4 +1,4 @@
-/*
+/**
  * Definition for a binary tree node.
  * public class TreeNode {
  *     int val;
@@ -7,19 +7,40 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
-public class Solution {
-    public List<Integer> rightSideView(TreeNode root) {     /// just use preorder traversal!!! use integer variable to keep track of levels
-        List<Integer> res = new ArrayList<Integer>();
-        help(root, res, 0);
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null)
+            return res;
+        Queue<TreeNode> dq = new LinkedList<>();
+        dq.offer(root);
+        while (!dq.isEmpty()) {
+            int size = dq.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = dq.poll();
+                if (i == size-1) {
+                    res.add(node.val);
+                }
+                if (node.left != null)
+                    dq.offer(node.left);
+                if (node.right != null)
+                    dq.offer(node.right);
+            }
+        }
         return res;
     }
     
-    private void help(TreeNode root, List<Integer> res, int level){
-        if (root == null) return;
-        if (level == res.size()) {
-            res.add(root.val);
+    /*
+    public void helper(List<Integer> res, TreeNode node, int level) {
+        if (node == null)
+            return;
+        if (res.size() == level) {
+            res.add(node.val);
+        } else {
+            res.set(level, node.val);
         }
-        help(root.right, res, level+1);
-        help(root.left, res, level+1);
+        helper(res, node.left, level+1);
+        helper(res, node.right, level+1);
     }
+    */
 }

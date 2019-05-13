@@ -21,33 +21,23 @@ public class Solution {
     }
     */
 
-     // space O(1)
+    class Solution {
     public int numDecodings(String s) {
-        // write your code here
-        int len = s.length();
-        if (len == 0) {
-            return 0;
-        }
-        int last = 0, secondLast = 1;
-        if (s.charAt(len-1) != '0') last = 1;
-        
-        for (int i = len-2; i >= 0; i--) {
-            if (s.charAt(i) == '0') {
-                secondLast = last;
-                last = 0;
-                continue;
-            } 
-            String str = s.substring(i, i+2);
-            int val = Integer.parseInt(str);
-            if (val <= 26) {
-                int tmp = last;
-                last = last + secondLast;
-                secondLast = tmp;
-            } else {
-                secondLast = last;
+        int len = s.length(), secondLast = 1;
+        int last = s.charAt(0) == '0' ? 0 : 1;
+        for (int i = 1; i < s.length(); i++) {
+            char c = s.charAt(i);
+            int newLast = c =='0' ? 0 : last;
+            String tmp = s.substring(i-1, i+1);
+            int val = Integer.valueOf(tmp);
+            if (val <= 26 && val >= 10) {
+                newLast += secondLast;
             }
+            secondLast = last;
+            last = newLast;
         }
         return last;
     }
+}
 
 }
